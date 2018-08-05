@@ -1,21 +1,24 @@
 package cn.exrick.manager.controller;
 
-import cn.exrick.common.exception.XmallUploadException;
 import cn.exrick.common.pojo.KindEditorResult;
 import cn.exrick.common.pojo.Result;
-import cn.exrick.common.utils.QiniuUtil;
 import cn.exrick.common.utils.ResultUtil;
+import com.google.common.base.Splitter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.mikesu.fastdfs.FastdfsClient;
+import net.mikesu.fastdfs.FastdfsClientFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Exrickx
@@ -24,74 +27,44 @@ import java.io.IOException;
 @Api(description = "图片上传统一接口")
 public class ImageController {
 
-    @RequestMapping(value = "/image/imageUpload",method = RequestMethod.POST)
-    @ApiOperation(value = "WebUploader图片上传")
-    public Result<Object> uploadFile(@RequestParam("file") MultipartFile files,
-                                     HttpServletRequest request){
+    @Value("${fadf.trackers}")
+    private String fdfsTrackers;
 
-        String imagePath=null;
-        // 文件保存路径
-        String filePath = request.getSession().getServletContext().getRealPath("/upload")+"\\"
-                + QiniuUtil.renamePic(files.getOriginalFilename());
-        // 转存文件
-        try {
-            //保存至服务器
-            File file=new File((filePath));
-            files.transferTo(file);
-            //上传七牛云服务器
-            imagePath= QiniuUtil.qiniuUpload(filePath);
-            if(imagePath.contains("error")){
-               throw new XmallUploadException("上传失败");
-            }
-            // 路径为文件且不为空则进行删除
-            if (file.isFile() && file.exists()) {
-                file.delete();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    private FastdfsClient fastdfsClient;
+
+    @PostConstruct
+    public void initFastDfsClient() {
+        if (StringUtils.isEmpty(fdfsTrackers)) {
+            throw new IllegalArgumentException("input fdfsTrackers is null,value is :" + fdfsTrackers);
         }
-        return new ResultUtil<Object>().setData(imagePath);
+        Splitter splitter = Splitter.on(",").omitEmptyStrings().trimResults();
+        List<String> trackers = splitter.splitToList(fdfsTrackers);
+        fastdfsClient = FastdfsClientFactory.getFastdfsClient(trackers);
     }
 
-    @RequestMapping(value = "/kindeditor/imageUpload",method = RequestMethod.POST)
-    @ApiOperation(value = "KindEditor图片上传")
-    public KindEditorResult kindeditor(@RequestParam("imgFile") MultipartFile files, HttpServletRequest request){
+    @RequestMapping(value = "/image/imageUpload", method = RequestMethod.POST)
+    @ApiOperation(value = "WebUploader图片上传")
+    public Result<String> uploadFile(@RequestParam("file") MultipartFile files,
+                                     HttpServletRequest request) throws Exception {
+        String filename = upload2Fdfs(files);
+        return new ResultUtil<String>().setData(filename);
+    }
 
-        KindEditorResult kindEditorResult=new KindEditorResult();
-        // 文件保存路径
-        String filePath = request.getSession().getServletContext().getRealPath("/upload")+"\\"
-                + QiniuUtil.renamePic(files.getOriginalFilename());
-        //检查文件
-        String message=QiniuUtil.isValidImage(request,files);
-        if(!message.equals("valid")){
-            kindEditorResult.setError(1);
-            kindEditorResult.setMessage(message);
-            return kindEditorResult;
-        }
-        // 转存文件
-        try {
-            //保存至服务器
-            File file=new File((filePath));
-            files.transferTo(file);
-            //上传七牛云服务器
-            String imagePath=QiniuUtil.qiniuUpload(filePath);
-            if(imagePath.contains("error")){
-                kindEditorResult.setError(1);
-                kindEditorResult.setMessage("上传失败");
-                return kindEditorResult;
-            }
-            // 路径为文件且不为空则进行删除
-            if (file.isFile() && file.exists()) {
-                file.delete();
-            }
-            kindEditorResult.setError(0);
-            kindEditorResult.setUrl(imagePath);
-            return kindEditorResult;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @RequestMapping(value = "/kindeditor/imageUpload", method = RequestMethod.POST)
+    @ApiOperation(value = "KindEditor图片上传")
+    public KindEditorResult kindeditor(@RequestParam("imgFile") MultipartFile files, HttpServletRequest request) throws Exception {
+        String filename = upload2Fdfs(files);
+        KindEditorResult kindEditorResult = new KindEditorResult();
+        kindEditorResult.setUrl(filename);
         kindEditorResult.setError(1);
         kindEditorResult.setMessage("上传失败");
         return kindEditorResult;
+    }
+
+    private String upload2Fdfs(MultipartFile file) throws Exception {
+        byte[] fileBytes = file.getBytes();
+        String originalFilename = file.getOriginalFilename();
+        String fileId = fastdfsClient.upload(fileBytes, originalFilename);
+        return fastdfsClient.getUrl(fileId);
     }
 }

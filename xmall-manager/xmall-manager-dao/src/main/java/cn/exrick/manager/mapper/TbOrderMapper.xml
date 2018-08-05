@@ -428,20 +428,20 @@
   </select>
   <select id="selectOrderChart" resultType="cn.exrick.manager.dto.OrderChartData">
     select
-    sum(payment) money,DATE(create_time) time
+    sum(payment) AS money,DATE(create_time) AS  time
     FROM tb_order
     WHERE
     create_time BETWEEN #{startTime} and #{endTime}
     and status = 4
-    GROUP BY DAY(create_time)
+    GROUP BY time
   </select>
   <select id="selectOrderChartByYear" resultType="cn.exrick.manager.dto.OrderChartData">
     select
-    sum(payment) money,DATE(create_time) time
+    sum(payment) AS money,MONTH(create_time) AS time
     FROM tb_order
     WHERE
     YEAR(create_time) = #{year}
     and status = 4
-    GROUP BY MONTH(create_time)
+    GROUP BY time
   </select>
 </mapper>

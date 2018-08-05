@@ -123,7 +123,7 @@
                 </ul>
             </dd>
         </dl>
-        <dl id="menu-comments">
+        <%-- <dl id="menu-comments">
             <dt><i class="Hui-iconfont">&#xe622;</i> 评论管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
@@ -131,6 +131,7 @@
                 </ul>
             </dd>
         </dl>
+        --%>
         <dl id="menu-member">
             <dt><i class="Hui-iconfont">&#xe60d;</i> 会员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>

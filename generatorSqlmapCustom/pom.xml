@@ -10,7 +10,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>generatorSqlmapCustom</artifactId>
+    <artifactId>xmall-generation-dao</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <finalName>mybatis_generator</finalName>
@@ -28,7 +34,7 @@
                     <dependency>
                         <groupId>mysql</groupId>
                         <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.32</version>
+                        <version>8.0.11</version>
                     </dependency>
                 </dependencies>
             </plugin>

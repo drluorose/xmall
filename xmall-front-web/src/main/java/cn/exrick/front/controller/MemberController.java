@@ -3,6 +3,7 @@ package cn.exrick.front.controller;
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.common.pojo.GeetInit;
 import cn.exrick.common.utils.GeetestLib;
+import cn.exrick.common.utils.IPInfoUtil;
 import cn.exrick.manager.dto.front.CommonDto;
 import cn.exrick.manager.dto.front.MemberLoginRegist;
 import cn.exrick.common.pojo.Result;
@@ -30,27 +31,32 @@ import java.util.UUID;
 @Api(description = "会员注册登录")
 public class MemberController {
 
-    private final static Logger log= LoggerFactory.getLogger(MemberController.class);
+    private final static Logger log = LoggerFactory.getLogger(MemberController.class);
 
     @Autowired
     private LoginService loginService;
+
     @Autowired
     private RegisterService registerService;
+
     @Autowired
     private MemberService memberService;
+
     @Autowired
     private JedisClient jedisClient;
 
-    @RequestMapping(value = "/member/geetestInit",method = RequestMethod.GET)
+    @RequestMapping(value = "/member/geetestInit", method = RequestMethod.GET)
     @ApiOperation(value = "极验初始化")
-    public String geetesrInit(HttpServletRequest request){
+    public String geetesrInit(HttpServletRequest request) {
 
-        GeetestLib gtSdk = new GeetestLib(GeetestLib.id, GeetestLib.key,GeetestLib.newfailback);
+        GeetestLib gtSdk = new GeetestLib(GeetestLib.id, GeetestLib.key, GeetestLib.newfailback);
 
         String resStr = "{}";
 
         //自定义参数,可选择添加
         HashMap<String, String> param = new HashMap<String, String>();
+        param.put("client_type", "web");
+        param.put("ip_address", IPInfoUtil.getIpAddr(request));
 
         //进行验证预处理
         int gtServerStatus = gtSdk.preProcess(param);
@@ -58,26 +64,26 @@ public class MemberController {
         //将服务器状态设置到redis中
         //request.getSession().setAttribute(gtSdk.gtServerStatusSessionKey, gtServerStatus);
         String key = UUID.randomUUID().toString();
-        jedisClient.set(key,gtServerStatus+"");
-        jedisClient.expire(key,360);
+        jedisClient.set(key, gtServerStatus + "");
+        jedisClient.expire(key, 360);
 
         resStr = gtSdk.getResponseStr();
-        GeetInit geetInit = new Gson().fromJson(resStr,GeetInit.class);
+        GeetInit geetInit = new Gson().fromJson(resStr, GeetInit.class);
         geetInit.setStatusKey(key);
         return new Gson().toJson(geetInit);
     }
 
-    @RequestMapping(value = "/member/login",method = RequestMethod.POST)
+    @RequestMapping(value = "/member/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录")
     public Result<Member> login(@RequestBody MemberLoginRegist memberLoginRegist,
-                                HttpServletRequest request){
+                                HttpServletRequest request) {
 
         //极验验证
-        GeetestLib gtSdk = new GeetestLib(GeetestLib.id, GeetestLib.key,GeetestLib.newfailback);
+        GeetestLib gtSdk = new GeetestLib(GeetestLib.id, GeetestLib.key, GeetestLib.newfailback);
 
-        String challenge=memberLoginRegist.getChallenge();
-        String validate=memberLoginRegist.getValidate();
-        String seccode=memberLoginRegist.getSeccode();
+        String challenge = memberLoginRegist.getChallenge();
+        String validate = memberLoginRegist.getValidate();
+        String seccode = memberLoginRegist.getSeccode();
 
         //从redis中获取gt-server状态
         //int gt_server_status_code = (Integer) request.getSession().getAttribute(gtSdk.gtServerStatusSessionKey);
@@ -99,12 +105,11 @@ public class MemberController {
             System.out.println(gtResult);
         }
 
-        Member member=new Member();
+        Member member = new Member();
         if (gtResult == 1) {
             // 验证成功
-            member=loginService.userLogin(memberLoginRegist.getUserName(), memberLoginRegist.getUserPwd());
-        }
-        else {
+            member = loginService.userLogin(memberLoginRegist.getUserName(), memberLoginRegist.getUserPwd());
+        } else {
             // 验证失败
             member.setState(0);
             member.setMessage("验证失败");
@@ -112,33 +117,32 @@ public class MemberController {
         return new ResultUtil<Member>().setData(member);
     }
 
-    @RequestMapping(value = "/member/checkLogin",method = RequestMethod.GET)
+    @RequestMapping(value = "/member/checkLogin", method = RequestMethod.GET)
     @ApiOperation(value = "判断用户是否登录")
-    public Result<Member> checkLogin(@RequestParam(defaultValue = "") String token){
-
-        Member member=loginService.getUserByToken(token);
+    public Result<Member> checkLogin(@RequestParam(defaultValue = "") String token) {
+        Member member = loginService.getUserByToken(token);
         return new ResultUtil<Member>().setData(member);
     }
 
-    @RequestMapping(value = "/member/loginOut",method = RequestMethod.GET)
+    @RequestMapping(value = "/member/loginOut", method = RequestMethod.GET)
     @ApiOperation(value = "退出登录")
-    public Result<Object> logout(@RequestParam(defaultValue = "") String token){
+    public Result<Object> logout(@RequestParam(defaultValue = "") String token) {
 
         loginService.logout(token);
         return new ResultUtil<Object>().setData(null);
     }
 
-    @RequestMapping(value = "/member/register",method = RequestMethod.POST)
+    @RequestMapping(value = "/member/register", method = RequestMethod.POST)
     @ApiOperation(value = "用户注册")
     public Result<Object> register(@RequestBody MemberLoginRegist memberLoginRegist,
-                                   HttpServletRequest request){
+                                   HttpServletRequest request) {
 
         //极验验证
-        GeetestLib gtSdk = new GeetestLib(GeetestLib.id, GeetestLib.key,GeetestLib.newfailback);
+        GeetestLib gtSdk = new GeetestLib(GeetestLib.id, GeetestLib.key, GeetestLib.newfailback);
 
-        String challenge=memberLoginRegist.getChallenge();
-        String validate=memberLoginRegist.getValidate();
-        String seccode=memberLoginRegist.getSeccode();
+        String challenge = memberLoginRegist.getChallenge();
+        String validate = memberLoginRegist.getValidate();
+        String seccode = memberLoginRegist.getSeccode();
 
         //从redis中获取gt-server状态
         //int gt_server_status_code = (Integer) request.getSession().getAttribute(gtSdk.gtServerStatusSessionKey);
@@ -162,25 +166,24 @@ public class MemberController {
 
         if (gtResult == 1) {
             // 验证成功
-            int result=registerService.register(memberLoginRegist.getUserName(), memberLoginRegist.getUserPwd());
-            if(result==0){
+            int result = registerService.register(memberLoginRegist.getUserName(), memberLoginRegist.getUserPwd());
+            if (result == 0) {
                 return new ResultUtil<Object>().setErrorMsg("该用户名已被注册");
-            }else if(result==-1){
+            } else if (result == -1) {
                 return new ResultUtil<Object>().setErrorMsg("用户名密码不能为空");
             }
             return new ResultUtil<Object>().setData(result);
-        }
-        else {
+        } else {
             // 验证失败
             return new ResultUtil<Object>().setErrorMsg("验证失败");
         }
     }
 
-    @RequestMapping(value = "/member/imgaeUpload",method = RequestMethod.POST)
+    @RequestMapping(value = "/member/imgaeUpload", method = RequestMethod.POST)
     @ApiOperation(value = "用户头像上传")
-    public Result<Object> imgaeUpload(@RequestBody CommonDto common){
+    public Result<Object> imgaeUpload(@RequestBody CommonDto common) {
 
-        String imgPath = memberService.imageUpload(common.getUserId(),common.getToken(),common.getImgData());
+        String imgPath = memberService.imageUpload(common.getUserId(), common.getToken(), common.getImgData());
         return new ResultUtil<Object>().setData(imgPath);
     }
 }

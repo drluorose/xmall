@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.net.BindException;
 
 /**
- *
  * @author Exrick
  * @date 2018/03/24
  */
@@ -28,10 +27,10 @@ public class RestCtrlExceptionHandler {
     @ExceptionHandler(BindException.class)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    public Result<Object> bindExceptionHandler(BindException e){
-        String errorMsg="请求数据校验不合法: ";
-        if(e!=null){
-            errorMsg=e.getMessage();
+    public Result<Object> bindExceptionHandler(BindException e) {
+        String errorMsg = "请求数据校验不合法: ";
+        if (e != null) {
+            errorMsg = e.getMessage();
             log.warn(errorMsg);
         }
         return new ResultUtil<>().setErrorMsg(errorMsg);
@@ -41,9 +40,9 @@ public class RestCtrlExceptionHandler {
     @ExceptionHandler(XmallException.class)
     @ResponseBody
     public Result<Object> handleXmallException(XmallException e) {
-        String errorMsg="Xmall exception: ";
-        if (e!=null){
-            errorMsg=e.getMsg();
+        String errorMsg = "Xmall exception: ";
+        if (e != null) {
+            errorMsg = e.getMsg();
             log.warn(e.getMessage());
         }
         return new ResultUtil<>().setErrorMsg(errorMsg);
@@ -53,17 +52,17 @@ public class RestCtrlExceptionHandler {
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public Result<Object> handleException(Exception e) {
-        String errorMsg="Exception: ";
-        if (e!=null){
-            log.warn(e.getMessage());
-            if(e.getMessage()!=null&&e.getMessage().contains("Maximum upload size")){
-                errorMsg="上传文件大小超过5MB限制";
-            } else if(e.getMessage().contains("XmallException")){
+        String errorMsg = "Exception: ";
+        if (e != null) {
+            log.warn("Exception", e);
+            if (e.getMessage() != null && e.getMessage().contains("Maximum upload size")) {
+                errorMsg = "上传文件大小超过5MB限制";
+            } else if (e.getMessage().contains("XmallException")) {
                 errorMsg = e.getMessage();
-                errorMsg = StringUtils.substringAfter(errorMsg,"XmallException:");
-                errorMsg = StringUtils.substringBefore(errorMsg,"\n");
-            } else{
-                errorMsg=e.getMessage();
+                errorMsg = StringUtils.substringAfter(errorMsg, "XmallException:");
+                errorMsg = StringUtils.substringBefore(errorMsg, "\n");
+            } else {
+                errorMsg = e.getMessage();
             }
         }
         return new ResultUtil<>().setErrorMsg(errorMsg);
@@ -73,9 +72,9 @@ public class RestCtrlExceptionHandler {
     @ExceptionHandler(XmallUploadException.class)
     @ResponseBody
     public Result<Object> handleUploadException(XmallUploadException e) {
-        String errorMsg="Xmall upload exception: ";
-        if (e!=null){
-            errorMsg=e.getMsg();
+        String errorMsg = "Xmall upload exception: ";
+        if (e != null) {
+            errorMsg = e.getMsg();
             log.warn(errorMsg);
         }
         return new ResultUtil<>().setErrorMsg(errorMsg);

@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ *
+ * ALTER USER 'root'@'localhost' IDENTIFIED BY 'EusbI7pr91%h$3BC';
  * @author Exrickx
  */
 @Service

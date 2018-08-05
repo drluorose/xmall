@@ -257,9 +257,10 @@
   </update>
   <select id="getWeekHot" resultType="cn.exrick.manager.pojo.TbOrderItem">
     SELECT
-    i.title,
-    i.pic_path picPath,
-    count(*) total
+    i.item_id as item_id,
+    i.title as title,
+    i.pic_path as picPath,
+    count(*) as total
     FROM
     tb_order_item i
     LEFT JOIN tb_order o ON i.order_id = o.order_id
@@ -268,7 +269,7 @@
     AND
     o.status = 4
     GROUP BY
-    i.item_id
+    item_id,title,picPath
     ORDER BY
     COUNT(*) DESC
   </select>
