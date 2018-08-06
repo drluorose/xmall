@@ -1,11 +1,11 @@
 package @packageName@.service.impl;
 
-import com.douyu.wsd.framework.oa.OaException;
-import com.douyu.wsd.framework.oa.bean.OaGetUIdPo;
-import com.douyu.wsd.framework.oa.bean.OaGetUIdReq;
-import com.douyu.wsd.framework.oa.bean.OaUserInfoPo;
-import com.douyu.wsd.framework.oa.config.OaConfig;
-import com.douyu.wsd.framework.oa.service.AbstractOaService;
+import cn.exrick.framework.oa.OaException;
+import cn.exrick.framework.oa.bean.OaGetUIdPo;
+import cn.exrick.framework.oa.bean.OaGetUIdReq;
+import cn.exrick.framework.oa.bean.OaUserInfoPo;
+import cn.exrick.framework.oa.config.OaConfig;
+import cn.exrick.framework.oa.service.AbstractOaService;
 
 import javax.annotation.Resource;
 

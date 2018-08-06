@@ -14,8 +14,6 @@
     <artifactId>xmall-project-tools</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <description>douyu java project generate system</description>
-    <url>https://git.dz11.com/wsd_java/cradle</url>
 
 
     <properties>

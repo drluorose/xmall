@@ -1,0 +1,33 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.exrick</groupId>
+    <artifactId>xmall-project-group</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>xmall-project-group</description>
+
+    <modules>
+        <module>xmall-common</module>
+        <module>xmall-content</module>
+        <module>xmall-front-web</module>
+        <module>xmall-generation-dao</module>
+        <module>xmall-manager</module>
+        <module>xmall-manager-web</module>
+        <module>xmall-mybatis-tools</module>
+        <module>xmall-parent</module>
+        <module>xmall-project-tools</module>
+        <module>xmall-search</module>
+        <module>xmall-sso</module>
+    </modules>
+
+
+
+
+
+
+</project>
