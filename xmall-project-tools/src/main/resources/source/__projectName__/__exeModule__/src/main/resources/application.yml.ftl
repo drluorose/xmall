@@ -1,0 +1,17 @@
+#Tomcat服务器参数
+server:
+  port: 8080
+  tomcat:
+    max-threads: 500
+    min-spare-threads: 50
+
+
+# 默认的profile为dev，其他环境通过指定启动参数使用不同的profile，比如：
+#   测试环境：java -jar my-spring-boot.jar --spring.profiles.active=test
+#   生产环境：java -jar my-spring-boot.jar --spring.profiles.active=prod
+spring:
+  profiles:
+    active: dev
+  aop:
+    auto: true
+    proxy-target-class: true
