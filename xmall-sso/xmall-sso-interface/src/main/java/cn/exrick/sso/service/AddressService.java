@@ -1,7 +1,5 @@
 package cn.exrick.sso.service;
 
-import cn.exrick.manager.pojo.TbAddress;
-
 import java.util.List;
 
 /**

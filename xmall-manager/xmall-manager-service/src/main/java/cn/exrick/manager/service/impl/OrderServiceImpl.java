@@ -4,16 +4,8 @@ import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.manager.dto.OrderDetail;
-import cn.exrick.manager.mapper.TbOrderItemMapper;
-import cn.exrick.manager.mapper.TbOrderMapper;
-import cn.exrick.manager.mapper.TbOrderShippingMapper;
-import cn.exrick.manager.mapper.TbThanksMapper;
-import cn.exrick.manager.pojo.TbOrder;
-import cn.exrick.manager.pojo.TbOrderExample;
-import cn.exrick.manager.pojo.TbOrderItem;
-import cn.exrick.manager.pojo.TbOrderItemExample;
-import cn.exrick.manager.pojo.TbOrderShipping;
-import cn.exrick.manager.pojo.TbThanks;
+import cn.exrick.manager.mapper.TbOrderExtMapper;
+import cn.exrick.manager.mapper.TbOrderItemExtMapper;
 import cn.exrick.manager.service.OrderService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -34,9 +26,9 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    private TbOrderMapper tbOrderMapper;
+    private TbOrderExtMapper tbOrderMapper;
     @Autowired
-    private TbOrderItemMapper tbOrderItemMapper;
+    private TbOrderItemExtMapper tbOrderItemMapper;
     @Autowired
     private TbOrderShippingMapper tbOrderShippingMapper;
     @Autowired

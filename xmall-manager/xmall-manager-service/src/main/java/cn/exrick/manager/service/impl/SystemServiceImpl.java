@@ -2,10 +2,8 @@ package cn.exrick.manager.service.impl;
 
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.pojo.DataTablesResult;
-import cn.exrick.manager.mapper.TbBaseMapper;
 import cn.exrick.manager.mapper.TbLogMapper;
-import cn.exrick.manager.mapper.TbOrderItemMapper;
-import cn.exrick.manager.mapper.TbShiroFilterMapper;
+import cn.exrick.manager.mapper.TbOrderItemExtMapper;
 import cn.exrick.manager.pojo.*;
 import cn.exrick.manager.service.SystemService;
 import com.github.pagehelper.PageHelper;
@@ -29,7 +27,7 @@ public class SystemServiceImpl implements SystemService {
     @Autowired
     private TbLogMapper tbLogMapper;
     @Autowired
-    private TbOrderItemMapper tbOrderItemMapper;
+    private TbOrderItemExtMapper tbOrderItemMapper;
 
     @Value("${BASE_ID}")
     private String BASE_ID;

@@ -1,10 +1,6 @@
 package cn.exrick.manager.dto;
 
 
-import cn.exrick.manager.pojo.TbOrder;
-import cn.exrick.manager.pojo.TbOrderItem;
-import cn.exrick.manager.pojo.TbOrderShipping;
-
 import java.io.Serializable;
 import java.util.List;
 

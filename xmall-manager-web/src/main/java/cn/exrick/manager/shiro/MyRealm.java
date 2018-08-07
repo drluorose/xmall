@@ -1,6 +1,5 @@
 package cn.exrick.manager.shiro;
 
-import cn.exrick.manager.pojo.TbUser;
 import cn.exrick.manager.service.UserService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;

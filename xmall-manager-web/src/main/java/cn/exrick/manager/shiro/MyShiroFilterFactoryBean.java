@@ -1,6 +1,5 @@
 package cn.exrick.manager.shiro;
 
-import cn.exrick.manager.pojo.TbShiroFilter;
 import cn.exrick.manager.service.SystemService;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;

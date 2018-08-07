@@ -1,6 +1,5 @@
 package cn.exrick.sso.service.impl;
 
-import cn.exrick.manager.pojo.TbThanks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

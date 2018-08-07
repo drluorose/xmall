@@ -5,9 +5,7 @@ import java.util.List;
 
 
 import cn.exrick.common.exception.XmallException;
-import cn.exrick.manager.mapper.TbMemberMapper;
-import cn.exrick.manager.pojo.TbMember;
-import cn.exrick.manager.pojo.TbMemberExample;
+import cn.exrick.manager.mapper.TbMemberExtMapper;
 import cn.exrick.sso.service.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,7 @@ import org.springframework.util.DigestUtils;
 public class RegisterServiceImpl implements RegisterService {
 	
 	@Autowired
-	private TbMemberMapper tbMemberMapper;
+	private TbMemberExtMapper tbMemberMapper;
 
 	@Override
 	public boolean checkData(String param, int type) {

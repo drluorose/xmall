@@ -1,9 +1,6 @@
 package cn.exrick.manager.service;
 
 import cn.exrick.common.pojo.DataTablesResult;
-import cn.exrick.manager.pojo.TbThanks;
-
-import java.util.List;
 
 /**
  * @author Exrickx

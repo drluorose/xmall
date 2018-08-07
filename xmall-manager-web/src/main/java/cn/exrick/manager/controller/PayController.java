@@ -2,7 +2,6 @@ package cn.exrick.manager.controller;
 
 import cn.exrick.common.pojo.Result;
 import cn.exrick.common.utils.ResultUtil;
-import cn.exrick.manager.pojo.TbThanks;
 import cn.exrick.manager.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -4,7 +4,6 @@ import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.common.pojo.Result;
 import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.content.service.ContentService;
-import cn.exrick.manager.pojo.TbPanelContent;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;

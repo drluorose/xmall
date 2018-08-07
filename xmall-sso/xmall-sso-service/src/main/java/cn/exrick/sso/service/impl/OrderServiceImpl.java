@@ -36,11 +36,11 @@ public class OrderServiceImpl implements OrderService {
     private final static Logger log= LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
-    private TbMemberMapper tbMemberMapper;    //用户
+    private TbMemberExtMapper tbMemberMapper;    //用户
     @Autowired
-    private TbOrderMapper tbOrderMapper;    //订单
+    private TbOrderExtMapper tbOrderMapper;    //订单
     @Autowired
-    private TbOrderItemMapper tbOrderItemMapper;  //订单商品
+    private TbOrderItemExtMapper tbOrderItemMapper;  //订单商品
     @Autowired
     private TbOrderShippingMapper tbOrderShippingMapper;  //订单物流
     @Autowired

@@ -2,9 +2,6 @@ package cn.exrick.manager.service.impl;
 
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.pojo.DataTablesResult;
-import cn.exrick.manager.mapper.TbThanksMapper;
-import cn.exrick.manager.pojo.TbThanks;
-import cn.exrick.manager.pojo.TbThanksExample;
 import cn.exrick.manager.service.ThanksService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

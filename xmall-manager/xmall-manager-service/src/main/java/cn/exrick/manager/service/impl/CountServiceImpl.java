@@ -3,7 +3,7 @@ package cn.exrick.manager.service.impl;
 import cn.exrick.common.constant.CountConstant;
 import cn.exrick.common.utils.TimeUtil;
 import cn.exrick.manager.dto.OrderChartData;
-import cn.exrick.manager.mapper.TbOrderMapper;
+import cn.exrick.manager.mapper.TbOrderExtMapper;
 import cn.exrick.manager.service.CountService;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
@@ -28,7 +28,7 @@ public class CountServiceImpl implements CountService {
     private final static Logger log= LoggerFactory.getLogger(CountServiceImpl.class);
 
     @Autowired
-    private TbOrderMapper tbOrderMapper;
+    private TbOrderExtMapper tbOrderMapper;
 
     @Override
     public List<OrderChartData> getOrderCountData(int type, Date startTime, Date endTime, int year) {

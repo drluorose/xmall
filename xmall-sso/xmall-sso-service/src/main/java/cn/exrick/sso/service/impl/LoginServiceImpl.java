@@ -4,9 +4,7 @@ package cn.exrick.sso.service.impl;
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.dto.front.Member;
-import cn.exrick.manager.mapper.TbMemberMapper;
-import cn.exrick.manager.pojo.TbMember;
-import cn.exrick.manager.pojo.TbMemberExample;
+import cn.exrick.manager.mapper.TbMemberExtMapper;
 import cn.exrick.sso.service.LoginService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ import java.util.UUID;
 public class LoginServiceImpl implements LoginService {
 
 	@Autowired
-	private TbMemberMapper tbMemberMapper;
+	private TbMemberExtMapper tbMemberMapper;
 	@Autowired
 	private JedisClient jedisClient;
 	@Value("${SESSION_EXPIRE}")

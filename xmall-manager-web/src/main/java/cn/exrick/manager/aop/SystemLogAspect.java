@@ -4,7 +4,6 @@ import cn.exrick.common.annotation.SystemControllerLog;
 import cn.exrick.common.annotation.SystemServiceLog;
 import cn.exrick.common.utils.IPInfoUtil;
 import cn.exrick.common.utils.ThreadPoolUtil;
-import cn.exrick.manager.pojo.TbLog;
 import cn.exrick.manager.service.SystemService;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;

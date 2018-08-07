@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.exrick.manager.mapper.TbMemberExtMapper">
+    <select id="selectByMemberInfo" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM tb_member
+        WHERE
+        state != 2
+        AND
+        (username LIKE #{search}
+        OR
+        phone LIKE #{search}
+        OR
+        email LIKE #{search}
+        OR
+        sex LIKE #{search}
+        OR
+        address LIKE #{search})
+        <if test="minDate != null and minDate != '' and maxDate != null and maxDate != ''">
+            AND
+            created BETWEEN #{minDate} AND #{maxDate}
+        </if>
+        ORDER BY
+        ${orderCol}
+        ${orderDir}
+    </select>
+    <select id="selectByRemoveMemberInfo" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM tb_member
+        WHERE
+        state = 2
+        AND
+        (username LIKE #{search}
+        OR
+        phone LIKE #{search}
+        OR
+        email LIKE #{search}
+        OR
+        sex LIKE #{search}
+        OR
+        address LIKE #{search})
+        <if test="minDate != null and minDate != '' and maxDate != null and maxDate != ''">
+            AND
+            created BETWEEN #{minDate} AND #{maxDate}
+        </if>
+        ORDER BY
+        ${orderCol}
+        ${orderDir}
+    </select>
+</mapper>

@@ -1,7 +1,5 @@
 package cn.exrick.manager.dto.front;
 
-import cn.exrick.manager.pojo.TbAddress;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;

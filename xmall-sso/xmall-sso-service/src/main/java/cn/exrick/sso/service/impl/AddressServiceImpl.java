@@ -1,9 +1,6 @@
 package cn.exrick.sso.service.impl;
 
 import cn.exrick.common.exception.XmallException;
-import cn.exrick.manager.mapper.TbAddressMapper;
-import cn.exrick.manager.pojo.TbAddress;
-import cn.exrick.manager.pojo.TbAddressExample;
 import cn.exrick.sso.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

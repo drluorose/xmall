@@ -2,7 +2,6 @@ package cn.exrick.manager.service;
 
 import cn.exrick.manager.dto.MemberDto;
 import cn.exrick.common.pojo.DataTablesResult;
-import cn.exrick.manager.pojo.TbMember;
 
 /**
  * @author Exrick

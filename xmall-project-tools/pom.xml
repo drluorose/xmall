@@ -62,14 +62,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-
-        <!-- 斗鱼OA START -->
-        <dependency>
-            <groupId>com.douyu.wsd-framework</groupId>
-            <artifactId>framework-oa</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        <!-- 斗鱼OA END -->
     </dependencies>
 
     <build>
