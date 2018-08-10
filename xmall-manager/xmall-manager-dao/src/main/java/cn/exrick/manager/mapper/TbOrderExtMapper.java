@@ -5,6 +5,7 @@ import cn.exrick.manager.dto.OrderChartData;
 import java.util.Date;
 import java.util.List;
 
+import cn.exrick.manager.pojo.TbOrder;
 import org.apache.ibatis.annotations.Param;
 
 /**

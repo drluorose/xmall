@@ -2,6 +2,7 @@ package cn.exrick.manager.mapper;
 
 import java.util.List;
 
+import cn.exrick.manager.pojo.TbMember;
 import org.apache.ibatis.annotations.Param;
 
 public interface TbMemberExtMapper extends TbMemberMapper {

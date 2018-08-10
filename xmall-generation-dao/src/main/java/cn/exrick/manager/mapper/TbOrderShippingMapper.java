@@ -2,7 +2,9 @@ package cn.exrick.manager.mapper;
 
 import cn.exrick.manager.pojo.TbOrderShipping;
 import cn.exrick.manager.pojo.TbOrderShippingExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface TbOrderShippingMapper {

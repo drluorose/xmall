@@ -1,19 +1,14 @@
 package cn.exrick.manager.dto;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * @author Exrickx
  */
+@Data
 public class EsCount implements Serializable {
 
     private Integer count;
-
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
 }

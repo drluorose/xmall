@@ -27,6 +27,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="xmall-manager-interface" />
     <orderEntry type="module" module-name="xmall-manager-pojo" />
+    <orderEntry type="module" module-name="xmall-generation-pojo" />
     <orderEntry type="module" module-name="xmall-common" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.9.9" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.3.2" level="project" />

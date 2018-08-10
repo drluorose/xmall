@@ -1,10 +1,13 @@
 package cn.exrick.manager.dto.front;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * @author Exrickx
  */
+@Data
 public class CommonDto implements Serializable {
 
     private Long userId;
@@ -12,28 +15,4 @@ public class CommonDto implements Serializable {
     private String imgData;
 
     private String token;
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getImgData() {
-        return imgData;
-    }
-
-    public void setImgData(String imgData) {
-        this.imgData = imgData;
-    }
 }
