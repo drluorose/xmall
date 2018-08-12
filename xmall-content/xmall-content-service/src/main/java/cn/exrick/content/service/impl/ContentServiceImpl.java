@@ -11,9 +11,10 @@ import cn.exrick.manager.dto.front.AllGoodsResult;
 import cn.exrick.manager.dto.front.Product;
 import cn.exrick.manager.dto.front.ProductDet;
 import cn.exrick.manager.mapper.TbItemDescMapper;
-import cn.exrick.manager.mapper.TbItemExtMapper;
+import cn.exrick.manager.mapper.TbItemMapper;
 import cn.exrick.manager.mapper.TbPanelContentMapper;
 import cn.exrick.manager.mapper.TbPanelMapper;
+import cn.exrick.manager.mapper.ext.TbItemExtMapper;
 import cn.exrick.manager.pojo.TbItem;
 import cn.exrick.manager.pojo.TbItemDesc;
 import cn.exrick.manager.pojo.TbPanel;
@@ -22,6 +23,7 @@ import cn.exrick.manager.pojo.TbPanelContentExample;
 import cn.exrick.manager.pojo.TbPanelExample;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -168,19 +170,19 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<TbPanel> getHome() {
+    public List<TbPanelDto> getHome() {
 
-        List<TbPanel> list = new ArrayList<>();
+        List<TbPanelDto> tbPanelDtos = null;
 
         //查询缓存
         try {
             //有缓存则读取
             String json = jedisClient.get(PRODUCT_HOME);
             if (json != null) {
-                list = new Gson().fromJson(json, new TypeToken<List<TbPanel>>() {
+                tbPanelDtos = new Gson().fromJson(json, new TypeToken<List<TbPanelDto>>() {
                 }.getType());
                 log.info("读取了首页缓存");
-                return list;
+                return tbPanelDtos;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -193,25 +195,29 @@ public class ContentServiceImpl implements ContentService {
         criteria.andPositionEqualTo(0);
         criteria.andStatusEqualTo(1);
         example.setOrderByClause("sort_order");
-        list = tbPanelMapper.selectByExample(example);
-        if (CollectionUtils.isEmpty(list)) {
+        List<TbPanel> tbPanels = tbPanelMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(tbPanels)) {
             return Lists.newArrayList();
         }
-        List<TbPanelDto> tbPannelDtos = Lists.transform(list, TbPanelDto::new);
-        for (TbPanelDto tbPanel : tbPannelDtos) {
+        tbPanelDtos = Lists.newArrayList(Lists.transform(tbPanels, TbPanelDto::new));
+        for (TbPanelDto tbPanel : tbPanelDtos) {
             TbPanelContentExample exampleContent = new TbPanelContentExample();
             exampleContent.setOrderByClause("sort_order");
             TbPanelContentExample.Criteria criteriaContent = exampleContent.createCriteria();
             //条件查询
             criteriaContent.andPanelIdEqualTo(tbPanel.getId());
             List<TbPanelContent> contentList = tbPanelContentMapper.selectByExample(exampleContent);
-            List<TbPanelContentDto> tbPanelContentDtos = Lists.transform(contentList, TbPanelContentDto::new);
+            List<TbPanelContentDto> tbPanelContentDtos = Lists.newArrayList(Lists.transform(contentList, TbPanelContentDto::new));
             for (TbPanelContentDto content : tbPanelContentDtos) {
                 if (content.getProductId() != null) {
                     TbItem tbItem = tbItemExtMapper.selectByPrimaryKey(content.getProductId());
                     content.setProductName(tbItem.getTitle());
                     content.setSalePrice(tbItem.getPrice());
                     content.setSubTitle(tbItem.getSellPoint());
+                    List<String> imgs = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(tbItem.getImage());
+                    if (!CollectionUtils.isEmpty(imgs)) {
+                        content.setProductImageBig(imgs.get(0));
+                    }
                 }
             }
 
@@ -220,12 +226,12 @@ public class ContentServiceImpl implements ContentService {
 
         //把结果添加至缓存
         try {
-            jedisClient.set(PRODUCT_HOME, new Gson().toJson(list));
+            jedisClient.set(PRODUCT_HOME, new Gson().toJson(tbPanelDtos));
             log.info("添加了首页缓存");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return list;
+        return tbPanelDtos;
     }
 
     @Override

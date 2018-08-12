@@ -7,6 +7,7 @@
         <groupId>cn.exrick</groupId>
         <artifactId>xmall-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../xmall-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>xmall-mybatis-tools</artifactId>

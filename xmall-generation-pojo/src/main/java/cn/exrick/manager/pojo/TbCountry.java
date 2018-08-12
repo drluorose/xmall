@@ -1,9 +1,10 @@
 package cn.exrick.manager.pojo;
 
+import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class TbCountry {
+public class TbCountry implements Serializable {
     private Integer id;
 
     private Integer continentId;
@@ -21,4 +22,6 @@ public class TbCountry {
     private String fullCname;
 
     private String remark;
+
+    private static final long serialVersionUID = 1L;
 }

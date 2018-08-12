@@ -14,8 +14,16 @@
     <packaging>war</packaging>
     <dependencies>
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+        </dependency>
+        <dependency>
             <groupId>cn.exrick</groupId>
-            <artifactId>xmall-manager-dao</artifactId>
+            <artifactId>xmall-generation-dao</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -71,13 +79,20 @@
         </dependency>
         <!--七牛云图片上传SDK-->
         <!--<dependency>-->
-            <!--<groupId>com.qiniu</groupId>-->
-            <!--<artifactId>qiniu-java-sdk</artifactId>-->
+        <!--<groupId>com.qiniu</groupId>-->
+        <!--<artifactId>qiniu-java-sdk</artifactId>-->
         <!--</dependency>-->
         <!-- Redis客户端 -->
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>4.3.14.RELEASE</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -113,16 +128,16 @@
                 </configuration>
                 <!-- For any extra dependencies needed when running embedded Tomcat (not WAR dependencies) add them below -->
                 <!--<dependencies>-->
-                    <!--<dependency>-->
-                        <!--<groupId>org.apache.derby</groupId>-->
-                        <!--<artifactId>derby</artifactId>-->
-                        <!--<version>\${derbyVersion}</version>-->
-                    <!--</dependency>-->
-                    <!--<dependency>-->
-                        <!--<groupId>javax.mail</groupId>-->
-                        <!--<artifactId>mail</artifactId>-->
-                        <!--<version>1.4</version>-->
-                    <!--</dependency>-->
+                <!--<dependency>-->
+                <!--<groupId>org.apache.derby</groupId>-->
+                <!--<artifactId>derby</artifactId>-->
+                <!--<version>\${derbyVersion}</version>-->
+                <!--</dependency>-->
+                <!--<dependency>-->
+                <!--<groupId>javax.mail</groupId>-->
+                <!--<artifactId>mail</artifactId>-->
+                <!--<version>1.4</version>-->
+                <!--</dependency>-->
                 <!--</dependencies>-->
             </plugin>
         </plugins>

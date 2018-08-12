@@ -54,7 +54,6 @@
     <orderEntry type="library" name="Maven: redis.clients:jedis:2.9.0" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20171018" level="project" />
     <orderEntry type="module" module-name="xmall-manager-interface" />
-    <orderEntry type="module" module-name="xmall-manager-pojo" />
     <orderEntry type="module" module-name="xmall-generation-pojo" />
     <orderEntry type="module" module-name="xmall-content-interface" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:4.3.12.RELEASE" level="project" />

@@ -1,9 +1,10 @@
 package cn.exrick.manager.pojo;
 
+import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class TbAddress {
+public class TbAddress implements Serializable {
     private Long addressId;
 
     private Long userId;
@@ -15,4 +16,6 @@ public class TbAddress {
     private String streetName;
 
     private Boolean isDefault;
+
+    private static final long serialVersionUID = 1L;
 }

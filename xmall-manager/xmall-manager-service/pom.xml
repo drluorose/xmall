@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.exrick</groupId>
-            <artifactId>xmall-manager-dao</artifactId>
+            <artifactId>xmall-generation-dao</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

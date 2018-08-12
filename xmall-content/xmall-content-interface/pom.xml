@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.exrick</groupId>
-            <artifactId>xmall-manager-pojo</artifactId>
+            <artifactId>xmall-generation-pojo</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

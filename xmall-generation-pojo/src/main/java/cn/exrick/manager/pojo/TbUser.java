@@ -1,10 +1,11 @@
 package cn.exrick.manager.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
 @Data
-public class TbUser {
+public class TbUser implements Serializable {
     private Long id;
 
     private String username;
@@ -30,4 +31,6 @@ public class TbUser {
     private Date created;
 
     private Date updated;
+
+    private static final long serialVersionUID = 1L;
 }

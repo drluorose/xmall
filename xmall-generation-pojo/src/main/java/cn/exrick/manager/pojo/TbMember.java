@@ -1,11 +1,12 @@
 package cn.exrick.manager.pojo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
 @Data
-public class TbMember {
+public class TbMember implements Serializable {
     private Long id;
 
     private String username;
@@ -33,4 +34,6 @@ public class TbMember {
     private Integer points;
 
     private BigDecimal balance;
+
+    private static final long serialVersionUID = 1L;
 }

@@ -1,10 +1,11 @@
 package cn.exrick.manager.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
 @Data
-public class TbLog {
+public class TbLog implements Serializable {
     private Integer id;
 
     private String name;
@@ -26,4 +27,6 @@ public class TbLog {
     private Integer time;
 
     private Date createDate;
+
+    private static final long serialVersionUID = 1L;
 }

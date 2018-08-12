@@ -1,9 +1,10 @@
 package cn.exrick.manager.pojo;
 
+import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class TbBase {
+public class TbBase implements Serializable {
     private Integer id;
 
     private String webName;
@@ -33,4 +34,6 @@ public class TbBase {
     private String updateLog;
 
     private String frontUrl;
+
+    private static final long serialVersionUID = 1L;
 }

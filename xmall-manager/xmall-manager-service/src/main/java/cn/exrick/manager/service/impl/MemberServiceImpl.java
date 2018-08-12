@@ -4,7 +4,7 @@ import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.dto.MemberDto;
 import cn.exrick.common.exception.XmallException;
-import cn.exrick.manager.mapper.TbMemberExtMapper;
+import cn.exrick.manager.mapper.ext.TbMemberExtMapper;
 import cn.exrick.manager.pojo.TbMember;
 import cn.exrick.manager.pojo.TbMemberExample;
 import cn.exrick.manager.service.MemberService;

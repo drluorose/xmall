@@ -8,7 +8,7 @@ import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.dto.ItemDto;
 import cn.exrick.manager.mapper.TbItemCatMapper;
 import cn.exrick.manager.mapper.TbItemDescMapper;
-import cn.exrick.manager.mapper.TbItemExtMapper;
+import cn.exrick.manager.mapper.ext.TbItemExtMapper;
 import cn.exrick.manager.pojo.TbItem;
 import cn.exrick.manager.pojo.TbItemCat;
 import cn.exrick.manager.pojo.TbItemDesc;

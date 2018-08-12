@@ -1,11 +1,12 @@
 package cn.exrick.manager.pojo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
 @Data
-public class TbOrder {
+public class TbOrder implements Serializable {
     private String orderId;
 
     private BigDecimal payment;
@@ -39,4 +40,6 @@ public class TbOrder {
     private String buyerNick;
 
     private Boolean buyerComment;
+
+    private static final long serialVersionUID = 1L;
 }

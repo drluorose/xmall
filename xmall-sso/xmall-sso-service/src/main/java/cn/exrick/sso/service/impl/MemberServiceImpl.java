@@ -4,7 +4,7 @@ import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.common.utils.QiniuUtil;
 import cn.exrick.manager.dto.front.Member;
-import cn.exrick.manager.mapper.TbMemberExtMapper;
+import cn.exrick.manager.mapper.ext.TbMemberExtMapper;
 import cn.exrick.manager.pojo.TbMember;
 import cn.exrick.sso.service.LoginService;
 import cn.exrick.sso.service.MemberService;

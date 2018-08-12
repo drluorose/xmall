@@ -1,10 +1,11 @@
 package cn.exrick.manager.pojo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
-public class TbOrderItem {
+public class TbOrderItem implements Serializable {
     private String id;
 
     private String itemId;
@@ -20,4 +21,6 @@ public class TbOrderItem {
     private BigDecimal totalFee;
 
     private String picPath;
+
+    private static final long serialVersionUID = 1L;
 }

@@ -1,5 +1,6 @@
 package cn.exrick.content.service;
 
+import cn.exrick.manager.dto.TbPanelDto;
 import cn.exrick.manager.dto.front.AllGoodsResult;
 import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.manager.dto.front.ProductDet;
@@ -53,7 +54,7 @@ public interface ContentService {
      * 获取首页数据
      * @return
      */
-    List<TbPanel> getHome();
+    List<TbPanelDto> getHome();
 
     /**
      * 获取商品推荐板块

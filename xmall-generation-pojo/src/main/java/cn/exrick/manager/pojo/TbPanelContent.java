@@ -1,10 +1,11 @@
 package cn.exrick.manager.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
 @Data
-public class TbPanelContent {
+public class TbPanelContent implements Serializable {
     private Integer id;
 
     private Integer panelId;
@@ -26,4 +27,6 @@ public class TbPanelContent {
     private Date created;
 
     private Date updated;
+
+    private static final long serialVersionUID = 1L;
 }

@@ -4,7 +4,7 @@ package cn.exrick.sso.service.impl;
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.dto.front.Member;
-import cn.exrick.manager.mapper.TbMemberExtMapper;
+import cn.exrick.manager.mapper.ext.TbMemberExtMapper;
 import cn.exrick.manager.pojo.TbMember;
 import cn.exrick.manager.pojo.TbMemberExample;
 import cn.exrick.sso.service.LoginService;
