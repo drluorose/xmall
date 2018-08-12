@@ -3,14 +3,10 @@ package com.douyu.wsd.cradle.service;
 import com.douyu.wsd.cradle.common.ProjectConstants;
 import com.douyu.wsd.cradle.common.TemporaryFileAutoCleanInterceptor;
 import com.douyu.wsd.cradle.domain.MavenModule;
+import com.douyu.wsd.cradle.utils.IdUtils;
 import com.douyu.wsd.cradle.utils.Underline2Camel;
 import com.douyu.wsd.cradle.utils.ZipUtils;
 import com.douyu.wsd.cradle.vo.GenerateReq;
-import com.douyu.wsd.framework.common.io.FileUtils;
-import com.douyu.wsd.framework.common.json.JsonUtils;
-import com.douyu.wsd.framework.common.lang.IdGenerator;
-import com.douyu.wsd.framework.common.lang.StringUtils;
-import com.douyu.wsd.framework.common.ops.SystemUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,23 +20,26 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import com.google.common.base.Charsets;
+import com.google.gson.Gson;
 import com.mysql.jdbc.Driver;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.IdGenerator;
 import org.springframework.util.ResourceUtils;
 
 @Service
 @Slf4j
 public class CodeGenerateServiceImpl implements CodeGenerateService {
 
-
     private TemplateParser parser;
-
 
     @PostConstruct
     public void init() throws IOException {
@@ -50,7 +49,7 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
     @Override
     public File generate(GenerateReq req) throws IOException {
 
-        File outputDir = createRequestLevelDir("request_" + IdGenerator.uuid());
+        File outputDir = createRequestLevelDir("request_" + IdUtils.getId());
 
         TemporaryFileAutoCleanInterceptor.registerForDelete(outputDir);
 
@@ -81,18 +80,18 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
 
     private Map<String, Object> prepareContext(GenerateReq req, File outputDir) throws FileNotFoundException {
         MavenModule commonModule = req.isUseCommon() ? MavenModule.builder()
-                .name(req.getCommonArtifactId())
-                .artifactId(req.getCommonArtifactId())
-                .packageName(req.getCommonPackageName())
-                .useMybatis(req.isCommonUseMybatis())
-                .useDubbo(req.isCommonUseDubbo())
-                .useRestTemplate(req.isCommonUseRestTemplate())
-                .databaseIp(req.getCommonDatabaseIp())
-                .databasePort(req.getCommonDatabasePort())
-                .databaseName(req.getCommonDatabaseName())
-                .databaseUsername(req.getCommonDatabaseUsername())
-                .databasePassword(req.getCommonDatabasePassword())
-                .build() : null;
+            .name(req.getCommonArtifactId())
+            .artifactId(req.getCommonArtifactId())
+            .packageName(req.getCommonPackageName())
+            .useMybatis(req.isCommonUseMybatis())
+            .useDubbo(req.isCommonUseDubbo())
+            .useRestTemplate(req.isCommonUseRestTemplate())
+            .databaseIp(req.getCommonDatabaseIp())
+            .databasePort(req.getCommonDatabasePort())
+            .databaseName(req.getCommonDatabaseName())
+            .databaseUsername(req.getCommonDatabaseUsername())
+            .databasePassword(req.getCommonDatabasePassword())
+            .build() : null;
 
         if (commonModule != null && req.isCommonUseMybatis()) {
             commonModule.setTableMapping(queryTableMapping(commonModule));
@@ -101,19 +100,19 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
         List<MavenModule> exeModules = new LinkedList<>();
         if (req.isUseExe1()) {
             MavenModule exeModule1 = MavenModule.builder()
-                    .name(req.getExeArtifactId1())
-                    .artifactId(req.getExeArtifactId1())
-                    .packageName(req.getExePackageName1())
-                    .useMybatis(req.isExeUseMybatis1())
-                    .useDubbo(req.isExeUseDubbo1())
-                    .useRestTemplate(req.isExeUseRestTemplate1() || req.isExeUseOa1())
-                    .databaseIp(req.getExeDatabaseIp1())
-                    .databasePort(req.getExeDatabasePort1())
-                    .databaseName(req.getExeDatabaseName1())
-                    .databaseUsername(req.getExeDatabaseUsername1())
-                    .databasePassword(req.getExeDatabasePassword1())
-                    .useOa(req.isExeUseOa1())
-                    .build();
+                .name(req.getExeArtifactId1())
+                .artifactId(req.getExeArtifactId1())
+                .packageName(req.getExePackageName1())
+                .useMybatis(req.isExeUseMybatis1())
+                .useDubbo(req.isExeUseDubbo1())
+                .useRestTemplate(req.isExeUseRestTemplate1() || req.isExeUseOa1())
+                .databaseIp(req.getExeDatabaseIp1())
+                .databasePort(req.getExeDatabasePort1())
+                .databaseName(req.getExeDatabaseName1())
+                .databaseUsername(req.getExeDatabaseUsername1())
+                .databasePassword(req.getExeDatabasePassword1())
+                .useOa(req.isExeUseOa1())
+                .build();
             if (req.isExeUseMybatis1()) {
                 exeModule1.setTableMapping(queryTableMapping(exeModule1));
             }
@@ -121,19 +120,19 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
         }
         if (req.isUseExe2()) {
             MavenModule exeModule2 = MavenModule.builder()
-                    .name(req.getExeArtifactId2())
-                    .artifactId(req.getExeArtifactId2())
-                    .packageName(req.getExePackageName2())
-                    .useMybatis(req.isExeUseMybatis2())
-                    .useDubbo(req.isExeUseDubbo2())
-                    .useRestTemplate(req.isExeUseRestTemplate2() || req.isExeUseOa2())
-                    .databaseIp(req.getExeDatabaseIp2())
-                    .databasePort(req.getExeDatabasePort2())
-                    .databaseName(req.getExeDatabaseName2())
-                    .databaseUsername(req.getExeDatabaseUsername2())
-                    .databasePassword(req.getExeDatabasePassword2())
-                    .useOa(req.isExeUseOa2())
-                    .build();
+                .name(req.getExeArtifactId2())
+                .artifactId(req.getExeArtifactId2())
+                .packageName(req.getExePackageName2())
+                .useMybatis(req.isExeUseMybatis2())
+                .useDubbo(req.isExeUseDubbo2())
+                .useRestTemplate(req.isExeUseRestTemplate2() || req.isExeUseOa2())
+                .databaseIp(req.getExeDatabaseIp2())
+                .databasePort(req.getExeDatabasePort2())
+                .databaseName(req.getExeDatabaseName2())
+                .databaseUsername(req.getExeDatabaseUsername2())
+                .databasePassword(req.getExeDatabasePassword2())
+                .useOa(req.isExeUseOa2())
+                .build();
             if (req.isExeUseMybatis2()) {
                 exeModule2.setTableMapping(queryTableMapping(exeModule2));
             }
@@ -141,19 +140,19 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
         }
         if (req.isUseExe3()) {
             MavenModule exeModule3 = MavenModule.builder()
-                    .name(req.getExeArtifactId3())
-                    .artifactId(req.getExeArtifactId3())
-                    .packageName(req.getExePackageName3())
-                    .useMybatis(req.isExeUseMybatis3())
-                    .useDubbo(req.isExeUseDubbo3())
-                    .useRestTemplate(req.isExeUseRestTemplate3() || req.isExeUseOa3())
-                    .databaseIp(req.getExeDatabaseIp3())
-                    .databasePort(req.getExeDatabasePort3())
-                    .databaseName(req.getExeDatabaseName3())
-                    .databaseUsername(req.getExeDatabaseUsername3())
-                    .databasePassword(req.getExeDatabasePassword3())
-                    .useOa(req.isExeUseOa3())
-                    .build();
+                .name(req.getExeArtifactId3())
+                .artifactId(req.getExeArtifactId3())
+                .packageName(req.getExePackageName3())
+                .useMybatis(req.isExeUseMybatis3())
+                .useDubbo(req.isExeUseDubbo3())
+                .useRestTemplate(req.isExeUseRestTemplate3() || req.isExeUseOa3())
+                .databaseIp(req.getExeDatabaseIp3())
+                .databasePort(req.getExeDatabasePort3())
+                .databaseName(req.getExeDatabaseName3())
+                .databaseUsername(req.getExeDatabaseUsername3())
+                .databasePassword(req.getExeDatabasePassword3())
+                .useOa(req.isExeUseOa3())
+                .build();
             if (req.isExeUseMybatis3()) {
                 exeModule3.setTableMapping(queryTableMapping(exeModule3));
             }
@@ -161,7 +160,7 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
         }
 
         String sourcePath = SystemUtils.IS_OS_LINUX ?
-                "/opt/wsd-java-service/bin/source" : ResourceUtils.getFile("classpath:source").getAbsolutePath();
+            "/opt/wsd-java-service/bin/source" : ResourceUtils.getFile("classpath:source").getAbsolutePath();
         Map<String, Object> map = new HashMap<>();
         map.put("projectName", req.getProjectName());
         map.put("description", "暂无");
@@ -192,9 +191,9 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
         String sql = "SHOW TABLES";
         List<String> tables = jdbcTemplate.queryForList(sql, String.class);
         Map<String, String> map = tables.stream()
-                .filter(Objects::nonNull)
-                .collect(Collectors.toMap(t -> t, CodeGenerateServiceImpl::convertToClassName, (t1, t2) -> t1));
-        String json = JsonUtils.toJson(map);
+            .filter(Objects::nonNull)
+            .collect(Collectors.toMap(t -> t, CodeGenerateServiceImpl::convertToClassName, (t1, t2) -> t1));
+        String json = new Gson().toJson(map);
         return json;
 //        return StringUtils.replace(json, "\"", "\\\"");
     }
@@ -206,7 +205,7 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
     private JdbcTemplate createJdbcTemplate(MavenModule module) {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
         String jdbcUrl = "jdbc:mysql://" + module.getDatabaseIp() + ":" + module.getDatabasePort() + "/" + module
-                .getDatabaseName();
+            .getDatabaseName();
         dataSource.setDriverClass(Driver.class);
         dataSource.setUrl(jdbcUrl);
         dataSource.setUsername(module.getDatabaseUsername());
@@ -219,7 +218,7 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
         parser.parseFile("build.xml.ftl", buildFile, context);
 
         if (log.isDebugEnabled()) {
-            log.debug("build xml: \n{}", FileUtils.readFileToString(buildFile, Charsets.UTF_8));
+            log.debug("build xml: \n{}", FileUtils.readFileToString(buildFile, Charsets.UTF_8.name()));
         }
 
         org.apache.tools.ant.DirectoryScanner.removeDefaultExclude("**/.gitignore");
@@ -235,10 +234,9 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
     }
 
     private File buildZip(File inputDir) {
-        File outputFile = new File(ProjectConstants.WORK_BASE_DIR, IdGenerator.uuid() + ".zip");
+        File outputFile = new File(ProjectConstants.WORK_BASE_DIR, IdUtils.getId() + ".zip");
         ZipUtils.zip(inputDir, outputFile);
         return outputFile;
     }
-
 
 }

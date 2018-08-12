@@ -4,6 +4,7 @@ import cn.exrick.common.pojo.Result;
 import cn.exrick.common.pojo.ZTreeNode;
 import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.content.service.PanelService;
+import cn.exrick.manager.pojo.TbPanel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;

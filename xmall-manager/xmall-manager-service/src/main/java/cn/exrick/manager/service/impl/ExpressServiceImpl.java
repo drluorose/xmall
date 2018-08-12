@@ -1,5 +1,8 @@
 package cn.exrick.manager.service.impl;
 
+import cn.exrick.manager.mapper.TbExpressMapper;
+import cn.exrick.manager.pojo.TbExpress;
+import cn.exrick.manager.pojo.TbExpressExample;
 import cn.exrick.manager.service.ExpressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -2,6 +2,7 @@ package cn.exrick.front.controller;
 
 import cn.exrick.common.pojo.Result;
 import cn.exrick.common.utils.ResultUtil;
+import cn.exrick.manager.pojo.TbAddress;
 import cn.exrick.sso.service.AddressService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

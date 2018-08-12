@@ -6,6 +6,14 @@ import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.manager.dto.OrderDetail;
 import cn.exrick.manager.mapper.TbOrderExtMapper;
 import cn.exrick.manager.mapper.TbOrderItemExtMapper;
+import cn.exrick.manager.mapper.TbOrderShippingMapper;
+import cn.exrick.manager.mapper.TbThanksMapper;
+import cn.exrick.manager.pojo.TbOrder;
+import cn.exrick.manager.pojo.TbOrderExample;
+import cn.exrick.manager.pojo.TbOrderItem;
+import cn.exrick.manager.pojo.TbOrderItemExample;
+import cn.exrick.manager.pojo.TbOrderShipping;
+import cn.exrick.manager.pojo.TbThanks;
 import cn.exrick.manager.service.OrderService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -311,14 +319,14 @@ public class OrderServiceImpl implements OrderService {
         if(!value.equals(token)){
             return -1;
         }
-        //保存
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            Date date=sdf.parse(tbThanks.getTime());
-            tbThanks.setDate(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        //保存
+//        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        try {
+//            Date date=sdf.parse(tbThanks.getDate());
+//            tbThanks.setDate(date);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         if(tbThanksMapper.updateByPrimaryKey(tbThanks)!=1){
             return 0;
         }

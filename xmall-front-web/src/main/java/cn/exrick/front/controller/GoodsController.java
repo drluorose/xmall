@@ -6,6 +6,7 @@ import cn.exrick.manager.dto.front.SearchResult;
 import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.content.service.ContentService;
 import cn.exrick.manager.dto.front.ProductDet;
+import cn.exrick.manager.pojo.TbPanel;
 import cn.exrick.search.service.SearchService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

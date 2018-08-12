@@ -4,6 +4,7 @@ import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.dto.front.CartProduct;
 import cn.exrick.manager.mapper.TbItemMapper;
+import cn.exrick.manager.pojo.TbItem;
 import cn.exrick.sso.service.CartService;
 import com.google.gson.Gson;
 import org.slf4j.Logger;

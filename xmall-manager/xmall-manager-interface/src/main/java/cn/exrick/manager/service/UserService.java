@@ -1,6 +1,10 @@
 package cn.exrick.manager.service;
 
 import cn.exrick.common.pojo.DataTablesResult;
+import cn.exrick.manager.dto.TbRoleDto;
+import cn.exrick.manager.pojo.TbPermission;
+import cn.exrick.manager.pojo.TbRole;
+import cn.exrick.manager.pojo.TbUser;
 
 import java.util.List;
 import java.util.Set;
@@ -48,7 +52,7 @@ public interface UserService {
      * @param tbRole
      * @return
      */
-    int addRole(TbRole tbRole);
+    int addRole(TbRoleDto tbRole);
 
     /**
      * 通过角色名获取角色
@@ -70,7 +74,7 @@ public interface UserService {
      * @param tbRole
      * @return
      */
-    int updateRole(TbRole tbRole);
+    int updateRole(TbRoleDto tbRole);
 
     /**
      * 删除角色

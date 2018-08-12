@@ -1,6 +1,9 @@
 package cn.exrick.manager.service.impl;
 
 import cn.exrick.common.constant.DictConstant;
+import cn.exrick.manager.mapper.TbDictMapper;
+import cn.exrick.manager.pojo.TbDict;
+import cn.exrick.manager.pojo.TbDictExample;
 import cn.exrick.manager.service.DictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

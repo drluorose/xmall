@@ -1,8 +1,6 @@
 package cn.exrick.manager.pojo;
 
 import java.util.Date;
-import java.util.List;
-
 import lombok.Data;
 
 @Data
@@ -26,6 +24,4 @@ public class TbPanel {
     private Date created;
 
     private Date updated;
-
-    private List<TbPanelContent> panelContents;
 }

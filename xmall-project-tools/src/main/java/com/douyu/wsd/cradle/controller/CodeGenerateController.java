@@ -1,16 +1,9 @@
 package com.douyu.wsd.cradle.controller;
 
-import com.douyu.wsd.framework.common.io.FileUtils;
-import com.douyu.wsd.framework.common.lang.StringUtils;
-import com.douyu.wsd.framework.common.time.DateFormatUtils;
 import com.douyu.wsd.cradle.service.CodeGenerateService;
 import com.douyu.wsd.cradle.vo.GenerateReq;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import javax.annotation.Resource;
-
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +12,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")

@@ -4,6 +4,7 @@ import cn.exrick.common.pojo.Result;
 import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.manager.dto.MemberDto;
 import cn.exrick.common.pojo.DataTablesResult;
+import cn.exrick.manager.pojo.TbMember;
 import cn.exrick.manager.service.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -2,6 +2,7 @@ package cn.exrick.manager.service;
 
 import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.manager.dto.OrderDetail;
+import cn.exrick.manager.pojo.TbThanks;
 
 import java.math.BigDecimal;
 
@@ -107,7 +108,7 @@ public interface OrderService {
      * @param tbThanks
      * @return
      */
-    int editPay(String tokenName,String token,TbThanks tbThanks);
+    int editPay(String tokenName, String token, TbThanks tbThanks);
 
     /**
      * 捐赠删除不回邮件

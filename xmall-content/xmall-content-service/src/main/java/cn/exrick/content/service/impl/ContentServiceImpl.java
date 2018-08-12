@@ -2,15 +2,27 @@ package cn.exrick.content.service.impl;
 
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.jedis.JedisClient;
-import cn.exrick.manager.dto.front.AllGoodsResult;
 import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.content.service.ContentService;
 import cn.exrick.manager.dto.DtoUtil;
-import cn.exrick.manager.dto.front.*;
-import cn.exrick.manager.mapper.*;
-import cn.exrick.manager.pojo.*;
+import cn.exrick.manager.dto.TbPanelContentDto;
+import cn.exrick.manager.dto.TbPanelDto;
+import cn.exrick.manager.dto.front.AllGoodsResult;
+import cn.exrick.manager.dto.front.Product;
+import cn.exrick.manager.dto.front.ProductDet;
+import cn.exrick.manager.mapper.TbItemDescMapper;
+import cn.exrick.manager.mapper.TbItemExtMapper;
+import cn.exrick.manager.mapper.TbPanelContentMapper;
+import cn.exrick.manager.mapper.TbPanelMapper;
+import cn.exrick.manager.pojo.TbItem;
+import cn.exrick.manager.pojo.TbItemDesc;
+import cn.exrick.manager.pojo.TbPanel;
+import cn.exrick.manager.pojo.TbPanelContent;
+import cn.exrick.manager.pojo.TbPanelContentExample;
+import cn.exrick.manager.pojo.TbPanelExample;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -92,7 +105,12 @@ public class ContentServiceImpl implements ContentService {
         //条件查询
         criteria.andPanelIdEqualTo(panelId);
         list = tbPanelContentMapper.selectByExample(example);
-        for (TbPanelContent content : list) {
+        if (CollectionUtils.isEmpty(list)) {
+            result.setData(list);
+            return result;
+        }
+        List<TbPanelContentDto> contents = Lists.transform(list, TbPanelContentDto::new);
+        for (TbPanelContentDto content : contents) {
             if (content.getProductId() != null) {
                 TbItem tbItem = tbItemExtMapper.selectByPrimaryKey(content.getProductId());
                 content.setProductName(tbItem.getTitle());
@@ -176,14 +194,19 @@ public class ContentServiceImpl implements ContentService {
         criteria.andStatusEqualTo(1);
         example.setOrderByClause("sort_order");
         list = tbPanelMapper.selectByExample(example);
-        for (TbPanel tbPanel : list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return Lists.newArrayList();
+        }
+        List<TbPanelDto> tbPannelDtos = Lists.transform(list, TbPanelDto::new);
+        for (TbPanelDto tbPanel : tbPannelDtos) {
             TbPanelContentExample exampleContent = new TbPanelContentExample();
             exampleContent.setOrderByClause("sort_order");
             TbPanelContentExample.Criteria criteriaContent = exampleContent.createCriteria();
             //条件查询
             criteriaContent.andPanelIdEqualTo(tbPanel.getId());
             List<TbPanelContent> contentList = tbPanelContentMapper.selectByExample(exampleContent);
-            for (TbPanelContent content : contentList) {
+            List<TbPanelContentDto> tbPanelContentDtos = Lists.transform(contentList, TbPanelContentDto::new);
+            for (TbPanelContentDto content : tbPanelContentDtos) {
                 if (content.getProductId() != null) {
                     TbItem tbItem = tbItemExtMapper.selectByPrimaryKey(content.getProductId());
                     content.setProductName(tbItem.getTitle());
@@ -192,7 +215,7 @@ public class ContentServiceImpl implements ContentService {
                 }
             }
 
-            tbPanel.setPanelContents(contentList);
+            tbPanel.setPanelContents(tbPanelContentDtos);
         }
 
         //把结果添加至缓存
@@ -263,21 +286,26 @@ public class ContentServiceImpl implements ContentService {
 
     List<TbPanel> getTbPanelAndContentsById(Integer panelId) {
 
-        List<TbPanel> list = new ArrayList<>();
+        List<TbPanel> list;
         TbPanelExample example = new TbPanelExample();
         TbPanelExample.Criteria criteria = example.createCriteria();
         //条件查询
         criteria.andIdEqualTo(panelId);
         criteria.andStatusEqualTo(1);
         list = tbPanelMapper.selectByExample(example);
-        for (TbPanel tbPanel : list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return Lists.newArrayList();
+        }
+        List<TbPanelDto> tbPanelDtos = Lists.transform(list, TbPanelDto::new);
+        for (TbPanelDto tbPanel : tbPanelDtos) {
             TbPanelContentExample exampleContent = new TbPanelContentExample();
             exampleContent.setOrderByClause("sort_order");
             TbPanelContentExample.Criteria criteriaContent = exampleContent.createCriteria();
             //条件查询
             criteriaContent.andPanelIdEqualTo(tbPanel.getId());
             List<TbPanelContent> contentList = tbPanelContentMapper.selectByExample(exampleContent);
-            for (TbPanelContent content : contentList) {
+            List<TbPanelContentDto> tbPanelContentDtos = Lists.transform(contentList, TbPanelContentDto::new);
+            for (TbPanelContentDto content : tbPanelContentDtos) {
                 if (content.getProductId() != null) {
                     TbItem tbItem = tbItemExtMapper.selectByPrimaryKey(content.getProductId());
                     content.setProductName(tbItem.getTitle());
@@ -286,7 +314,7 @@ public class ContentServiceImpl implements ContentService {
                 }
             }
 
-            tbPanel.setPanelContents(contentList);
+            tbPanel.setPanelContents(tbPanelContentDtos);
         }
         return list;
     }

@@ -5,6 +5,7 @@ import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.manager.dto.EsInfo;
 import cn.exrick.manager.dto.ItemDto;
 import cn.exrick.common.pojo.DataTablesResult;
+import cn.exrick.manager.pojo.TbItem;
 import cn.exrick.manager.service.ItemService;
 import cn.exrick.search.service.SearchItemService;
 import io.swagger.annotations.Api;

@@ -23,4 +23,6 @@ public class OrderInfo implements Serializable {
     private String streetName;
 
     private BigDecimal orderTotal;
+
+    private List<CartProduct> goodsList;
 }

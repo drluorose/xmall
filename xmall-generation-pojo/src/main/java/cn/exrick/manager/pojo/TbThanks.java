@@ -25,4 +25,6 @@ public class TbThanks {
     private String orderId;
 
     private Date date;
+
+
 }

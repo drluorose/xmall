@@ -4,10 +4,16 @@ import cn.exrick.common.annotation.SystemControllerLog;
 import cn.exrick.common.annotation.SystemServiceLog;
 import cn.exrick.common.utils.IPInfoUtil;
 import cn.exrick.common.utils.ThreadPoolUtil;
+import cn.exrick.manager.dto.TbLogDto;
+import cn.exrick.manager.pojo.TbLog;
 import cn.exrick.manager.service.SystemService;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +85,7 @@ public class SystemLogAspect {
 
             if (null != username) {
 
-                TbLog tbLog=new TbLog();
+                TbLogDto tbLog=new TbLogDto();
 
                 //日志标题
                 tbLog.setName(getControllerMethodDescription(joinPoint));
@@ -130,7 +136,7 @@ public class SystemLogAspect {
 
             if (null != username) {
 
-                TbLog tbLog=new TbLog();
+                TbLogDto tbLog=new TbLogDto();
 
                 //日志标题
                 tbLog.setName(getControllerMethodDescription(joinPoint));
