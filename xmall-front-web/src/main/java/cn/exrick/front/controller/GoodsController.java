@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public class GoodsController {
 
     @RequestMapping(value = "/goods/home", method = RequestMethod.GET)
     @ApiOperation(value = "首页内容展示")
-    public Result<List<TbPanelDto>> getProductHome() {
+    public Result<List<TbPanelDto>> getProductHome(HttpSession httpSession) {
 
         List<TbPanelDto> list = contentService.getHome();
         return new ResultUtil<List<TbPanelDto>>().setData(list);

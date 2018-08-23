@@ -7,7 +7,7 @@
     <context id="testTables" targetRuntime="MyBatis3">
         <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
         <plugin type="org.mybatis.generator.plugins.LombokPlugin"/>
-        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
         <commentGenerator>
             <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
             <property name="suppressAllComments" value="true"/>
@@ -33,7 +33,7 @@
         </javaModelGenerator>
         <!-- targetProject:mapper映射文件生成的位置 -->
         <sqlMapGenerator targetPackage="cn.exrick.manager.mapper"
-                         targetProject="./src/main/java">
+                         targetProject="./src/main/resources">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
@@ -68,7 +68,10 @@
         <table schema="" tableName="tb_express"></table>
         <table schema="" tableName="tb_dict"></table>
         <table schema="" tableName="tb_continent"></table>
-        <table schema="" tableName="tb_country"></table>
+        <table schema="" tableName="tb_country">
+            <columnOverride column="status" javaType="cn.exrick.common.enums.EnableStatusEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler"/>
+        </table>
         <table schema="" tableName="tb_city"></table>
     </context>
 </generatorConfiguration>

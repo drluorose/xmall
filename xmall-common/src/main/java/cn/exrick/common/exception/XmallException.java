@@ -8,9 +8,14 @@ public class XmallException extends RuntimeException {
 
     private String msg;
 
-    public XmallException(String msg){
+    public XmallException(String msg, Throwable cause) {
+        super(cause);
+        this.msg = msg;
+    }
+
+    public XmallException(String msg) {
         super(msg);
-        this.msg=msg;
+        this.msg = msg;
     }
 
     public String getMsg() {

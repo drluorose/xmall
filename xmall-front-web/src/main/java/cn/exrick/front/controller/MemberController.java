@@ -2,13 +2,13 @@ package cn.exrick.front.controller;
 
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.common.pojo.GeetInit;
+import cn.exrick.common.pojo.Result;
 import cn.exrick.common.utils.GeetestLib;
 import cn.exrick.common.utils.IPInfoUtil;
-import cn.exrick.manager.dto.front.CommonDto;
-import cn.exrick.manager.dto.front.MemberLoginRegist;
-import cn.exrick.common.pojo.Result;
 import cn.exrick.common.utils.ResultUtil;
+import cn.exrick.manager.dto.front.CommonDto;
 import cn.exrick.manager.dto.front.Member;
+import cn.exrick.manager.dto.front.MemberLoginRegist;
 import cn.exrick.sso.service.LoginService;
 import cn.exrick.sso.service.MemberService;
 import cn.exrick.sso.service.RegisterService;
@@ -18,9 +18,14 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -119,8 +124,9 @@ public class MemberController {
 
     @RequestMapping(value = "/member/checkLogin", method = RequestMethod.GET)
     @ApiOperation(value = "判断用户是否登录")
-    public Result<Member> checkLogin(@RequestParam(defaultValue = "") String token) {
+    public Result<Member> checkLogin(@RequestParam(defaultValue = "") String token, HttpSession httpSession) {
         Member member = loginService.getUserByToken(token);
+
         return new ResultUtil<Member>().setData(member);
     }
 

@@ -53,6 +53,7 @@
     <orderEntry type="library" name="Maven: com.qiniu:happy-dns-java:0.1.6" level="project" />
     <orderEntry type="library" name="Maven: redis.clients:jedis:2.9.0" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20171018" level="project" />
+    <orderEntry type="library" name="Maven: com.auth0:java-jwt:3.4.0" level="project" />
     <orderEntry type="module" module-name="xmall-manager-interface" />
     <orderEntry type="module" module-name="xmall-generation-pojo" />
     <orderEntry type="module" module-name="xmall-content-interface" />

@@ -9,6 +9,8 @@ import lombok.Data;
 public class TbMember implements Serializable {
     private Long id;
 
+    private String mid;
+
     private String username;
 
     private String password;

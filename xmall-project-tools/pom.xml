@@ -89,6 +89,12 @@
             <artifactId>commons-io</artifactId>
             <version>1.3.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>cn.exrick</groupId>
+            <artifactId>xmall-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

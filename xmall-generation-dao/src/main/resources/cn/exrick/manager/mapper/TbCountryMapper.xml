@@ -10,6 +10,7 @@
     <result column="full_name" jdbcType="VARCHAR" property="fullName" />
     <result column="cname" jdbcType="VARCHAR" property="cname" />
     <result column="full_cname" jdbcType="VARCHAR" property="fullCname" />
+    <result column="status" jdbcType="TINYINT" property="status" typeHandler="cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.exrick.manager.pojo.TbCountry">
     <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
@@ -34,6 +35,25 @@
                   and ${criterion.condition}
                   <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.statusCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler} and #{criterion.secondValue,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
                   </foreach>
                 </when>
               </choose>
@@ -67,13 +87,32 @@
                 </when>
               </choose>
             </foreach>
+            <foreach collection="criteria.statusCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler} and #{criterion.secondValue,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
           </trim>
         </if>
       </foreach>
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, continent_id, name, lower_name, country_code, full_name, cname, full_cname
+    id, continent_id, name, lower_name, country_code, full_name, cname, full_cname, status
   </sql>
   <sql id="Blob_Column_List">
     remark
@@ -129,12 +168,12 @@
   <insert id="insert" parameterType="cn.exrick.manager.pojo.TbCountry">
     insert into tb_country (id, continent_id, name, 
       lower_name, country_code, full_name, 
-      cname, full_cname, remark
-      )
+      cname, full_cname, status, 
+      remark)
     values (#{id,jdbcType=INTEGER}, #{continentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{lowerName,jdbcType=VARCHAR}, #{countryCode,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR}, 
-      #{cname,jdbcType=VARCHAR}, #{fullCname,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR}
-      )
+      #{cname,jdbcType=VARCHAR}, #{fullCname,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}, 
+      #{remark,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.exrick.manager.pojo.TbCountry">
     insert into tb_country
@@ -162,6 +201,9 @@
       </if>
       <if test="fullCname != null">
         full_cname,
+      </if>
+      <if test="status != null">
+        status,
       </if>
       <if test="remark != null">
         remark,
@@ -191,6 +233,9 @@
       </if>
       <if test="fullCname != null">
         #{fullCname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=LONGVARCHAR},
@@ -230,6 +275,9 @@
       <if test="record.fullCname != null">
         full_cname = #{record.fullCname,jdbcType=VARCHAR},
       </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=LONGVARCHAR},
       </if>
@@ -248,6 +296,7 @@
       full_name = #{record.fullName,jdbcType=VARCHAR},
       cname = #{record.cname,jdbcType=VARCHAR},
       full_cname = #{record.fullCname,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       remark = #{record.remark,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -262,7 +311,8 @@
       country_code = #{record.countryCode,jdbcType=VARCHAR},
       full_name = #{record.fullName,jdbcType=VARCHAR},
       cname = #{record.cname,jdbcType=VARCHAR},
-      full_cname = #{record.fullCname,jdbcType=VARCHAR}
+      full_cname = #{record.fullCname,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -291,6 +341,9 @@
       <if test="fullCname != null">
         full_cname = #{fullCname,jdbcType=VARCHAR},
       </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=LONGVARCHAR},
       </if>
@@ -306,6 +359,7 @@
       full_name = #{fullName,jdbcType=VARCHAR},
       cname = #{cname,jdbcType=VARCHAR},
       full_cname = #{fullCname,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       remark = #{remark,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -317,7 +371,8 @@
       country_code = #{countryCode,jdbcType=VARCHAR},
       full_name = #{fullName,jdbcType=VARCHAR},
       cname = #{cname,jdbcType=VARCHAR},
-      full_cname = #{fullCname,jdbcType=VARCHAR}
+      full_cname = #{fullCname,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

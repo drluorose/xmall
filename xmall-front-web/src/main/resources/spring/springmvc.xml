@@ -15,6 +15,15 @@
 
     <mvc:annotation-driven/>
 
+    <context:annotation-config/>
+    <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/>
+
+
+    <bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="192.168.31.234"/>
+        <property name="port" value="6379"/>
+    </bean>
+
     <!-- 连接redis单机版 -->
     <bean id="jedisClientPool" class="cn.exrick.common.jedis.JedisClientPool">
         <property name="jedisPool" ref="jedisPool"></property>

@@ -1,4 +1,4 @@
-package com.douyu.wsd.cradle.utils;
+package cn.exrick.common.utils;
 
 import com.google.common.base.Objects;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * </table>
  * <p/>
  * <p>Instances of this class are immutable.</p>
+ *
  * @author dongjiejie
  */
 @Slf4j
@@ -262,9 +263,7 @@ public class ObjectId implements Comparable<ObjectId>, java.io.Serializable {
             nextInc, GEN_MACHINE);
     }
 
-    public static void main(String[] args) {
-        for (int i = 0; i < 20; i++) {
-            System.out.println(new ObjectId().toHexString());
-        }
+    public static final String getId() {
+        return ObjectId.get().toHexString();
     }
 }

@@ -1,6 +1,5 @@
 package cn.exrick.manager.dto.front;
 
-
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,7 +9,7 @@ import java.math.BigDecimal;
  * @author Exrickx
  */
 @Data
-public class Member implements Serializable{
+public class Member implements Serializable {
 
     private Long id;
 
@@ -37,6 +36,5 @@ public class Member implements Serializable{
     private String token;
 
     private String message;
-
 
 }

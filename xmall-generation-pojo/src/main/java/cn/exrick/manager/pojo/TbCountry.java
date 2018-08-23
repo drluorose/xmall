@@ -1,5 +1,6 @@
 package cn.exrick.manager.pojo;
 
+import cn.exrick.common.enums.EnableStatusEnum;
 import java.io.Serializable;
 import lombok.Data;
 
@@ -20,6 +21,8 @@ public class TbCountry implements Serializable {
     private String cname;
 
     private String fullCname;
+
+    private EnableStatusEnum status;
 
     private String remark;
 

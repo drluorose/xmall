@@ -1,9 +1,9 @@
 package com.douyu.wsd.cradle.service;
 
+import cn.exrick.common.utils.ObjectId;
 import com.douyu.wsd.cradle.common.ProjectConstants;
 import com.douyu.wsd.cradle.common.TemporaryFileAutoCleanInterceptor;
 import com.douyu.wsd.cradle.domain.MavenModule;
-import com.douyu.wsd.cradle.utils.IdUtils;
 import com.douyu.wsd.cradle.utils.Underline2Camel;
 import com.douyu.wsd.cradle.utils.ZipUtils;
 import com.douyu.wsd.cradle.vo.GenerateReq;
@@ -32,7 +32,6 @@ import org.apache.tools.ant.ProjectHelper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.IdGenerator;
 import org.springframework.util.ResourceUtils;
 
 @Service
@@ -49,7 +48,7 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
     @Override
     public File generate(GenerateReq req) throws IOException {
 
-        File outputDir = createRequestLevelDir("request_" + IdUtils.getId());
+        File outputDir = createRequestLevelDir("request_" + ObjectId.get());
 
         TemporaryFileAutoCleanInterceptor.registerForDelete(outputDir);
 
@@ -234,7 +233,7 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
     }
 
     private File buildZip(File inputDir) {
-        File outputFile = new File(ProjectConstants.WORK_BASE_DIR, IdUtils.getId() + ".zip");
+        File outputFile = new File(ProjectConstants.WORK_BASE_DIR, ObjectId.getId() + ".zip");
         ZipUtils.zip(inputDir, outputFile);
         return outputFile;
     }
