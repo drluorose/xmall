@@ -13,6 +13,8 @@ public class Member implements Serializable {
 
     private Long id;
 
+    private String mid;
+
     private String username;
 
     private String phone;
@@ -36,5 +38,7 @@ public class Member implements Serializable {
     private String token;
 
     private String message;
+
+    private String jwtSign;
 
 }

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -113,7 +114,13 @@ public class MemberController {
         Member member = new Member();
         if (gtResult == 1) {
             // 验证成功
-            member = loginService.userLogin(memberLoginRegist.getUserName(), memberLoginRegist.getUserPwd());
+            try {
+                member = loginService.userLogin(memberLoginRegist.getUserName(), memberLoginRegist.getUserPwd());
+            } catch (NoSuchAlgorithmException e) {
+                log.error("e", e);
+                member.setState(0);
+                member.setMessage("签名错误");
+            }
         } else {
             // 验证失败
             member.setState(0);

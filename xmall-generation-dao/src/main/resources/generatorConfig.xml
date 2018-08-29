@@ -73,5 +73,9 @@
                             typeHandler="cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler"/>
         </table>
         <table schema="" tableName="tb_city"></table>
+        <table schema="" tableName="tb_member_jwt_key">
+            <columnOverride column="status" javaType="cn.exrick.common.enums.EnableStatusEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler"/>
+        </table>
     </context>
 </generatorConfiguration>

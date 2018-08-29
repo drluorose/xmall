@@ -1,5 +1,6 @@
 package cn.exrick.front.controller;
 
+import cn.exrick.common.annotation.JwtAuth;
 import cn.exrick.common.pojo.Result;
 import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.common.utils.XmallLists;
@@ -10,11 +11,9 @@ import cn.exrick.manager.pojo.TbAddress;
 import cn.exrick.manager.pojo.TbCity;
 import cn.exrick.manager.pojo.TbCountry;
 import cn.exrick.sso.service.AddressService;
-import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +33,7 @@ public class AddressController {
     @Autowired
     private AddressService addressService;
 
+    @JwtAuth
     @RequestMapping(value = "/member/allCountry")
     @ApiOperation(value = "获取所有的国家信息")
     public Result<List<CountryDto>> getAllCountry() {
@@ -43,6 +43,7 @@ public class AddressController {
         return new ResultUtil<List<CountryDto>>().setData(countryDtos);
     }
 
+    @JwtAuth
     @RequestMapping(value = "/member/citiesCountry")
     @ApiOperation(value = "获取某个国家下的城市")
     public Result<List<CityDto>> getCountryCites(@RequestBody IdReq idReq) {
@@ -54,6 +55,7 @@ public class AddressController {
         return new ResultUtil<List<CityDto>>().setData(cityDtos);
     }
 
+    @JwtAuth
     @RequestMapping(value = "/member/addressList", method = RequestMethod.POST)
     @ApiOperation(value = "获得所有收货地址")
     public Result<List<TbAddress>> addressList(@RequestBody TbAddress tbAddress) {
@@ -62,6 +64,7 @@ public class AddressController {
         return new ResultUtil<List<TbAddress>>().setData(list);
     }
 
+    @JwtAuth
     @RequestMapping(value = "/member/address", method = RequestMethod.POST)
     @ApiOperation(value = "通过id获得收货地址")
     public Result<TbAddress> address(@RequestBody TbAddress tbAddress) {
@@ -70,6 +73,7 @@ public class AddressController {
         return new ResultUtil<TbAddress>().setData(address);
     }
 
+    @JwtAuth
     @RequestMapping(value = "/member/addAddress", method = RequestMethod.POST)
     @ApiOperation(value = "添加收货地址")
     public Result<Object> addAddress(@RequestBody TbAddress tbAddress) {
@@ -78,6 +82,7 @@ public class AddressController {
         return new ResultUtil<Object>().setData(result);
     }
 
+    @JwtAuth
     @RequestMapping(value = "/member/updateAddress", method = RequestMethod.POST)
     @ApiOperation(value = "编辑收货地址")
     public Result<Object> updateAddress(@RequestBody TbAddress tbAddress) {
@@ -86,6 +91,7 @@ public class AddressController {
         return new ResultUtil<Object>().setData(result);
     }
 
+    @JwtAuth
     @RequestMapping(value = "/member/delAddress", method = RequestMethod.POST)
     @ApiOperation(value = "删除收货地址")
     public Result<Object> delAddress(@RequestBody TbAddress tbAddress) {

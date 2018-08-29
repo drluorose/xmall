@@ -141,6 +141,7 @@ public class DtoUtil {
         Member member = new Member();
 
         member.setId(tbMemer.getId());
+        member.setMid(tbMemer.getMid());
         member.setUsername(tbMemer.getUsername());
         member.setEmail(tbMemer.getEmail());
         member.setPhone(tbMemer.getPhone());

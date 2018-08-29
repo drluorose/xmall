@@ -6,6 +6,7 @@ import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.utils.IPInfoUtil;
 import cn.exrick.front.limit.RedisRaterLimiter;
 import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,10 @@ import java.lang.reflect.Method;
 
 /**
  * 限流拦截器
+ *
  * @author Exrickx
  */
+@Slf4j
 @Component
 public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
 
@@ -45,18 +48,21 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) throws Exception {
-
+        log.info("request:{}", request);
         // IP限流 在线Demo所需 一秒限10个请求
-        String token1 = redisRaterLimiter.acquireTokenFromBucket("XMALL"+ IPInfoUtil.getIpAddr(request), 10, 1000);
+        String token1 = redisRaterLimiter.acquireTokenFromBucket("XMALL" + IPInfoUtil.getIpAddr(request), 10, 1000);
         if (StrUtil.isBlank(token1)) {
             throw new XmallException("你手速怎么这么快，请点慢一点");
         }
 
-        if(rateLimitEnable){
+        if (rateLimitEnable) {
             String token2 = redisRaterLimiter.acquireTokenFromBucket(CommonConstant.LIMIT_ALL, limit, timeout);
             if (StrUtil.isBlank(token2)) {
                 throw new XmallException("当前访问总人数太多啦，请稍后再试");
             }
+        }
+        if (!(handler instanceof HandlerMethod)) {
+            return true;
         }
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;

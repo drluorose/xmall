@@ -21,6 +21,7 @@ import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Date;
@@ -168,6 +169,8 @@ public class JWTTests {
         ECPublicKey ecPublicKey = (ECPublicKey) factory
             .generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyStr))); // Helper.toByte(ecRemotePubKey)) is java.security.PublicKey#getEncoded()
 
+        ECPrivateKey ecPrivateKey = (ECPrivateKey) factory.generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyStr)));
+
         algorithm1 = Algorithm.ECDSA256(publicKey, null);
 
         verifier = JWT.require(algorithm1)
@@ -181,8 +184,10 @@ public class JWTTests {
 
     @Test
     public void testxx() {
-        Security.getAlgorithms("Signature").forEach(System.out::println);
-        Lists.newArrayList(Security.getProviders()).forEach(System.out::println);
+        Security.getAlgorithms("Signature").forEach(log::debug);
+        Lists.newArrayList(Security.getProviders()).forEach(x -> {
+            log.debug(x.toString());
+        });
     }
 
 }

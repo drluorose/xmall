@@ -2,11 +2,13 @@ package cn.exrick.common.jwt;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author dongjiejie dongjiejie@qq.com
  */
 @Data
-public class JwtKeyInfo {
+public class JwtKeyInfo implements Serializable {
     public JwtKeyInfo() {
     }
 
