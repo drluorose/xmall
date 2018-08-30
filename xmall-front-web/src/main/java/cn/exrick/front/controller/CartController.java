@@ -26,6 +26,7 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
+    @JwtAuth
     @RequestMapping(value = "/member/addCart", method = RequestMethod.POST)
     @ApiOperation(value = "添加购物车商品")
     public Result<Object> addCart(@RequestBody Cart cart) {
