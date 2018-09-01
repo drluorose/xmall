@@ -7,6 +7,7 @@ import cn.exrick.manager.dto.front.OrderInfo;
 import cn.exrick.manager.dto.front.PageOrder;
 import cn.exrick.manager.pojo.TbThanks;
 import cn.exrick.sso.service.OrderService;
+import com.alibaba.dubbo.config.annotation.Reference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(description = "订单")
 public class OrderController {
 
-    @Autowired
+    @Reference
     private OrderService orderService;
 
     @RequestMapping(value = "/member/orderList", method = RequestMethod.GET)

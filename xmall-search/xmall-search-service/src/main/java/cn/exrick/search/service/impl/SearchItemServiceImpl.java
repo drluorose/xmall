@@ -5,8 +5,8 @@ import cn.exrick.common.utils.HttpUtil;
 import cn.exrick.manager.dto.EsCount;
 import cn.exrick.manager.dto.EsInfo;
 import cn.exrick.manager.dto.front.SearchItem;
-import cn.exrick.search.service.SearchItemService;
 import cn.exrick.search.mapper.ItemMapper;
+import cn.exrick.search.service.SearchItemService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -15,12 +15,10 @@ import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -96,7 +94,7 @@ public class SearchItemServiceImpl implements SearchItemService {
             Settings settings = Settings.builder()
                 .put("cluster.name", ES_CLUSTER_NAME).build();
             TransportClient client = new PreBuiltTransportClient(settings)
-                .addTransportAddress(new TransportAddress(InetAddress.getByName(ES_CONNECT_IP), 9300));
+                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ES_CONNECT_IP), 9300));
             this.clearIndex(client);
             this.buildIndex(client);
             //批量添加

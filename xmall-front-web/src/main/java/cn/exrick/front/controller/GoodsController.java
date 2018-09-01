@@ -1,18 +1,21 @@
 package cn.exrick.front.controller;
 
-import cn.exrick.manager.dto.TbPanelDto;
-import cn.exrick.manager.dto.front.AllGoodsResult;
 import cn.exrick.common.pojo.Result;
-import cn.exrick.manager.dto.front.SearchResult;
 import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.content.service.ContentService;
+import cn.exrick.manager.dto.TbPanelDto;
+import cn.exrick.manager.dto.front.AllGoodsResult;
 import cn.exrick.manager.dto.front.ProductDet;
+import cn.exrick.manager.dto.front.SearchResult;
 import cn.exrick.manager.pojo.TbPanel;
 import cn.exrick.search.service.SearchService;
+import com.alibaba.dubbo.config.annotation.Reference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -24,10 +27,10 @@ import java.util.List;
 @Api(description = "商品页面展示")
 public class GoodsController {
 
-    @Autowired
+    @Reference
     private ContentService contentService;
 
-    @Autowired
+    @Reference
     private SearchService searchService;
 
     @RequestMapping(value = "/goods/home", method = RequestMethod.GET)

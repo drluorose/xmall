@@ -6,11 +6,11 @@ import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.jwt.JwtAlgorithmEnum;
 import cn.exrick.common.jwt.JwtKeyInfo;
 import cn.exrick.sso.service.LoginService;
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -25,7 +25,7 @@ import java.util.Objects;
 @Component
 public class JwtAuthInterceptor extends HandlerInterceptorAdapter {
 
-    @Autowired
+    @Reference
     private LoginService loginService;
 
     @Override

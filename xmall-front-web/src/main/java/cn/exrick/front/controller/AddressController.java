@@ -11,9 +11,9 @@ import cn.exrick.manager.pojo.TbAddress;
 import cn.exrick.manager.pojo.TbCity;
 import cn.exrick.manager.pojo.TbCountry;
 import cn.exrick.sso.service.AddressService;
+import com.alibaba.dubbo.config.annotation.Reference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +30,7 @@ import java.util.Objects;
 @Api(description = "收货地址")
 public class AddressController {
 
-    @Autowired
+    @Reference
     private AddressService addressService;
 
     @JwtAuth

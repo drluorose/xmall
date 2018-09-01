@@ -12,6 +12,7 @@ import cn.exrick.manager.dto.front.MemberLoginRegist;
 import cn.exrick.sso.service.LoginService;
 import cn.exrick.sso.service.MemberService;
 import cn.exrick.sso.service.RegisterService;
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,13 +40,13 @@ public class MemberController {
 
     private final static Logger log = LoggerFactory.getLogger(MemberController.class);
 
-    @Autowired
+    @Reference
     private LoginService loginService;
 
-    @Autowired
+    @Reference
     private RegisterService registerService;
 
-    @Autowired
+    @Reference
     private MemberService memberService;
 
     @Autowired

@@ -6,6 +6,7 @@ import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.manager.dto.front.Cart;
 import cn.exrick.manager.dto.front.CartProduct;
 import cn.exrick.sso.service.CartService;
+import com.alibaba.dubbo.config.annotation.Reference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import java.util.List;
 @Api(description = "购物车")
 public class CartController {
 
-    @Autowired
+    @Reference
     private CartService cartService;
 
     @JwtAuth

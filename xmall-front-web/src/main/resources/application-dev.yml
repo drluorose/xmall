@@ -1,0 +1,19 @@
+xmall:
+  rateLimit:
+    enable: true
+    timeout: 1000
+    limit: 20
+  redis:
+    host: 192.168.31.234
+    port: 6379
+spring:
+  application:
+    name: xmall-front-web
+  session:
+    store-type: redis
+  redis:
+    host: 192.168.31.234
+    port: 6379
+  dubbo:
+    protocol: dubbo
+    registry: zookeeper://192.168.31.234:2181
