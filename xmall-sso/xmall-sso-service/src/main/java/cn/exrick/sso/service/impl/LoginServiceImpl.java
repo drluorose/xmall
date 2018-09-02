@@ -8,12 +8,13 @@ import cn.exrick.common.utils.ObjectId;
 import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.dto.front.Member;
 import cn.exrick.manager.mapper.TbMemberJwtKeyMapper;
-import cn.exrick.manager.mapper.ext.TbMemberExtMapper;
+import cn.exrick.manager.mapper.TbMemberMapper;
 import cn.exrick.manager.pojo.TbMember;
 import cn.exrick.manager.pojo.TbMemberExample;
 import cn.exrick.manager.pojo.TbMemberJwtKey;
 import cn.exrick.manager.pojo.TbMemberJwtKeyExample;
 import cn.exrick.sso.service.LoginService;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.google.common.collect.Maps;
@@ -23,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 
@@ -39,13 +40,14 @@ import java.util.UUID;
  * @author Exrickx
  */
 @Slf4j
-@Service
+@Component
+@Service(interfaceClass = LoginService.class)
 public class LoginServiceImpl implements LoginService {
 
     private static final long valid_time = 1000 * 60 * 60 * 12;
 
     @Autowired
-    private TbMemberExtMapper tbMemberMapper;
+    private TbMemberMapper tbMemberMapper;
 
     @Autowired
     private TbMemberJwtKeyMapper tbMemberJwtKeyMapper;

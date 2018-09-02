@@ -5,15 +5,19 @@ import cn.exrick.manager.mapper.TbDictMapper;
 import cn.exrick.manager.pojo.TbDict;
 import cn.exrick.manager.pojo.TbDictExample;
 import cn.exrick.manager.service.DictService;
+import com.alibaba.dubbo.config.annotation.Service;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * @author Exrickx
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = DictService.class)
 public class DictServiceImpl implements DictService {
 
     @Autowired
@@ -22,8 +26,8 @@ public class DictServiceImpl implements DictService {
     @Override
     public List<TbDict> getDictList() {
 
-        TbDictExample example=new TbDictExample();
-        TbDictExample.Criteria criteria=example.createCriteria();
+        TbDictExample example = new TbDictExample();
+        TbDictExample.Criteria criteria = example.createCriteria();
         //条件查询
         criteria.andTypeEqualTo(DictConstant.DICT_EXT);
         List<TbDict> list = tbDictMapper.selectByExample(example);
@@ -33,8 +37,8 @@ public class DictServiceImpl implements DictService {
     @Override
     public List<TbDict> getStopList() {
 
-        TbDictExample example=new TbDictExample();
-        TbDictExample.Criteria criteria=example.createCriteria();
+        TbDictExample example = new TbDictExample();
+        TbDictExample.Criteria criteria = example.createCriteria();
         //条件查询
         criteria.andTypeEqualTo(DictConstant.DICT_STOP);
         List<TbDict> list = tbDictMapper.selectByExample(example);

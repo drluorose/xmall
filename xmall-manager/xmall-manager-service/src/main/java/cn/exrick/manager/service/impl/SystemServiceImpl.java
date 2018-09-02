@@ -3,23 +3,33 @@ package cn.exrick.manager.service.impl;
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.manager.mapper.TbBaseMapper;
+import cn.exrick.manager.mapper.TbLogMapper;
+import cn.exrick.manager.mapper.TbShiroFilterMapper;
 import cn.exrick.manager.mapper.ext.TbLogExtMapper;
 import cn.exrick.manager.mapper.ext.TbOrderItemExtMapper;
-import cn.exrick.manager.mapper.TbShiroFilterMapper;
-import cn.exrick.manager.pojo.*;
+import cn.exrick.manager.pojo.TbBase;
+import cn.exrick.manager.pojo.TbLog;
+import cn.exrick.manager.pojo.TbLogExample;
+import cn.exrick.manager.pojo.TbOrderItem;
+import cn.exrick.manager.pojo.TbShiroFilter;
+import cn.exrick.manager.pojo.TbShiroFilterExample;
 import cn.exrick.manager.service.SystemService;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * @author Exrickx
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = SystemService.class)
 public class SystemServiceImpl implements SystemService {
 
     @Autowired
@@ -30,6 +40,9 @@ public class SystemServiceImpl implements SystemService {
 
     @Autowired
     private TbLogExtMapper tbLogExtMapper;
+
+    @Autowired
+    private TbLogMapper tbLogMapper;
 
     @Autowired
     private TbOrderItemExtMapper tbOrderItemMapper;
@@ -126,7 +139,7 @@ public class SystemServiceImpl implements SystemService {
     @Override
     public int addLog(TbLog tbLog) {
 
-        if (tbLogExtMapper.insert(tbLog) != 1) {
+        if (tbLogMapper.insert(tbLog) != 1) {
             throw new XmallException("保存日志失败");
         }
         return 1;
@@ -153,7 +166,7 @@ public class SystemServiceImpl implements SystemService {
     public Long countLog() {
 
         TbLogExample example = new TbLogExample();
-        Long result = tbLogExtMapper.countByExample(example);
+        Long result = tbLogMapper.countByExample(example);
         if (result == null) {
             throw new XmallException("获取日志数量失败");
         }
@@ -163,7 +176,7 @@ public class SystemServiceImpl implements SystemService {
     @Override
     public int deleteLog(int id) {
 
-        if (tbLogExtMapper.deleteByPrimaryKey(id) != 1) {
+        if (tbLogMapper.deleteByPrimaryKey(id) != 1) {
             throw new XmallException("删除日志失败");
         }
         return 1;

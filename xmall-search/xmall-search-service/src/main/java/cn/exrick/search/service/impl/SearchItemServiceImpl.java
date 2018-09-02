@@ -5,23 +5,26 @@ import cn.exrick.common.utils.HttpUtil;
 import cn.exrick.manager.dto.EsCount;
 import cn.exrick.manager.dto.EsInfo;
 import cn.exrick.manager.dto.front.SearchItem;
-import cn.exrick.search.mapper.ItemMapper;
+import cn.exrick.manager.mapper.ext.TbItemExtMapper;
 import cn.exrick.search.service.SearchItemService;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
+import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
+import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -34,26 +37,27 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
  * @author Exrickx
  */
 @Slf4j
-@Service
+@Component
+@Service(interfaceClass = SearchItemService.class)
 public class SearchItemServiceImpl implements SearchItemService {
 
     @Autowired
-    private ItemMapper itemMapper;
+    private TbItemExtMapper tbItemExtMapper;
 
-    @Value("${ES_CONNECT_IP}")
-    private String ES_CONNECT_IP;
+    @Value("${es.connectIp}")
+    private String esConnectIp;
 
-    @Value("${ES_NODE_CLIENT_PORT}")
-    private String ES_NODE_CLIENT_PORT;
+    @Value("${es.nodeClientPort}")
+    private String esNodeClientPort;
 
-    @Value("${ES_CLUSTER_NAME}")
-    private String ES_CLUSTER_NAME;
+    @Value("${es.clusterName}")
+    private String esClusterName;
 
-    @Value("${ITEM_INDEX}")
-    private String ITEM_INDEX;
+    @Value("${es.itemIndex}")
+    private String esItemIndex;
 
-    @Value("${ITEM_TYPE}")
-    private String ITEM_TYPE;
+    @Value("${es.itemType}")
+    private String esItemType;
 
     @PostConstruct
     private void initIndex() {
@@ -62,11 +66,17 @@ public class SearchItemServiceImpl implements SearchItemService {
     }
 
     private void clearIndex(TransportClient client) {
-        client.admin().indices().prepareDelete(ITEM_INDEX).execute().actionGet();
+        client.admin().indices().prepareDelete(esItemIndex).execute().actionGet();
+    }
+
+    private boolean existsIndex(TransportClient client) {
+        IndicesExistsRequest indicesExistsRequest = client.admin().indices().prepareExists(esItemIndex).request();
+        IndicesExistsResponse response = client.admin().indices().exists(indicesExistsRequest).actionGet();
+        return response.isExists();
     }
 
     private void buildIndex(TransportClient client) throws IOException {
-        CreateIndexRequestBuilder createBuilder = client.admin().indices().prepareCreate(ITEM_INDEX);
+        CreateIndexRequestBuilder createBuilder = client.admin().indices().prepareCreate(esItemIndex);
         XContentBuilder xContentBuilder = XContentFactory.jsonBuilder().startObject()
             .startObject("properties");
 
@@ -78,6 +88,7 @@ public class SearchItemServiceImpl implements SearchItemService {
         xContentBuilder = builderField(xContentBuilder, "categoryName", "string");
         xContentBuilder = builderField(xContentBuilder, "cid", "integer");
         xContentBuilder.endObject().endObject();
+        client.admin().indices().create(createBuilder.request()).actionGet();
     }
 
     private XContentBuilder builderField(XContentBuilder xContentBuilder, String fieldName, String type) throws IOException {
@@ -92,16 +103,18 @@ public class SearchItemServiceImpl implements SearchItemService {
 
         try {
             Settings settings = Settings.builder()
-                .put("cluster.name", ES_CLUSTER_NAME).build();
+                .put("cluster.name", esClusterName).build();
             TransportClient client = new PreBuiltTransportClient(settings)
-                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ES_CONNECT_IP), 9300));
-            this.clearIndex(client);
+                .addTransportAddress(new TransportAddress(InetAddress.getByName(esConnectIp), 9300));
+            if (this.existsIndex(client)) {
+                this.clearIndex(client);
+            }
             this.buildIndex(client);
             //批量添加
             BulkRequestBuilder bulkRequest = client.prepareBulk();
 
             //查询商品列表
-            List<SearchItem> itemList = itemMapper.getItemList();
+            List<SearchItem> itemList = tbItemExtMapper.getItemList();
 
             //遍历商品列表
             for (SearchItem searchItem : itemList) {
@@ -113,7 +126,7 @@ public class SearchItemServiceImpl implements SearchItemService {
                     image = "";
                 }
                 searchItem.setProductImageBig(image);
-                bulkRequest.add(client.prepareIndex(ITEM_INDEX, ITEM_TYPE, String.valueOf(searchItem.getProductId()))
+                bulkRequest.add(client.prepareIndex(esItemIndex, esItemType, String.valueOf(searchItem.getProductId()))
                     .setSource(jsonBuilder()
                         .startObject()
                         .field("productId", searchItem.getProductId())
@@ -144,8 +157,8 @@ public class SearchItemServiceImpl implements SearchItemService {
     @Override
     public EsInfo getEsInfo() {
 
-        String healthUrl = "http://" + ES_CONNECT_IP + ":" + ES_NODE_CLIENT_PORT + "/_cluster/health";
-        String countUrl = "http://" + ES_CONNECT_IP + ":" + ES_NODE_CLIENT_PORT + "/_count";
+        String healthUrl = "http://" + esConnectIp + ":" + esNodeClientPort + "/_cluster/health";
+        String countUrl = "http://" + esConnectIp + ":" + esNodeClientPort + "/_count";
         String healthResult = HttpUtil.sendGet(healthUrl);
         String countResult = HttpUtil.sendGet(countUrl);
         if (StringUtils.isBlank(healthResult) || StringUtils.isBlank(countResult)) {

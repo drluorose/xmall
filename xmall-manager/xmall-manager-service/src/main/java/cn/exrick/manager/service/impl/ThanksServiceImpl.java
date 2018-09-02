@@ -6,17 +6,21 @@ import cn.exrick.manager.mapper.TbThanksMapper;
 import cn.exrick.manager.pojo.TbThanks;
 import cn.exrick.manager.pojo.TbThanksExample;
 import cn.exrick.manager.service.ThanksService;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * @author Exrickx
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = ThanksService.class)
 public class ThanksServiceImpl implements ThanksService {
 
     @Autowired

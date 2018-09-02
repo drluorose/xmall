@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://192.168.31.234:3306/xmall?characterEncoding=utf-8
+      username: xmall
+      password: EusbI7pr91%h$3BCX
+      driver-class-name: com.mysql.jdbc.Driver
+      validationQuery: select 1
+      filter:
+        stat:
+          enabled: true
+        config:
+          enabled: true
+        encoding:
+          enabled: true
+  dubbo:
+    server: true
+    application: xmall-content
+    protocol:
+      name: dubbo
+      port: 20881
+    registry: zookeeper://192.168.31.234:2181
+activemq:
+  brokerUrl: tcp://192.168.31.234:61616
+es:
+  connectIp: 192.168.31.234
+  nodeClientPort: 9200
+  clusterName: elasticsearch
+  itemIndex: item
+  itemType: itemList
+redis:
+  host: 192.168.31.234
+  port: 6379
+---
+PRODUCT_HOME: PRODUCT_HOME
+PRODUCT_ITEM: PRODUCT_ITEM
+ITEM_EXPIRE: 604800
+RECOMEED_PANEL_ID: 6
+RECOMEED_PANEL: RECOMEED_PANEL
+THANK_PANEL_ID: 4
+THANK_PANEL: THANK_PANEL

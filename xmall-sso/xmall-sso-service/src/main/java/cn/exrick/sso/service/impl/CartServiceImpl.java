@@ -3,15 +3,16 @@ package cn.exrick.sso.service.impl;
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.dto.front.CartProduct;
-import cn.exrick.manager.mapper.ext.TbItemExtMapper;
+import cn.exrick.manager.mapper.TbItemMapper;
 import cn.exrick.manager.pojo.TbItem;
 import cn.exrick.sso.service.CartService;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,8 @@ import java.util.List;
 /**
  * @author Exrickx
  */
-@Service
+@Component
+@Service(interfaceClass = CartService.class)
 public class CartServiceImpl implements CartService {
 
     private final static Logger log = LoggerFactory.getLogger(CartServiceImpl.class);
@@ -31,7 +33,7 @@ public class CartServiceImpl implements CartService {
     private String CART_PRE;
 
     @Autowired
-    private TbItemExtMapper tbItemExtMapper;
+    private TbItemMapper tbItemExtMapper;
 
     @Override
     public int addCart(long userId, long itemId, int num) {

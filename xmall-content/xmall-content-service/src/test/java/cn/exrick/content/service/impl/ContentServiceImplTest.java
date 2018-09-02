@@ -1,6 +1,5 @@
 package cn.exrick.content.service.impl;
 
-import cn.exrick.content.service.ContentService;
 import cn.exrick.manager.mapper.TbOrderMapper;
 import cn.exrick.manager.mapper.TbPanelMapper;
 import cn.exrick.manager.mapper.ext.TbOrderExtMapper;
@@ -33,7 +32,7 @@ public class ContentServiceImplTest {
 //        tbPanelMapper.selectByExample(tbPanelExample);
 //        tbOrderMapper.countByExample(new TbOrderExample());
         tbOrderMapper.selectByExample(new TbOrderExample());
-        tbOrderExtMapper.selectByExample(new TbOrderExample());
+        tbOrderMapper.selectByExample(new TbOrderExample());
     }
 
 }

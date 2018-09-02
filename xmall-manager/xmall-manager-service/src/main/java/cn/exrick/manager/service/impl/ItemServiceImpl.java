@@ -8,37 +8,45 @@ import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.dto.ItemDto;
 import cn.exrick.manager.mapper.TbItemCatMapper;
 import cn.exrick.manager.mapper.TbItemDescMapper;
+import cn.exrick.manager.mapper.TbItemMapper;
 import cn.exrick.manager.mapper.ext.TbItemExtMapper;
 import cn.exrick.manager.pojo.TbItem;
 import cn.exrick.manager.pojo.TbItemCat;
 import cn.exrick.manager.pojo.TbItemDesc;
 import cn.exrick.manager.pojo.TbItemExample;
 import cn.exrick.manager.service.ItemService;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import javax.jms.*;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Exrick on 2017/7/29.
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = ItemService.class)
 public class ItemServiceImpl implements ItemService {
-
-    private final static Logger log = LoggerFactory.getLogger(ItemServiceImpl.class);
 
     @Autowired
     private TbItemExtMapper tbItemExtMapper;
+
+    @Autowired
+    private TbItemMapper tbItemMapper;
 
     @Autowired
     private TbItemDescMapper tbItemDescMapper;
@@ -50,7 +58,7 @@ public class ItemServiceImpl implements ItemService {
     private JmsTemplate jmsTemplate;
 
     @Resource
-    private Destination topicDestination;
+    private ActiveMQTopic topicDestination;
 
     @Autowired
     private JedisClient jedisClient;
@@ -62,7 +70,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto getItemById(Long id) {
         ItemDto itemDto = new ItemDto();
 
-        TbItem tbItem = tbItemExtMapper.selectByPrimaryKey(id);
+        TbItem tbItem = tbItemMapper.selectByPrimaryKey(id);
         itemDto = DtoUtil.TbItem2ItemDto(tbItem);
 
         TbItemCat tbItemCat = tbItemCatMapper.selectByPrimaryKey(itemDto.getCid());
@@ -77,7 +85,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public TbItem getNormalItemById(Long id) {
 
-        return tbItemExtMapper.selectByPrimaryKey(id);
+        return tbItemMapper.selectByPrimaryKey(id);
     }
 
     @Override
@@ -121,7 +129,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public DataTablesResult getAllItemCount() {
         TbItemExample example = new TbItemExample();
-        Long count = tbItemExtMapper.countByExample(example);
+        Long count = tbItemMapper.countByExample(example);
         DataTablesResult result = new DataTablesResult();
         result.setRecordsTotal(Math.toIntExact(count));
         return result;
@@ -134,7 +142,7 @@ public class ItemServiceImpl implements ItemService {
         tbMember.setStatus(state);
         tbMember.setUpdated(new Date());
 
-        if (tbItemExtMapper.updateByPrimaryKey(tbMember) != 1) {
+        if (tbItemMapper.updateByPrimaryKey(tbMember) != 1) {
             throw new XmallException("修改商品状态失败");
         }
         return getNormalItemById(id);
@@ -143,7 +151,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public int deleteItem(Long id) {
 
-        if (tbItemExtMapper.deleteByPrimaryKey(id) != 1) {
+        if (tbItemMapper.deleteByPrimaryKey(id) != 1) {
             throw new XmallException("删除商品失败");
         }
         if (tbItemDescMapper.deleteByPrimaryKey(id) != 1) {
@@ -169,7 +177,7 @@ public class ItemServiceImpl implements ItemService {
         if (tbItem.getImage().isEmpty()) {
             tbItem.setImage("http://ow2h3ee9w.bkt.clouddn.com/nopic.jpg");
         }
-        if (tbItemExtMapper.insert(tbItem) != 1) {
+        if (tbItemMapper.insert(tbItem) != 1) {
             throw new XmallException("添加商品失败");
         }
 
@@ -205,7 +213,7 @@ public class ItemServiceImpl implements ItemService {
         tbItem.setStatus(oldTbItem.getStatus());
         tbItem.setCreated(oldTbItem.getCreated());
         tbItem.setUpdated(new Date());
-        if (tbItemExtMapper.updateByPrimaryKey(tbItem) != 1) {
+        if (tbItemMapper.updateByPrimaryKey(tbItem) != 1) {
             throw new XmallException("更新商品失败");
         }
 

@@ -7,11 +7,11 @@ import cn.exrick.manager.mapper.ext.TbOrderExtMapper;
 import cn.exrick.manager.service.CountService;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import com.alibaba.dubbo.config.annotation.Service;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,10 +22,10 @@ import java.util.List;
 /**
  * @author Exrickx
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = CountService.class)
 public class CountServiceImpl implements CountService {
-
-    private final static Logger log = LoggerFactory.getLogger(CountServiceImpl.class);
 
     @Autowired
     private TbOrderExtMapper tbOrderMapper;

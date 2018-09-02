@@ -6,33 +6,52 @@ import cn.exrick.manager.dto.RoleDto;
 import cn.exrick.manager.dto.TbRoleDto;
 import cn.exrick.manager.dto.TbUserDto;
 import cn.exrick.manager.mapper.TbPermissionMapper;
-import cn.exrick.manager.mapper.ext.TbRoleExtMapper;
+import cn.exrick.manager.mapper.TbRoleMapper;
 import cn.exrick.manager.mapper.TbRolePermMapper;
+import cn.exrick.manager.mapper.TbUserMapper;
+import cn.exrick.manager.mapper.ext.TbRoleExtMapper;
 import cn.exrick.manager.mapper.ext.TbUserExtMapper;
-import cn.exrick.manager.pojo.*;
+import cn.exrick.manager.pojo.TbPermission;
+import cn.exrick.manager.pojo.TbPermissionExample;
+import cn.exrick.manager.pojo.TbRole;
+import cn.exrick.manager.pojo.TbRoleExample;
+import cn.exrick.manager.pojo.TbRolePerm;
+import cn.exrick.manager.pojo.TbRolePermExample;
+import cn.exrick.manager.pojo.TbUser;
+import cn.exrick.manager.pojo.TbUserExample;
 import cn.exrick.manager.service.UserService;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.google.common.collect.Lists;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Exrickx
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = UserService.class)
 public class UserServiceImpl implements UserService {
-
-    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private TbUserExtMapper tbUserExtMapper;
 
     @Autowired
+    private TbUserMapper tbUserMapper;
+
+    @Autowired
     private TbRoleExtMapper tbRoleExtMapper;
+
+    @Autowired
+    private TbRoleMapper tbRoleMapper;
 
     @Autowired
     private TbPermissionMapper tbPermissionMapper;
@@ -49,7 +68,7 @@ public class UserServiceImpl implements UserService {
         criteria.andUsernameEqualTo(username);
         criteria.andStateEqualTo(1);
         try {
-            list = tbUserExtMapper.selectByExample(example);
+            list = tbUserMapper.selectByExample(example);
         } catch (Exception e) {
             throw new XmallException("通过ID获取用户信息失败");
         }
@@ -77,7 +96,7 @@ public class UserServiceImpl implements UserService {
         DataTablesResult result = new DataTablesResult();
         List<RoleDto> list = new ArrayList<>();
         TbRoleExample example = new TbRoleExample();
-        List<TbRole> list1 = tbRoleExtMapper.selectByExample(example);
+        List<TbRole> list1 = tbRoleMapper.selectByExample(example);
         if (list1 == null) {
             throw new XmallException("获取角色列表失败");
         }
@@ -109,7 +128,7 @@ public class UserServiceImpl implements UserService {
     public List<TbRole> getAllRoles() {
 
         TbRoleExample example = new TbRoleExample();
-        List<TbRole> list = tbRoleExtMapper.selectByExample(example);
+        List<TbRole> list = tbRoleMapper.selectByExample(example);
         if (list == null) {
             throw new XmallException("获取所有角色列表失败");
         }
@@ -122,7 +141,7 @@ public class UserServiceImpl implements UserService {
         if (getRoleByRoleName(tbRole.getName()) != null) {
             throw new XmallException("该角色名已存在");
         }
-        if (tbRoleExtMapper.insert(tbRole) != 1) {
+        if (tbRoleMapper.insert(tbRole) != 1) {
             throw new XmallException("添加角色失败");
         }
         if (tbRole.getRoles() != null) {
@@ -147,7 +166,7 @@ public class UserServiceImpl implements UserService {
         criteria.andNameEqualTo(roleName);
         List<TbRole> list = new ArrayList<>();
         try {
-            list = tbRoleExtMapper.selectByExample(example);
+            list = tbRoleMapper.selectByExample(example);
         } catch (Exception e) {
             throw new XmallException("通过角色名获取角色失败");
         }
@@ -160,7 +179,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean getRoleByEditName(int id, String roleName) {
 
-        TbRole tbRole = tbRoleExtMapper.selectByPrimaryKey(id);
+        TbRole tbRole = tbRoleMapper.selectByPrimaryKey(id);
         TbRole newRole = null;
         if (tbRole == null) {
             throw new XmallException("通过ID获取角色失败");
@@ -180,7 +199,7 @@ public class UserServiceImpl implements UserService {
         if (!getRoleByEditName(tbRole.getId(), tbRole.getName())) {
             throw new XmallException("该角色名已存在");
         }
-        if (tbRoleExtMapper.updateByPrimaryKey(tbRole) != 1) {
+        if (tbRoleMapper.updateByPrimaryKey(tbRole) != 1) {
             throw new XmallException("更新角色失败");
         }
         if (tbRole.getRoles() != null) {
@@ -232,7 +251,7 @@ public class UserServiceImpl implements UserService {
         if (list.size() > 0) {
             return 0;
         }
-        if (tbRoleExtMapper.deleteByPrimaryKey(id) != 1) {
+        if (tbRoleMapper.deleteByPrimaryKey(id) != 1) {
             throw new XmallException("删除角色失败");
         }
         TbRolePermExample example = new TbRolePermExample();
@@ -254,7 +273,7 @@ public class UserServiceImpl implements UserService {
     public Long countRole() {
 
         TbRoleExample example = new TbRoleExample();
-        Long result = tbRoleExtMapper.countByExample(example);
+        Long result = tbRoleMapper.countByExample(example);
         return result;
     }
 
@@ -316,7 +335,7 @@ public class UserServiceImpl implements UserService {
 
         DataTablesResult result = new DataTablesResult();
         TbUserExample example = new TbUserExample();
-        List<TbUser> list = tbUserExtMapper.selectByExample(example);
+        List<TbUser> list = tbUserMapper.selectByExample(example);
         if (list == null) {
             throw new XmallException("获取用户列表失败");
         }
@@ -340,7 +359,7 @@ public class UserServiceImpl implements UserService {
         TbUserExample example = new TbUserExample();
         TbUserExample.Criteria criteria = example.createCriteria();
         criteria.andUsernameEqualTo(username);
-        List<TbUser> list = tbUserExtMapper.selectByExample(example);
+        List<TbUser> list = tbUserMapper.selectByExample(example);
         if (list.size() != 0) {
             return false;
         }
@@ -353,7 +372,7 @@ public class UserServiceImpl implements UserService {
         TbUserExample example = new TbUserExample();
         TbUserExample.Criteria criteria = example.createCriteria();
         criteria.andPhoneEqualTo(phone);
-        List<TbUser> list = tbUserExtMapper.selectByExample(example);
+        List<TbUser> list = tbUserMapper.selectByExample(example);
         if (list.size() != 0) {
             return false;
         }
@@ -366,7 +385,7 @@ public class UserServiceImpl implements UserService {
         TbUserExample example = new TbUserExample();
         TbUserExample.Criteria criteria = example.createCriteria();
         criteria.andEmailEqualTo(emaill);
-        List<TbUser> list = tbUserExtMapper.selectByExample(example);
+        List<TbUser> list = tbUserMapper.selectByExample(example);
         if (list.size() != 0) {
             return false;
         }
@@ -390,7 +409,7 @@ public class UserServiceImpl implements UserService {
         user.setState(1);
         user.setCreated(new Date());
         user.setUpdated(new Date());
-        if (tbUserExtMapper.insert(user) != 1) {
+        if (tbUserMapper.insert(user) != 1) {
             throw new XmallException("添加用户失败");
         }
         return 1;
@@ -399,7 +418,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public TbUser getUserById(Long id) {
 
-        TbUser tbUser = tbUserExtMapper.selectByPrimaryKey(id);
+        TbUser tbUser = tbUserMapper.selectByPrimaryKey(id);
         if (tbUser == null) {
             throw new XmallException("通过ID获取用户失败");
         }
@@ -410,12 +429,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updateUser(TbUser user) {
 
-        TbUser old = tbUserExtMapper.selectByPrimaryKey(user.getId());
+        TbUser old = tbUserMapper.selectByPrimaryKey(user.getId());
         user.setPassword(old.getPassword());
         user.setState(old.getState());
         user.setCreated(old.getCreated());
         user.setUpdated(new Date());
-        if (tbUserExtMapper.updateByPrimaryKey(user) != 1) {
+        if (tbUserMapper.updateByPrimaryKey(user) != 1) {
             throw new XmallException("更新用户失败");
         }
         return 1;
@@ -424,10 +443,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public int changeUserState(Long id, int state) {
 
-        TbUser tbUser = tbUserExtMapper.selectByPrimaryKey(id);
+        TbUser tbUser = tbUserMapper.selectByPrimaryKey(id);
         tbUser.setState(state);
         tbUser.setUpdated(new Date());
-        if (tbUserExtMapper.updateByPrimaryKey(tbUser) != 1) {
+        if (tbUserMapper.updateByPrimaryKey(tbUser) != 1) {
             throw new XmallException("更新用户状态失败");
         }
         return 1;
@@ -436,11 +455,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public int changePassword(TbUser tbUser) {
 
-        TbUser old = tbUserExtMapper.selectByPrimaryKey(tbUser.getId());
+        TbUser old = tbUserMapper.selectByPrimaryKey(tbUser.getId());
         old.setUpdated(new Date());
         String md5Pass = DigestUtils.md5DigestAsHex(tbUser.getPassword().getBytes());
         old.setPassword(md5Pass);
-        if (tbUserExtMapper.updateByPrimaryKey(old) != 1) {
+        if (tbUserMapper.updateByPrimaryKey(old) != 1) {
             throw new XmallException("修改用户密码失败");
         }
         return 1;
@@ -482,7 +501,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public int deleteUser(Long userId) {
 
-        if (tbUserExtMapper.deleteByPrimaryKey(userId) != 1) {
+        if (tbUserMapper.deleteByPrimaryKey(userId) != 1) {
             throw new XmallException("删除用户失败");
         }
         return 1;
@@ -492,7 +511,7 @@ public class UserServiceImpl implements UserService {
     public Long countUser() {
 
         TbUserExample example = new TbUserExample();
-        Long result = tbUserExtMapper.countByExample(example);
+        Long result = tbUserMapper.countByExample(example);
         if (result == null) {
             throw new XmallException("统计用户数失败");
         }

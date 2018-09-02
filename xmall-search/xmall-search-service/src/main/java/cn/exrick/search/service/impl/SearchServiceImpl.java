@@ -4,21 +4,23 @@ import cn.exrick.common.exception.XmallException;
 import cn.exrick.manager.dto.front.SearchItem;
 import cn.exrick.manager.dto.front.SearchResult;
 import cn.exrick.search.service.SearchService;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.google.gson.Gson;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -29,20 +31,22 @@ import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 /**
  * @author Exrickx
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = SearchService.class)
 public class SearchServiceImpl implements SearchService {
 
-    @Value("${ES_CONNECT_IP}")
-    private String ES_CONNECT_IP;
+    @Value("${es.connectIp}")
+    private String connectIp;
 
-    @Value("${ES_CLUSTER_NAME}")
-    private String ES_CLUSTER_NAME;
+    @Value("${es.clusterName}")
+    private String clusterName;
 
-    @Value("${ITEM_INDEX}")
-    private String ITEM_INDEX;
+    @Value("${es.itemIndex}")
+    private String itemIndex;
 
-    @Value("${ITEM_TYPE}")
-    private String ITEM_TYPE;
+    @Value("${es.itemType}")
+    private String itemType;
 
     /**
      * 使用QueryBuilder
@@ -56,9 +60,9 @@ public class SearchServiceImpl implements SearchService {
 
         try {
             Settings settings = Settings.builder()
-                .put("cluster.name", ES_CLUSTER_NAME).build();
+                .put("cluster.name", clusterName).build();
             TransportClient client = new PreBuiltTransportClient(settings)
-                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ES_CONNECT_IP), 9300));
+                .addTransportAddress(new TransportAddress(InetAddress.getByName(connectIp), 9300));
 
             SearchResult searchResult = new SearchResult();
 
@@ -82,79 +86,67 @@ public class SearchServiceImpl implements SearchService {
             SearchResponse searchResponse = null;
 
             if (priceGt >= 0 && priceLte >= 0 && sort.isEmpty()) {
-                searchResponse = client.prepareSearch(ITEM_INDEX)
-                    .setTypes(ITEM_TYPE)
+                searchResponse = client.prepareSearch(itemIndex)
+                    .setTypes(itemType)
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setQuery(qb)    // Query
                     .setFrom(start).setSize(size).setExplain(true)//从第几个开始，显示size个数据
-                    .setHighlighterPreTags("<a style=\"color: #e4393c\">")
-                    .setHighlighterPostTags("</a>")
-                    .addHighlightedField("productName")
+                    .highlighter(hiBuilder)
                     .setPostFilter(QueryBuilders.rangeQuery("salePrice").gt(priceGt).lt(priceLte))    //过滤条件
                     .get();
             } else if (priceGt >= 0 && priceLte >= 0 && sort.equals("1")) {
-                searchResponse = client.prepareSearch(ITEM_INDEX)
-                    .setTypes(ITEM_TYPE)
+                searchResponse = client.prepareSearch(itemIndex)
+                    .setTypes(itemType)
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setQuery(qb)    // Query
                     .setFrom(start).setSize(size).setExplain(true)    //从第几个开始，显示size个数据
-                    .setHighlighterPreTags("<a style=\"color: #e4393c\">")
-                    .setHighlighterPostTags("</a>")
-                    .addHighlightedField("productName")      //设置高亮显示
+                    .highlighter(hiBuilder)
                     .setPostFilter(QueryBuilders.rangeQuery("salePrice").gt(priceGt).lt(priceLte))    //过滤条件
                     .addSort("salePrice", SortOrder.ASC)
                     .get();
             } else if (priceGt >= 0 && priceLte >= 0 && sort.equals("-1")) {
-                searchResponse = client.prepareSearch(ITEM_INDEX)
-                    .setTypes(ITEM_TYPE)
+                searchResponse = client.prepareSearch(itemIndex)
+                    .setTypes(itemType)
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setQuery(qb)    // Query
                     .setFrom(start).setSize(size).setExplain(true)    //从第几个开始，显示size个数据
-                    .setHighlighterPreTags("<a style=\"color: #e4393c\">")
-                    .setHighlighterPostTags("</a>")
-                    .addHighlightedField("productName")       //设置高亮显示
+                    .highlighter(hiBuilder)     //设置高亮显示
                     .setPostFilter(QueryBuilders.rangeQuery("salePrice").gt(priceGt).lt(priceLte))    //过滤条件
                     .addSort("salePrice", SortOrder.DESC)
                     .get();
             } else if ((priceGt < 0 || priceLte < 0) && sort.isEmpty()) {
-                searchResponse = client.prepareSearch(ITEM_INDEX)
-                    .setTypes(ITEM_TYPE)
+                searchResponse = client.prepareSearch(itemIndex)
+                    .setTypes(itemType)
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setQuery(qb)    // Query
                     .setFrom(start).setSize(size).setExplain(true)    //从第几个开始，显示size个数据
-                    .setHighlighterPreTags("<a style=\"color: #e4393c\">")
-                    .setHighlighterPostTags("</a>")
-                    .addHighlightedField("productName")      //设置高亮显示
+                    .highlighter(hiBuilder)     //设置高亮显示
                     .get();
             } else if ((priceGt < 0 || priceLte < 0) && sort.equals("1")) {
-                searchResponse = client.prepareSearch(ITEM_INDEX)
-                    .setTypes(ITEM_TYPE)
+                searchResponse = client.prepareSearch(itemIndex)
+                    .setTypes(itemType)
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setQuery(qb)    // Query
                     .setFrom(start).setSize(size).setExplain(true)    //从第几个开始，显示size个数据
-                    .setHighlighterPreTags("<a style=\"color: #e4393c\">")
-                    .setHighlighterPostTags("</a>")
-                    .addHighlightedField("productName")       //设置高亮显示
+                    .highlighter(hiBuilder)      //设置高亮显示
                     .addSort("salePrice", SortOrder.ASC)
                     .get();
             } else if ((priceGt < 0 || priceLte < 0) && sort.equals("-1")) {
-                searchResponse = client.prepareSearch(ITEM_INDEX)
-                    .setTypes(ITEM_TYPE)
+                searchResponse = client.prepareSearch(itemIndex)
+                    .setTypes(itemType)
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setQuery(qb)    // Query
                     .setFrom(start).setSize(size).setExplain(true)    //从第几个开始，显示size个数据
-                    .setHighlighterPreTags("<a style=\"color: #e4393c\">")
-                    .setHighlighterPostTags("</a>")
-                    .addHighlightedField("productName")
+                    .highlighter(hiBuilder)
                     .addSort("salePrice", SortOrder.DESC)
                     .get();
             }
 
             SearchHits hits = searchResponse.getHits();
             //返回总结果数
-            searchResult.setRecordCount(hits.totalHits());
+            searchResult.setRecordCount(hits.totalHits);
             List<SearchItem> list = new ArrayList<>();
-            if (hits.totalHits() > 0) {
+            if (hits.totalHits > 0) {
                 for (SearchHit hit : hits) {
                     //总页数
                     int totalPage = (int) (hit.getScore() / size);

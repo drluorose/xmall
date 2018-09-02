@@ -57,6 +57,9 @@ public class ContentServiceImpl implements ContentService {
     private TbItemExtMapper tbItemExtMapper;
 
     @Autowired
+    private TbItemMapper tbItemMapper;
+
+    @Autowired
     private TbItemDescMapper tbItemDescMapper;
 
     @Autowired
@@ -114,7 +117,7 @@ public class ContentServiceImpl implements ContentService {
         List<TbPanelContentDto> contents = Lists.transform(list, TbPanelContentDto::new);
         for (TbPanelContentDto content : contents) {
             if (content.getProductId() != null) {
-                TbItem tbItem = tbItemExtMapper.selectByPrimaryKey(content.getProductId());
+                TbItem tbItem = tbItemMapper.selectByPrimaryKey(content.getProductId());
                 content.setProductName(tbItem.getTitle());
                 content.setSalePrice(tbItem.getPrice());
                 content.setSubTitle(tbItem.getSellPoint());
@@ -210,7 +213,7 @@ public class ContentServiceImpl implements ContentService {
             List<TbPanelContentDto> tbPanelContentDtos = Lists.newArrayList(Lists.transform(contentList, TbPanelContentDto::new));
             for (TbPanelContentDto content : tbPanelContentDtos) {
                 if (content.getProductId() != null) {
-                    TbItem tbItem = tbItemExtMapper.selectByPrimaryKey(content.getProductId());
+                    TbItem tbItem = tbItemMapper.selectByPrimaryKey(content.getProductId());
                     content.setProductName(tbItem.getTitle());
                     content.setSalePrice(tbItem.getPrice());
                     content.setSubTitle(tbItem.getSellPoint());
@@ -313,7 +316,7 @@ public class ContentServiceImpl implements ContentService {
             List<TbPanelContentDto> tbPanelContentDtos = Lists.transform(contentList, TbPanelContentDto::new);
             for (TbPanelContentDto content : tbPanelContentDtos) {
                 if (content.getProductId() != null) {
-                    TbItem tbItem = tbItemExtMapper.selectByPrimaryKey(content.getProductId());
+                    TbItem tbItem = tbItemMapper.selectByPrimaryKey(content.getProductId());
                     content.setProductName(tbItem.getTitle());
                     content.setSalePrice(tbItem.getPrice());
                     content.setSubTitle(tbItem.getSellPoint());
@@ -343,7 +346,7 @@ public class ContentServiceImpl implements ContentService {
             e.printStackTrace();
         }
 
-        TbItem tbItem = tbItemExtMapper.selectByPrimaryKey(id);
+        TbItem tbItem = tbItemMapper.selectByPrimaryKey(id);
         ProductDet productDet = new ProductDet();
         productDet.setProductId(id);
         productDet.setProductName(tbItem.getTitle());

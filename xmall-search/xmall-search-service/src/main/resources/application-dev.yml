@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://192.168.31.234:3306/xmall?characterEncoding=utf-8
+      username: xmall
+      password: EusbI7pr91%h$3BCX
+      driver-class-name: com.mysql.jdbc.Driver
+      validationQuery: select 1
+      filter:
+        stat:
+          enabled: true
+        config:
+          enabled: true
+        encoding:
+          enabled: true
+  dubbo:
+    server: true
+    application: xmall-search
+    protocol:
+      name: dubbo
+      port: 20882
+    registry: zookeeper://192.168.31.234:2181
+activemq:
+  brokerUrl: tcp://192.168.31.234:61616
+es:
+  connectIp: 192.168.31.234
+  nodeClientPort: 9200
+  clusterName: elasticsearch
+  itemIndex: item
+  itemType: itemList

@@ -1,25 +1,22 @@
 package cn.exrick.manager.service.impl;
 
-import cn.exrick.common.enums.EnableStatusEnum;
 import cn.exrick.common.exception.XmallException;
-import cn.exrick.common.jwt.JwtKeyInfo;
 import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.dto.MemberDto;
-import cn.exrick.manager.mapper.TbMemberJwtKeyMapper;
+import cn.exrick.manager.mapper.TbMemberMapper;
 import cn.exrick.manager.mapper.ext.TbMemberExtMapper;
 import cn.exrick.manager.pojo.TbMember;
 import cn.exrick.manager.pojo.TbMemberExample;
-import cn.exrick.manager.pojo.TbMemberJwtKey;
-import cn.exrick.manager.pojo.TbMemberJwtKeyExample;
 import cn.exrick.manager.service.MemberService;
+import com.alibaba.dubbo.common.utils.CollectionUtils;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
@@ -29,16 +26,16 @@ import java.util.List;
  * @author Exrick
  * @date 2017/8/11
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = MemberService.class)
 public class MemberServiceImpl implements MemberService {
 
-    final static Logger log = LoggerFactory.getLogger(MemberServiceImpl.class);
+    @Autowired
+    private TbMemberMapper tbMemberMapper;
 
     @Autowired
-    private TbMemberExtMapper tbMemberMapper;
-
-    @Autowired
-    private TbMemberJwtKeyMapper tbMemberJwtKeyMapper;
+    private TbMemberExtMapper tbMemberExtMapper;
 
     @Override
     public TbMember getMemberById(long memberId) {
@@ -62,7 +59,10 @@ public class MemberServiceImpl implements MemberService {
         try {
             //分页
             PageHelper.startPage(start / length + 1, length);
-            List<TbMember> list = tbMemberMapper.selectByMemberInfo("%" + search + "%", minDate, maxDate, orderCol, orderDir);
+            List<TbMember> list = tbMemberExtMapper.selectByMemberInfo("%" + search + "%", minDate, maxDate, orderCol, orderDir);
+            if (CollectionUtils.isEmpty(list)) {
+                list = Lists.newArrayList();
+            }
             PageInfo<TbMember> pageInfo = new PageInfo<>(list);
 
             for (TbMember tbMember : list) {
@@ -89,8 +89,9 @@ public class MemberServiceImpl implements MemberService {
 
         try {
             //分页执行查询返回结果
+
             PageHelper.startPage(start / length + 1, length);
-            List<TbMember> list = tbMemberMapper.selectByRemoveMemberInfo("%" + search + "%", minDate, maxDate, orderCol, orderDir);
+            List<TbMember> list = tbMemberExtMapper.selectByRemoveMemberInfo("%" + search + "%", minDate, maxDate, orderCol, orderDir);
             PageInfo<TbMember> pageInfo = new PageInfo<>(list);
 
             for (TbMember tbMember : list) {

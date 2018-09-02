@@ -1,7 +1,6 @@
 package cn.exrick.manager.mapper.ext;
 
 import cn.exrick.manager.dto.OrderChartData;
-import cn.exrick.manager.mapper.TbOrderMapper;
 import cn.exrick.manager.pojo.TbOrder;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,7 +10,7 @@ import java.util.List;
 /**
  * @author dongjiejie
  */
-public interface TbOrderExtMapper extends TbOrderMapper {
+public interface TbOrderExtMapper {
 
     List<TbOrder> selectByMulti(@Param("search") String search, @Param("orderCol") String orderCol, @Param("orderDir") String orderDir);
 

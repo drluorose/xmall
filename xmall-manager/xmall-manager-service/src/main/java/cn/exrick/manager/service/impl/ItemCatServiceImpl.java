@@ -7,8 +7,10 @@ import cn.exrick.manager.mapper.TbItemCatMapper;
 import cn.exrick.manager.pojo.TbItemCat;
 import cn.exrick.manager.pojo.TbItemCatExample;
 import cn.exrick.manager.service.ItemCatService;
+import com.alibaba.dubbo.config.annotation.Service;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +20,9 @@ import java.util.List;
  * @author Exrick
  * @date 2017/8/2
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = ItemCatService.class)
 public class ItemCatServiceImpl implements ItemCatService {
 
     @Autowired
@@ -27,8 +31,8 @@ public class ItemCatServiceImpl implements ItemCatService {
     @Override
     public TbItemCat getItemCatById(Long id) {
 
-        TbItemCat tbItemCat=tbItemCatMapper.selectByPrimaryKey(id);
-        if(tbItemCat==null){
+        TbItemCat tbItemCat = tbItemCatMapper.selectByPrimaryKey(id);
+        if (tbItemCat == null) {
             throw new XmallException("通过id获取商品分类失败");
         }
         return tbItemCat;
@@ -37,8 +41,8 @@ public class ItemCatServiceImpl implements ItemCatService {
     @Override
     public List<ZTreeNode> getItemCatList(int parentId) {
 
-        TbItemCatExample example=new TbItemCatExample();
-        TbItemCatExample.Criteria criteria=example.createCriteria();
+        TbItemCatExample example = new TbItemCatExample();
+        TbItemCatExample.Criteria criteria = example.createCriteria();
         //排序
         example.setOrderByClause("sort_order");
         //条件查询
@@ -46,11 +50,11 @@ public class ItemCatServiceImpl implements ItemCatService {
         List<TbItemCat> list = tbItemCatMapper.selectByExample(example);
 
         //转换成ZtreeNode
-        List<ZTreeNode> resultList=new ArrayList<>();
+        List<ZTreeNode> resultList = new ArrayList<>();
 
-        for(TbItemCat tbItemCat:list){
+        for (TbItemCat tbItemCat : list) {
 
-            ZTreeNode node= DtoUtil.TbItemCat2ZTreeNode(tbItemCat);
+            ZTreeNode node = DtoUtil.TbItemCat2ZTreeNode(tbItemCat);
 
             resultList.add(node);
         }
@@ -61,20 +65,19 @@ public class ItemCatServiceImpl implements ItemCatService {
     @Override
     public int addItemCat(TbItemCat tbItemCat) {
 
-        if(tbItemCat.getParentId()==0){
+        if (tbItemCat.getParentId() == 0) {
             //根节点
             tbItemCat.setSortOrder(0);
             tbItemCat.setStatus(1);
-        }else{
-            TbItemCat parent=tbItemCatMapper.selectByPrimaryKey(tbItemCat.getParentId());
+        } else {
+            TbItemCat parent = tbItemCatMapper.selectByPrimaryKey(tbItemCat.getParentId());
             tbItemCat.setSortOrder(0);
             tbItemCat.setStatus(1);
             tbItemCat.setCreated(new Date());
             tbItemCat.setUpdated(new Date());
         }
 
-
-        if(tbItemCatMapper.insert(tbItemCat)!=1){
+        if (tbItemCatMapper.insert(tbItemCat) != 1) {
             throw new XmallException("添加商品分类失败");
         }
         return 1;
@@ -83,11 +86,11 @@ public class ItemCatServiceImpl implements ItemCatService {
     @Override
     public int updateItemCat(TbItemCat tbItemCat) {
 
-        TbItemCat old=getItemCatById(tbItemCat.getId());
+        TbItemCat old = getItemCatById(tbItemCat.getId());
         tbItemCat.setCreated(old.getCreated());
         tbItemCat.setUpdated(new Date());
 
-        if(tbItemCatMapper.updateByPrimaryKey(tbItemCat)!=1){
+        if (tbItemCatMapper.updateByPrimaryKey(tbItemCat) != 1) {
             throw new XmallException("添加商品分类失败");
         }
         return 1;
@@ -103,15 +106,15 @@ public class ItemCatServiceImpl implements ItemCatService {
     public void deleteZTree(Long id) {
 
         //查询该节点所有子节点
-        List<ZTreeNode> node=getItemCatList(Math.toIntExact(id));
-        if(node.size()>0){
+        List<ZTreeNode> node = getItemCatList(Math.toIntExact(id));
+        if (node.size() > 0) {
             //如果有子节点，遍历子节点
-            for(int i=0;i<node.size();i++){
+            for (int i = 0; i < node.size(); i++) {
                 deleteItemCat((long) node.get(i).getId());
             }
         }
         //没有子节点直接删除
-        if(tbItemCatMapper.deleteByPrimaryKey(id)!=1){
+        if (tbItemCatMapper.deleteByPrimaryKey(id) != 1) {
             throw new XmallException("删除商品分类失败");
         }
     }

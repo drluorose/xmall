@@ -89,6 +89,23 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.spring.boot</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>4.3.14.RELEASE</version>
@@ -99,46 +116,18 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <!-- or if you want to use tomcat 6.x
-                <artifactId>tomcat6-maven-plugin</artifactId>
-                -->
-                <version>2.2</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <!-- http port -->
-                    <port>9090</port>
-                    <!-- application path always starts with /-->
-                    <path>/</path>
-                    <!-- optional path to a context file -->
-                    <contextFile>${tomcatContextXml}</contextFile>
-                    <!-- optional system propoerties you want to add -->
-                    <systemProperties>
-                        <appserver.base>${project.build.directory}/appserver-base</appserver.base>
-                        <appserver.home>${project.build.directory}/appserver-home</appserver.home>
-                        <derby.system.home>${project.build.directory}/appserver-base/logs</derby.system.home>
-                        <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
-                    </systemProperties>
-                    <!-- if you want to use test dependencies rather than only runtime -->
-                    <useTestClasspath>false</useTestClasspath>
-                    <!-- optional if you want to add some extra directories into the classloader -->
-                    <additionalClasspathDirs>
-                        <additionalClasspathDir></additionalClasspathDir>
-                    </additionalClasspathDirs>
+                    <executable>true</executable>
                 </configuration>
-                <!-- For any extra dependencies needed when running embedded Tomcat (not WAR dependencies) add them below -->
-                <!--<dependencies>-->
-                <!--<dependency>-->
-                <!--<groupId>org.apache.derby</groupId>-->
-                <!--<artifactId>derby</artifactId>-->
-                <!--<version>\${derbyVersion}</version>-->
-                <!--</dependency>-->
-                <!--<dependency>-->
-                <!--<groupId>javax.mail</groupId>-->
-                <!--<artifactId>mail</artifactId>-->
-                <!--<version>1.4</version>-->
-                <!--</dependency>-->
-                <!--</dependencies>-->
             </plugin>
         </plugins>
     </build>

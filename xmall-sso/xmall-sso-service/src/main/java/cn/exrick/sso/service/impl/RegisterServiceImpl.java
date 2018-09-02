@@ -1,25 +1,29 @@
 package cn.exrick.sso.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
 import cn.exrick.common.exception.XmallException;
-import cn.exrick.manager.mapper.ext.TbMemberExtMapper;
+import cn.exrick.manager.mapper.TbMemberMapper;
 import cn.exrick.manager.pojo.TbMember;
 import cn.exrick.manager.pojo.TbMemberExample;
 import cn.exrick.sso.service.RegisterService;
+import com.alibaba.dubbo.config.annotation.Service;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Exrickx
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = RegisterService.class)
 public class RegisterServiceImpl implements RegisterService {
 
     @Autowired
-    private TbMemberExtMapper tbMemberMapper;
+    private TbMemberMapper tbMemberMapper;
 
     @Override
     public boolean checkData(String param, int type) {

@@ -12,9 +12,11 @@ import cn.exrick.manager.pojo.TbCityExample;
 import cn.exrick.manager.pojo.TbCountry;
 import cn.exrick.manager.pojo.TbCountryExample;
 import cn.exrick.sso.service.AddressService;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -27,7 +29,9 @@ import java.util.Objects;
  *
  * @author Exrickx
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = AddressService.class)
 public class AddressServiceImpl implements AddressService {
 
     @Autowired

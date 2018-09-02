@@ -4,8 +4,10 @@ import cn.exrick.manager.mapper.TbExpressMapper;
 import cn.exrick.manager.pojo.TbExpress;
 import cn.exrick.manager.pojo.TbExpressExample;
 import cn.exrick.manager.service.ExpressService;
+import com.alibaba.dubbo.config.annotation.Service;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
@@ -13,7 +15,9 @@ import java.util.List;
 /**
  * @author Exrickx
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = ExpressService.class)
 public class ExpressServiceImpl implements ExpressService {
 
     @Autowired
