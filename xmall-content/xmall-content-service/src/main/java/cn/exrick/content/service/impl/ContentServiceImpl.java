@@ -21,18 +21,18 @@ import cn.exrick.manager.pojo.TbPanel;
 import cn.exrick.manager.pojo.TbPanelContent;
 import cn.exrick.manager.pojo.TbPanelContentExample;
 import cn.exrick.manager.pojo.TbPanelExample;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -42,10 +42,10 @@ import java.util.List;
 /**
  * @author Exrickx
  */
-@Service
+@Slf4j
+@Component
+@Service(interfaceClass = ContentService.class)
 public class ContentServiceImpl implements ContentService {
-
-    private final static Logger log = LoggerFactory.getLogger(PanelServiceImpl.class);
 
     @Autowired
     private TbPanelMapper tbPanelMapper;

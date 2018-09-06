@@ -224,6 +224,136 @@ public class TbAddressExample {
             return (Criteria) this;
         }
 
+        public Criteria andMidIsNull() {
+            addCriterion("mid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidIsNotNull() {
+            addCriterion("mid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidEqualTo(String value) {
+            addCriterion("mid =", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidNotEqualTo(String value) {
+            addCriterion("mid <>", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidGreaterThan(String value) {
+            addCriterion("mid >", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidGreaterThanOrEqualTo(String value) {
+            addCriterion("mid >=", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidLessThan(String value) {
+            addCriterion("mid <", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidLessThanOrEqualTo(String value) {
+            addCriterion("mid <=", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidLike(String value) {
+            addCriterion("mid like", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidNotLike(String value) {
+            addCriterion("mid not like", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidIn(List<String> values) {
+            addCriterion("mid in", values, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidNotIn(List<String> values) {
+            addCriterion("mid not in", values, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidBetween(String value1, String value2) {
+            addCriterion("mid between", value1, value2, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidNotBetween(String value1, String value2) {
+            addCriterion("mid not between", value1, value2, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCityIdIsNull() {
+            addCriterion("city_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCityIdIsNotNull() {
+            addCriterion("city_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCityIdEqualTo(Integer value) {
+            addCriterion("city_id =", value, "cityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCityIdNotEqualTo(Integer value) {
+            addCriterion("city_id <>", value, "cityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCityIdGreaterThan(Integer value) {
+            addCriterion("city_id >", value, "cityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCityIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("city_id >=", value, "cityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCityIdLessThan(Integer value) {
+            addCriterion("city_id <", value, "cityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCityIdLessThanOrEqualTo(Integer value) {
+            addCriterion("city_id <=", value, "cityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCityIdIn(List<Integer> values) {
+            addCriterion("city_id in", values, "cityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCityIdNotIn(List<Integer> values) {
+            addCriterion("city_id not in", values, "cityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCityIdBetween(Integer value1, Integer value2) {
+            addCriterion("city_id between", value1, value2, "cityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCityIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("city_id not between", value1, value2, "cityId");
+            return (Criteria) this;
+        }
+
         public Criteria andUserNameIsNull() {
             addCriterion("user_name is null");
             return (Criteria) this;

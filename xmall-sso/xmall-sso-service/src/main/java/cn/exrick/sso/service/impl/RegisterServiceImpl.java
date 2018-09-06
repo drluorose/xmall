@@ -75,5 +75,4 @@ public class RegisterServiceImpl implements RegisterService {
         }
         return 1;
     }
-
 }

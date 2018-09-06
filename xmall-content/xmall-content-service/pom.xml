@@ -11,7 +11,7 @@
 
     <artifactId>xmall-content-service</artifactId>
 
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>com.alibaba</groupId>

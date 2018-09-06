@@ -1,5 +1,6 @@
 package cn.exrick.sso.service;
 
+import cn.exrick.manager.dto.front.AddressDto;
 import cn.exrick.manager.pojo.TbAddress;
 import cn.exrick.manager.pojo.TbCity;
 import cn.exrick.manager.pojo.TbCountry;
@@ -30,11 +31,11 @@ public interface AddressService {
     /**
      * 获取地址
      *
-     * @param userId
+     * @param mid
      *
      * @return
      */
-    List<TbAddress> getAddressList(Long userId);
+    List<AddressDto> getAddressList(String mid);
 
     /**
      * 获取单个

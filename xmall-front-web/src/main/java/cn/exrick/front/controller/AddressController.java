@@ -4,6 +4,7 @@ import cn.exrick.common.annotation.JwtAuth;
 import cn.exrick.common.pojo.Result;
 import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.common.utils.XmallLists;
+import cn.exrick.manager.dto.front.AddressDto;
 import cn.exrick.manager.dto.front.CityDto;
 import cn.exrick.manager.dto.front.CountryDto;
 import cn.exrick.manager.dto.front.req.IdReq;
@@ -58,10 +59,10 @@ public class AddressController {
     @JwtAuth
     @RequestMapping(value = "/member/addressList", method = RequestMethod.POST)
     @ApiOperation(value = "获得所有收货地址")
-    public Result<List<TbAddress>> addressList(@RequestBody TbAddress tbAddress) {
+    public Result<List<AddressDto>> addressList(@RequestBody TbAddress tbAddress) {
 
-        List<TbAddress> list = addressService.getAddressList(tbAddress.getUserId());
-        return new ResultUtil<List<TbAddress>>().setData(list);
+        List<AddressDto> list = addressService.getAddressList(tbAddress.getMid());
+        return new ResultUtil<List<AddressDto>>().setData(list);
     }
 
     @JwtAuth

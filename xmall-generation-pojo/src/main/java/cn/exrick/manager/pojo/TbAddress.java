@@ -9,6 +9,10 @@ public class TbAddress implements Serializable {
 
     private Long userId;
 
+    private String mid;
+
+    private Integer cityId;
+
     private String userName;
 
     private String tel;

@@ -9,6 +9,8 @@ import lombok.Data;
 public class TbOrder implements Serializable {
     private String orderId;
 
+    private String mid;
+
     private BigDecimal payment;
 
     private Integer paymentType;

@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -41,6 +42,7 @@ import java.util.UUID;
  * @author Exrickx
  */
 @Slf4j
+@Component
 @Service(interfaceClass = OrderService.class)
 public class OrderServiceImpl implements OrderService {
 

@@ -4,6 +4,8 @@
   <resultMap id="BaseResultMap" type="cn.exrick.manager.pojo.TbAddress">
     <id column="address_id" jdbcType="BIGINT" property="addressId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="mid" jdbcType="VARCHAR" property="mid" />
+    <result column="city_id" jdbcType="INTEGER" property="cityId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="tel" jdbcType="VARCHAR" property="tel" />
     <result column="street_name" jdbcType="VARCHAR" property="streetName" />
@@ -68,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    address_id, user_id, user_name, tel, street_name, is_default
+    address_id, user_id, mid, city_id, user_name, tel, street_name, is_default
   </sql>
   <select id="selectByExample" parameterType="cn.exrick.manager.pojo.TbAddressExample" resultMap="BaseResultMap">
     select
@@ -101,12 +103,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.exrick.manager.pojo.TbAddress">
-    insert into tb_address (address_id, user_id, user_name, 
-      tel, street_name, is_default
-      )
-    values (#{addressId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, 
-      #{tel,jdbcType=VARCHAR}, #{streetName,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT}
-      )
+    insert into tb_address (address_id, user_id, mid, 
+      city_id, user_name, tel, 
+      street_name, is_default)
+    values (#{addressId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{mid,jdbcType=VARCHAR}, 
+      #{cityId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{streetName,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="cn.exrick.manager.pojo.TbAddress">
     insert into tb_address
@@ -116,6 +118,12 @@
       </if>
       <if test="userId != null">
         user_id,
+      </if>
+      <if test="mid != null">
+        mid,
+      </if>
+      <if test="cityId != null">
+        city_id,
       </if>
       <if test="userName != null">
         user_name,
@@ -136,6 +144,12 @@
       </if>
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="mid != null">
+        #{mid,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=INTEGER},
       </if>
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
@@ -166,6 +180,12 @@
       <if test="record.userId != null">
         user_id = #{record.userId,jdbcType=BIGINT},
       </if>
+      <if test="record.mid != null">
+        mid = #{record.mid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityId != null">
+        city_id = #{record.cityId,jdbcType=INTEGER},
+      </if>
       <if test="record.userName != null">
         user_name = #{record.userName,jdbcType=VARCHAR},
       </if>
@@ -187,6 +207,8 @@
     update tb_address
     set address_id = #{record.addressId,jdbcType=BIGINT},
       user_id = #{record.userId,jdbcType=BIGINT},
+      mid = #{record.mid,jdbcType=VARCHAR},
+      city_id = #{record.cityId,jdbcType=INTEGER},
       user_name = #{record.userName,jdbcType=VARCHAR},
       tel = #{record.tel,jdbcType=VARCHAR},
       street_name = #{record.streetName,jdbcType=VARCHAR},
@@ -200,6 +222,12 @@
     <set>
       <if test="userId != null">
         user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="mid != null">
+        mid = #{mid,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        city_id = #{cityId,jdbcType=INTEGER},
       </if>
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
@@ -219,6 +247,8 @@
   <update id="updateByPrimaryKey" parameterType="cn.exrick.manager.pojo.TbAddress">
     update tb_address
     set user_id = #{userId,jdbcType=BIGINT},
+      mid = #{mid,jdbcType=VARCHAR},
+      city_id = #{cityId,jdbcType=INTEGER},
       user_name = #{userName,jdbcType=VARCHAR},
       tel = #{tel,jdbcType=VARCHAR},
       street_name = #{streetName,jdbcType=VARCHAR},

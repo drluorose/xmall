@@ -176,6 +176,76 @@ public class TbOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andMidIsNull() {
+            addCriterion("mid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidIsNotNull() {
+            addCriterion("mid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidEqualTo(String value) {
+            addCriterion("mid =", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidNotEqualTo(String value) {
+            addCriterion("mid <>", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidGreaterThan(String value) {
+            addCriterion("mid >", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidGreaterThanOrEqualTo(String value) {
+            addCriterion("mid >=", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidLessThan(String value) {
+            addCriterion("mid <", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidLessThanOrEqualTo(String value) {
+            addCriterion("mid <=", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidLike(String value) {
+            addCriterion("mid like", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidNotLike(String value) {
+            addCriterion("mid not like", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidIn(List<String> values) {
+            addCriterion("mid in", values, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidNotIn(List<String> values) {
+            addCriterion("mid not in", values, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidBetween(String value1, String value2) {
+            addCriterion("mid between", value1, value2, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidNotBetween(String value1, String value2) {
+            addCriterion("mid not between", value1, value2, "mid");
+            return (Criteria) this;
+        }
+
         public Criteria andPaymentIsNull() {
             addCriterion("payment is null");
             return (Criteria) this;

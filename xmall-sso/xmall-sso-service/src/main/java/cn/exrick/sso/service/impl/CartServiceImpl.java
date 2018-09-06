@@ -8,8 +8,7 @@ import cn.exrick.manager.pojo.TbItem;
 import cn.exrick.sso.service.CartService;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.google.gson.Gson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,11 +19,10 @@ import java.util.List;
 /**
  * @author Exrickx
  */
+@Slf4j
 @Component
 @Service(interfaceClass = CartService.class)
 public class CartServiceImpl implements CartService {
-
-    private final static Logger log = LoggerFactory.getLogger(CartServiceImpl.class);
 
     @Autowired
     private JedisClient jedisClient;

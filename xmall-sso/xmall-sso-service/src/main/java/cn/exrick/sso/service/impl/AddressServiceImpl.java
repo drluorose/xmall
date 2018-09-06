@@ -2,6 +2,7 @@ package cn.exrick.sso.service.impl;
 
 import cn.exrick.common.enums.EnableStatusEnum;
 import cn.exrick.common.exception.XmallException;
+import cn.exrick.manager.dto.front.AddressDto;
 import cn.exrick.manager.mapper.TbAddressMapper;
 import cn.exrick.manager.mapper.TbCityMapper;
 import cn.exrick.manager.mapper.TbCountryMapper;
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -69,25 +69,43 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<TbAddress> getAddressList(Long userId) {
+    public List<AddressDto> getAddressList(String mid) {
 
-        List<TbAddress> list = new ArrayList<>();
+        List<TbAddress> list = null;
         TbAddressExample example = new TbAddressExample();
         TbAddressExample.Criteria criteria = example.createCriteria();
-        criteria.andUserIdEqualTo(userId);
+        criteria.andMidEqualTo(mid);
         list = tbAddressMapper.selectByExample(example);
-        if (list == null) {
-            throw new XmallException("获取默认地址列表失败");
+        if (Objects.isNull(list)) {
+            list = Lists.newArrayList();
         }
-
-        for (int i = 0; i < list.size(); i++) {
+        List<AddressDto> addressDtos = Lists.newArrayListWithCapacity(list.size());
+        list.forEach(tbAddress -> {
+            AddressDto addressDto = new AddressDto();
+            addressDto.setAddressId(tbAddress.getAddressId());
+            addressDto.setIsDefault(tbAddress.getIsDefault());
+            addressDto.setMid(tbAddress.getMid());
+            addressDto.setStreetName(tbAddress.getStreetName());
+            TbCity tbCity = tbCityMapper.selectByPrimaryKey(tbAddress.getCityId());
+            TbCountry tbCountry = null;
+            if (Objects.nonNull(tbCity)) {
+                tbCountry = tbCountryMapper.selectByPrimaryKey(tbCity.getCountryId());
+            }
+            addressDto.setTbCity(tbCity);
+            addressDto.setTbCountry(tbCountry);
+            addressDto.setTel(tbAddress.getTel());
+            addressDto.setUserId(tbAddress.getUserId());
+            addressDto.setUserName(tbAddress.getUserName());
+            addressDtos.add(addressDto);
+        });
+        for (int i = 0; i < addressDtos.size(); i++) {
             if (list.get(i).getIsDefault()) {
-                Collections.swap(list, 0, i);
+                Collections.swap(addressDtos, 0, i);
                 break;
             }
         }
 
-        return list;
+        return addressDtos;
     }
 
     @Override

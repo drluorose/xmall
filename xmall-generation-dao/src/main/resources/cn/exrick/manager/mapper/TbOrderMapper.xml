@@ -3,6 +3,7 @@
 <mapper namespace="cn.exrick.manager.mapper.TbOrderMapper">
   <resultMap id="BaseResultMap" type="cn.exrick.manager.pojo.TbOrder">
     <id column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="mid" jdbcType="VARCHAR" property="mid" />
     <result column="payment" jdbcType="DECIMAL" property="payment" />
     <result column="payment_type" jdbcType="INTEGER" property="paymentType" />
     <result column="post_fee" jdbcType="DECIMAL" property="postFee" />
@@ -79,9 +80,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    order_id, payment, payment_type, post_fee, status, create_time, update_time, payment_time, 
-    consign_time, end_time, close_time, shipping_name, shipping_code, user_id, buyer_message, 
-    buyer_nick, buyer_comment
+    order_id, mid, payment, payment_type, post_fee, status, create_time, update_time, 
+    payment_time, consign_time, end_time, close_time, shipping_name, shipping_code, user_id, 
+    buyer_message, buyer_nick, buyer_comment
   </sql>
   <select id="selectByExample" parameterType="cn.exrick.manager.pojo.TbOrderExample" resultMap="BaseResultMap">
     select
@@ -114,24 +115,29 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.exrick.manager.pojo.TbOrder">
-    insert into tb_order (order_id, payment, payment_type, 
-      post_fee, status, create_time, 
-      update_time, payment_time, consign_time, 
-      end_time, close_time, shipping_name, 
-      shipping_code, user_id, buyer_message, 
-      buyer_nick, buyer_comment)
-    values (#{orderId,jdbcType=VARCHAR}, #{payment,jdbcType=DECIMAL}, #{paymentType,jdbcType=INTEGER}, 
-      #{postFee,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{paymentTime,jdbcType=TIMESTAMP}, #{consignTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}, #{shippingName,jdbcType=VARCHAR}, 
-      #{shippingCode,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, #{buyerMessage,jdbcType=VARCHAR}, 
-      #{buyerNick,jdbcType=VARCHAR}, #{buyerComment,jdbcType=BIT})
+    insert into tb_order (order_id, mid, payment, 
+      payment_type, post_fee, status, 
+      create_time, update_time, payment_time, 
+      consign_time, end_time, close_time, 
+      shipping_name, shipping_code, user_id, 
+      buyer_message, buyer_nick, buyer_comment
+      )
+    values (#{orderId,jdbcType=VARCHAR}, #{mid,jdbcType=VARCHAR}, #{payment,jdbcType=DECIMAL}, 
+      #{paymentType,jdbcType=INTEGER}, #{postFee,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{paymentTime,jdbcType=TIMESTAMP}, 
+      #{consignTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}, 
+      #{shippingName,jdbcType=VARCHAR}, #{shippingCode,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, 
+      #{buyerMessage,jdbcType=VARCHAR}, #{buyerNick,jdbcType=VARCHAR}, #{buyerComment,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.exrick.manager.pojo.TbOrder">
     insert into tb_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="orderId != null">
         order_id,
+      </if>
+      <if test="mid != null">
+        mid,
       </if>
       <if test="payment != null">
         payment,
@@ -185,6 +191,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="orderId != null">
         #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="mid != null">
+        #{mid,jdbcType=VARCHAR},
       </if>
       <if test="payment != null">
         #{payment,jdbcType=DECIMAL},
@@ -248,6 +257,9 @@
       <if test="record.orderId != null">
         order_id = #{record.orderId,jdbcType=VARCHAR},
       </if>
+      <if test="record.mid != null">
+        mid = #{record.mid,jdbcType=VARCHAR},
+      </if>
       <if test="record.payment != null">
         payment = #{record.payment,jdbcType=DECIMAL},
       </if>
@@ -304,6 +316,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_order
     set order_id = #{record.orderId,jdbcType=VARCHAR},
+      mid = #{record.mid,jdbcType=VARCHAR},
       payment = #{record.payment,jdbcType=DECIMAL},
       payment_type = #{record.paymentType,jdbcType=INTEGER},
       post_fee = #{record.postFee,jdbcType=DECIMAL},
@@ -327,6 +340,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="cn.exrick.manager.pojo.TbOrder">
     update tb_order
     <set>
+      <if test="mid != null">
+        mid = #{mid,jdbcType=VARCHAR},
+      </if>
       <if test="payment != null">
         payment = #{payment,jdbcType=DECIMAL},
       </if>
@@ -380,7 +396,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.exrick.manager.pojo.TbOrder">
     update tb_order
-    set payment = #{payment,jdbcType=DECIMAL},
+    set mid = #{mid,jdbcType=VARCHAR},
+      payment = #{payment,jdbcType=DECIMAL},
       payment_type = #{paymentType,jdbcType=INTEGER},
       post_fee = #{postFee,jdbcType=DECIMAL},
       status = #{status,jdbcType=INTEGER},
