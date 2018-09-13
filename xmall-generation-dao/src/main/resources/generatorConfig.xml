@@ -77,5 +77,15 @@
             <columnOverride column="status" javaType="cn.exrick.common.enums.EnableStatusEnum"
                             typeHandler="cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler"/>
         </table>
+        <table schema="" tableName="tb_transaction" domainObjectName="Transaction">
+            <columnOverride column="payment" javaType="cn.exrick.common.enums.PaymentEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.PaymentEnumHandler"/>
+        </table>
+        <table schema="" tableName="tb_transaction_paypal" domainObjectName="TransactionPaypal">
+        </table>
+        <table schema="" tableName="tb_transaction_paypal_item" domainObjectName="TransactionPaypalItem">
+        </table>
+        <table schema="" tableName="tb_transaction_paypal_shipping_address" domainObjectName="TransactionPaypalShippingAddress">
+        </table>
     </context>
 </generatorConfiguration>
