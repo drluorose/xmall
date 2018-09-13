@@ -51,6 +51,7 @@
         <jcl-over-slf4j.version>1.7.25</jcl-over-slf4j.version>
         <spring-boot.version>1.5.15.RELEASE</spring-boot.version>
         <dubbo-spring-boot-starter.vesion>2.0.0</dubbo-spring-boot-starter.vesion>
+        <paypay-rest-api-sdk>2.0.0-SNAPSHOT</paypay-rest-api-sdk>
     </properties>
     <dependencies>
         <dependency>
@@ -374,6 +375,11 @@
                 <groupId>com.alibaba.spring.boot</groupId>
                 <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo-spring-boot-starter.vesion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.paypal.sdk</groupId>
+                <artifactId>rest-api-sdk</artifactId>
+                <version>${paypay-rest-api-sdk}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
