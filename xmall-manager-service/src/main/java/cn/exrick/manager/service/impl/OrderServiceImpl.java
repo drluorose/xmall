@@ -343,14 +343,6 @@ public class OrderServiceImpl implements OrderService {
         if (!value.equals(token)) {
             return -1;
         }
-//        //保存
-//        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        try {
-//            Date date=sdf.parse(tbThanks.getDate());
-//            tbThanks.setDate(date);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         if (tbThanksMapper.updateByPrimaryKey(tbThanks) != 1) {
             return 0;
         }

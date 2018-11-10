@@ -1,5 +1,6 @@
 package cn.exrick.sso.service.impl;
 
+import cn.exrick.common.enums.OrderStatusEnum;
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.common.utils.IDUtil;
@@ -174,7 +175,7 @@ public class OrderServiceImpl implements OrderService {
             order.setCloseDate(closeDate);
         }
         //finishDate
-        if (tbOrder.getEndTime() != null && tbOrder.getStatus() == 4) {
+        if (tbOrder.getEndTime() != null && tbOrder.getStatus() == OrderStatusEnum.SUCCESS) {
             String finishDate = formatter.format(tbOrder.getEndTime());
             order.setFinishDate(finishDate);
         }
@@ -214,7 +215,7 @@ public class OrderServiceImpl implements OrderService {
         if (tbOrder == null) {
             throw new XmallException("通过id获取订单失败");
         }
-        tbOrder.setStatus(5);
+        tbOrder.setStatus(OrderStatusEnum.CLOSED);
         tbOrder.setCloseTime(new Date());
         if (tbOrderMapper.updateByPrimaryKey(tbOrder) != 1) {
             throw new XmallException("取消订单失败");
@@ -240,7 +241,7 @@ public class OrderServiceImpl implements OrderService {
         order.setCreateTime(new Date());
         order.setUpdateTime(new Date());
         //0、未付款，1、已付款，2、未发货，3、已发货，4、交易成功，5、交易关闭，6、交易失败
-        order.setStatus(0);
+        order.setStatus(OrderStatusEnum.UNPAID);
 
         if (tbOrderMapper.insert(order) != 1) {
             throw new XmallException("生成订单失败");
@@ -331,7 +332,7 @@ public class OrderServiceImpl implements OrderService {
 
         //设置订单为已付款
         TbOrder tbOrder = tbOrderMapper.selectByPrimaryKey(tbThanks.getOrderId());
-        tbOrder.setStatus(1);
+        tbOrder.setStatus(OrderStatusEnum.PAID);
         tbOrder.setUpdateTime(new Date());
         tbOrder.setPaymentTime(new Date());
         if (tbOrderMapper.updateByPrimaryKey(tbOrder) != 1) {
@@ -353,13 +354,13 @@ public class OrderServiceImpl implements OrderService {
     public String judgeOrder(TbOrder tbOrder) {
 
         String result = null;
-        if (tbOrder.getStatus() == 0) {
+        if (tbOrder.getStatus() == OrderStatusEnum.UNPAID) {
             //判断是否已超1天
             long diff = System.currentTimeMillis() - tbOrder.getCreateTime().getTime();
             long days = diff / (1000 * 60 * 60 * 24);
             if (days >= 1) {
                 //设置失效
-                tbOrder.setStatus(5);
+                tbOrder.setStatus(OrderStatusEnum.CLOSED);
                 tbOrder.setCloseTime(new Date());
                 if (tbOrderMapper.updateByPrimaryKey(tbOrder) != 1) {
                     throw new XmallException("更新订单失效失败");

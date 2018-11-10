@@ -19,7 +19,7 @@
         <module>xmall-generation-pojo</module>
         <module>xmall-generation-dao</module>
         <module>xmall-api</module>
-        <module>xmall-manager-serivce</module>
+        <module>xmall-manager-service</module>
         <module>xmall-search-service</module>
         <module>xmall-sso-service</module>
         <module>xmall-content-service</module>
