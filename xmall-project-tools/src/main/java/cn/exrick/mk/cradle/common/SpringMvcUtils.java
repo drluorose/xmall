@@ -1,4 +1,4 @@
-package com.douyu.wsd.cradle.common;
+package cn.exrick.mk.cradle.common;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

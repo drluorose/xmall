@@ -1,4 +1,4 @@
-package com.douyu.wsd.cradle.common;
+package cn.exrick.mk.cradle.common;
 
 import com.douyu.wsd.cradle.AppLauncher;
 import com.google.common.base.Preconditions;

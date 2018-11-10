@@ -1,4 +1,4 @@
-package com.douyu.wsd.cradle.common;
+package cn.exrick.mk.cradle.common;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,7 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.exrick.mk.cradle.common.SpringMvcUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;

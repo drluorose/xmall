@@ -1,4 +1,4 @@
-package com.douyu.wsd.cradle.vo;
+package cn.exrick.mk.cradle.vo;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

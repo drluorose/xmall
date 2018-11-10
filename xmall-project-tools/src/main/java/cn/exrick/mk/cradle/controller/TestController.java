@@ -1,4 +1,4 @@
-package com.douyu.wsd.cradle.controller;
+package cn.exrick.mk.cradle.controller;
 
 import java.util.HashMap;
 import java.util.Map;

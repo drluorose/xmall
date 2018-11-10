@@ -1,7 +1,7 @@
-package com.douyu.wsd.cradle.config;
+package cn.exrick.mk.cradle.config;
 
-import com.douyu.wsd.cradle.common.TemporaryFileAutoCleanInterceptor;
 
+import cn.exrick.mk.cradle.common.TemporaryFileAutoCleanInterceptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.context.annotation.Configuration;

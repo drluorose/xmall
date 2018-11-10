@@ -1,6 +1,6 @@
-package com.douyu.wsd.cradle.controller;
+package cn.exrick.mk.cradle.controller;
 
-import com.douyu.wsd.cradle.service.CodeGenerateService;
+import cn.exrick.mk.cradle.service.CodeGenerateService;
 import com.douyu.wsd.cradle.vo.GenerateReq;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;

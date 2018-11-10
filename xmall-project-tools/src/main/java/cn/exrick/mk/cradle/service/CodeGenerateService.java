@@ -1,4 +1,4 @@
-package com.douyu.wsd.cradle.service;
+package cn.exrick.mk.cradle.service;
 
 import com.douyu.wsd.cradle.vo.GenerateReq;
 

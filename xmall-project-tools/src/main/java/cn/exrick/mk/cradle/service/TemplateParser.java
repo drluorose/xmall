@@ -1,7 +1,7 @@
-package com.douyu.wsd.cradle.service;
+package cn.exrick.mk.cradle.service;
 
+import cn.exrick.mk.cradle.common.ProjectConstants;
 import com.douyu.wsd.cradle.AppLauncher;
-import com.douyu.wsd.cradle.common.ProjectConstants;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;

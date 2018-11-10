@@ -1,4 +1,4 @@
-package com.douyu.wsd.cradle;
+package cn.exrick.mk.cradle;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -12,7 +12,7 @@ public class AppLauncher {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context =
-                new SpringApplicationBuilder(AppLauncher.class).run(args);
+            new SpringApplicationBuilder(AppLauncher.class).run(args);
         context.addApplicationListener(new ApplicationPidFileWriter());
         context.addApplicationListener(new EmbeddedServerPortFileWriter());
     }

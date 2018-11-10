@@ -1,24 +1,12 @@
-package com.douyu.wsd.cradle.service;
+package cn.exrick.mk.cradle.service;
 
 import cn.exrick.common.utils.ObjectId;
-import com.douyu.wsd.cradle.common.ProjectConstants;
-import com.douyu.wsd.cradle.common.TemporaryFileAutoCleanInterceptor;
-import com.douyu.wsd.cradle.domain.MavenModule;
+import cn.exrick.mk.cradle.common.ProjectConstants;
+import cn.exrick.mk.cradle.common.TemporaryFileAutoCleanInterceptor;
+import cn.exrick.mk.cradle.domain.MavenModule;
 import com.douyu.wsd.cradle.utils.Underline2Camel;
 import com.douyu.wsd.cradle.utils.ZipUtils;
 import com.douyu.wsd.cradle.vo.GenerateReq;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
-
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.mysql.jdbc.Driver;
@@ -33,6 +21,17 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
+
+import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j

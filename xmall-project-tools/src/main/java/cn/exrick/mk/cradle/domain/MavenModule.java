@@ -1,6 +1,4 @@
-package com.douyu.wsd.cradle.domain;
-
-import java.util.Map;
+package cn.exrick.mk.cradle.domain;
 
 import lombok.Builder;
 import lombok.Data;

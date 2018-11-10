@@ -1,4 +1,4 @@
-package com.douyu.wsd.cradle.utils;
+package cn.exrick.mk.cradle.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
