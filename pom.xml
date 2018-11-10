@@ -12,20 +12,19 @@
     <description>xmall-project-group</description>
 
     <modules>
-        <module>xmall-common</module>
-        <module>xmall-content</module>
-        <module>xmall-front-web</module>
-        <module>xmall-generation-pojo</module>
-        <module>xmall-generation-dao</module>
-        <module>xmall-manager</module>
-        <module>xmall-manager-web</module>
-        <module>xmall-mybatis-tools</module>
         <module>xmall-parent</module>
         <module>xmall-project-tools</module>
-        <module>xmall-search</module>
-        <module>xmall-sso</module>
-        <module>xmall-inteface</module>
+        <module>xmall-mybatis-tools</module>
+        <module>xmall-common</module>
+        <module>xmall-generation-pojo</module>
+        <module>xmall-generation-dao</module>
         <module>xmall-api</module>
+        <module>xmall-manager-serivce</module>
+        <module>xmall-search-service</module>
+        <module>xmall-sso-service</module>
+        <module>xmall-content-service</module>
+        <module>xmall-front-web</module>
+        <module>xmall-manager-web</module>
     </modules>
 
 
