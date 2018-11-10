@@ -3,6 +3,7 @@ package cn.exrick.common.utils;
 import com.google.common.base.Objects;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigInteger;
 import java.net.NetworkInterface;
 import java.nio.ByteBuffer;
 import java.util.Date;
@@ -111,6 +112,10 @@ public class ObjectId implements Comparable<ObjectId>, java.io.Serializable {
             buf.append(String.format("%02x", b & 0xff));
         }
         return buf.toString();
+    }
+
+    public String toDigitString() {
+        return new BigInteger(1, toByteArray()).toString(10);
     }
 
     /**

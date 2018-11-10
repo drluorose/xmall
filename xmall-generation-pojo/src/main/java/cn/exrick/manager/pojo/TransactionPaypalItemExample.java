@@ -165,73 +165,73 @@ public class TransactionPaypalItemExample {
             return (Criteria) this;
         }
 
-        public Criteria andTidIsNull() {
-            addCriterion("tid is null");
+        public Criteria andTPaypalIdIsNull() {
+            addCriterion("t_paypal_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andTidIsNotNull() {
-            addCriterion("tid is not null");
+        public Criteria andTPaypalIdIsNotNull() {
+            addCriterion("t_paypal_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTidEqualTo(String value) {
-            addCriterion("tid =", value, "tid");
+        public Criteria andTPaypalIdEqualTo(String value) {
+            addCriterion("t_paypal_id =", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andTidNotEqualTo(String value) {
-            addCriterion("tid <>", value, "tid");
+        public Criteria andTPaypalIdNotEqualTo(String value) {
+            addCriterion("t_paypal_id <>", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andTidGreaterThan(String value) {
-            addCriterion("tid >", value, "tid");
+        public Criteria andTPaypalIdGreaterThan(String value) {
+            addCriterion("t_paypal_id >", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andTidGreaterThanOrEqualTo(String value) {
-            addCriterion("tid >=", value, "tid");
+        public Criteria andTPaypalIdGreaterThanOrEqualTo(String value) {
+            addCriterion("t_paypal_id >=", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andTidLessThan(String value) {
-            addCriterion("tid <", value, "tid");
+        public Criteria andTPaypalIdLessThan(String value) {
+            addCriterion("t_paypal_id <", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andTidLessThanOrEqualTo(String value) {
-            addCriterion("tid <=", value, "tid");
+        public Criteria andTPaypalIdLessThanOrEqualTo(String value) {
+            addCriterion("t_paypal_id <=", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andTidLike(String value) {
-            addCriterion("tid like", value, "tid");
+        public Criteria andTPaypalIdLike(String value) {
+            addCriterion("t_paypal_id like", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andTidNotLike(String value) {
-            addCriterion("tid not like", value, "tid");
+        public Criteria andTPaypalIdNotLike(String value) {
+            addCriterion("t_paypal_id not like", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andTidIn(List<String> values) {
-            addCriterion("tid in", values, "tid");
+        public Criteria andTPaypalIdIn(List<String> values) {
+            addCriterion("t_paypal_id in", values, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andTidNotIn(List<String> values) {
-            addCriterion("tid not in", values, "tid");
+        public Criteria andTPaypalIdNotIn(List<String> values) {
+            addCriterion("t_paypal_id not in", values, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andTidBetween(String value1, String value2) {
-            addCriterion("tid between", value1, value2, "tid");
+        public Criteria andTPaypalIdBetween(String value1, String value2) {
+            addCriterion("t_paypal_id between", value1, value2, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andTidNotBetween(String value1, String value2) {
-            addCriterion("tid not between", value1, value2, "tid");
+        public Criteria andTPaypalIdNotBetween(String value1, String value2) {
+            addCriterion("t_paypal_id not between", value1, value2, "tPaypalId");
             return (Criteria) this;
         }
 

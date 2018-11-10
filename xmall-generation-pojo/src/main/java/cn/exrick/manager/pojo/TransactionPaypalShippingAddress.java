@@ -7,7 +7,7 @@ import lombok.Data;
 public class TransactionPaypalShippingAddress implements Serializable {
     private Long id;
 
-    private String tid;
+    private String tPaypayId;
 
     private String recipientName;
 

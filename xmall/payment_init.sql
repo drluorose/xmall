@@ -1,3 +1,4 @@
+drop table  if exists tb_transaction;
 create table tb_transaction(
   id bigint(20) NOT NULL AUTO_INCREMENT,
   order_id varchar(32) not null default '' comment '订单号',
@@ -10,10 +11,12 @@ create table tb_transaction(
   PRIMARY key (id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+drop table if exists  tb_transaction_paypal;
 CREATE TABLE tb_transaction_paypal (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   tid varchar(32) not null default '' COMMENT '支付账号id',
-  paypal_id varchar(128) not null default '' comment 'paypay支付id号',
+  t_paypal_id varchar(128) not null default '' comment 'paypay支付id号',
   total Decimal(10,2) not null default 0 COMMENT '总共金额',
   currency varchar(20) not null default '' COMMENT '支付的货币种类',
   subtotal decimal(10,2) not null default 0 comment '货物总价',
@@ -26,12 +29,13 @@ CREATE TABLE tb_transaction_paypal (
   cancel_url varchar(512) not null default '' COMMENT  'cancel url',
   PRIMARY KEY (id),
   unique key (tid),
-  unique key (paypal_id)
+  unique key (t_paypal_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+drop table if exists tb_transaction_paypal_item;
 create table tb_transaction_paypal_item(
   id bigint(20) NOT null AUTO_INCREMENT,
-  tid varchar(32) not null default '' comment '交易号',
+  t_paypal_id varchar(32) not null default '' comment 'paypal 交易号',
   name varchar(128) not null default '' comment '名称',
   description varchar(512) not null default  '' comment '描述',
   quantity int(10) not null default 1 comment '数量',
@@ -42,9 +46,10 @@ create table tb_transaction_paypal_item(
   primary key(id)
 ) ENGINE=InnoDB Default CHARSET=utf8 COLLATE=utf8_bin;
 
+drop table if exists tb_transaction_paypal_shipping_address;
 create table tb_transaction_paypal_shipping_address(
   id bigint(20) NOT null Auto_increment,
-  tid varchar(32) not null default '' comment '交易号',
+  t_paypay_id varchar(32) not null default '' comment '交易号',
   recipient_name varchar(512) not null default '' comment  '',
   line1 varchar(512) not null default '' comment  '街道1',
   line2 varchar(512) not null default '' comment  '街道2',
@@ -54,5 +59,5 @@ create table tb_transaction_paypal_shipping_address(
   phone varchar(64)  not null default  '' comment  '电话号码+86 这种',
   state varchar(64) not null default '' comment  '洲简称',
   primary key(id),
-  unique key(tid)
+  unique key(t_paypay_id)
 )ENGINE=InnoDB Default CHARSET=utf8 COLLATE=utf8_bin;

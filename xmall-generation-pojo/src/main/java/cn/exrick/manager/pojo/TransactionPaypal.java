@@ -10,7 +10,7 @@ public class TransactionPaypal implements Serializable {
 
     private String tid;
 
-    private String paypalId;
+    private String tPaypalId;
 
     private BigDecimal total;
 
@@ -28,9 +28,11 @@ public class TransactionPaypal implements Serializable {
 
     private BigDecimal insurance;
 
-    private String returnUrl;
+    private String selfUrl;
 
-    private String cancelUrl;
+    private String approvalUrl;
+
+    private String executeUrl;
 
     private static final long serialVersionUID = 1L;
 }

@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="cn.exrick.manager.pojo.TransactionPaypal">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="tid" jdbcType="VARCHAR" property="tid" />
-    <result column="paypal_id" jdbcType="VARCHAR" property="paypalId" />
+    <result column="t_paypal_id" jdbcType="VARCHAR" property="tPaypalId" />
     <result column="total" jdbcType="DECIMAL" property="total" />
     <result column="currency" jdbcType="VARCHAR" property="currency" />
     <result column="subtotal" jdbcType="DECIMAL" property="subtotal" />
@@ -13,8 +13,9 @@
     <result column="handling_fee" jdbcType="DECIMAL" property="handlingFee" />
     <result column="shipping_discount" jdbcType="DECIMAL" property="shippingDiscount" />
     <result column="insurance" jdbcType="DECIMAL" property="insurance" />
-    <result column="return_url" jdbcType="VARCHAR" property="returnUrl" />
-    <result column="cancel_url" jdbcType="VARCHAR" property="cancelUrl" />
+    <result column="self_url" jdbcType="VARCHAR" property="selfUrl" />
+    <result column="approval_url" jdbcType="VARCHAR" property="approvalUrl" />
+    <result column="execute_url" jdbcType="VARCHAR" property="executeUrl" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -75,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, tid, paypal_id, total, currency, subtotal, tax, shipping, handling_fee, shipping_discount, 
-    insurance, return_url, cancel_url
+    id, tid, t_paypal_id, total, currency, subtotal, tax, shipping, handling_fee, shipping_discount, 
+    insurance, self_url, approval_url, execute_url
   </sql>
   <select id="selectByExample" parameterType="cn.exrick.manager.pojo.TransactionPaypalExample" resultMap="BaseResultMap">
     select
@@ -109,16 +110,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.exrick.manager.pojo.TransactionPaypal">
-    insert into tb_transaction_paypal (id, tid, paypal_id, 
+    insert into tb_transaction_paypal (id, tid, t_paypal_id, 
       total, currency, subtotal, 
       tax, shipping, handling_fee, 
-      shipping_discount, insurance, return_url, 
-      cancel_url)
-    values (#{id,jdbcType=BIGINT}, #{tid,jdbcType=VARCHAR}, #{paypalId,jdbcType=VARCHAR}, 
+      shipping_discount, insurance, self_url, 
+      approval_url, execute_url)
+    values (#{id,jdbcType=BIGINT}, #{tid,jdbcType=VARCHAR}, #{tPaypalId,jdbcType=VARCHAR}, 
       #{total,jdbcType=DECIMAL}, #{currency,jdbcType=VARCHAR}, #{subtotal,jdbcType=DECIMAL}, 
       #{tax,jdbcType=DECIMAL}, #{shipping,jdbcType=DECIMAL}, #{handlingFee,jdbcType=DECIMAL}, 
-      #{shippingDiscount,jdbcType=DECIMAL}, #{insurance,jdbcType=DECIMAL}, #{returnUrl,jdbcType=VARCHAR}, 
-      #{cancelUrl,jdbcType=VARCHAR})
+      #{shippingDiscount,jdbcType=DECIMAL}, #{insurance,jdbcType=DECIMAL}, #{selfUrl,jdbcType=VARCHAR}, 
+      #{approvalUrl,jdbcType=VARCHAR}, #{executeUrl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.exrick.manager.pojo.TransactionPaypal">
     insert into tb_transaction_paypal
@@ -129,8 +130,8 @@
       <if test="tid != null">
         tid,
       </if>
-      <if test="paypalId != null">
-        paypal_id,
+      <if test="tPaypalId != null">
+        t_paypal_id,
       </if>
       <if test="total != null">
         total,
@@ -156,11 +157,14 @@
       <if test="insurance != null">
         insurance,
       </if>
-      <if test="returnUrl != null">
-        return_url,
+      <if test="selfUrl != null">
+        self_url,
       </if>
-      <if test="cancelUrl != null">
-        cancel_url,
+      <if test="approvalUrl != null">
+        approval_url,
+      </if>
+      <if test="executeUrl != null">
+        execute_url,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -170,8 +174,8 @@
       <if test="tid != null">
         #{tid,jdbcType=VARCHAR},
       </if>
-      <if test="paypalId != null">
-        #{paypalId,jdbcType=VARCHAR},
+      <if test="tPaypalId != null">
+        #{tPaypalId,jdbcType=VARCHAR},
       </if>
       <if test="total != null">
         #{total,jdbcType=DECIMAL},
@@ -197,11 +201,14 @@
       <if test="insurance != null">
         #{insurance,jdbcType=DECIMAL},
       </if>
-      <if test="returnUrl != null">
-        #{returnUrl,jdbcType=VARCHAR},
+      <if test="selfUrl != null">
+        #{selfUrl,jdbcType=VARCHAR},
       </if>
-      <if test="cancelUrl != null">
-        #{cancelUrl,jdbcType=VARCHAR},
+      <if test="approvalUrl != null">
+        #{approvalUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="executeUrl != null">
+        #{executeUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -220,8 +227,8 @@
       <if test="record.tid != null">
         tid = #{record.tid,jdbcType=VARCHAR},
       </if>
-      <if test="record.paypalId != null">
-        paypal_id = #{record.paypalId,jdbcType=VARCHAR},
+      <if test="record.tPaypalId != null">
+        t_paypal_id = #{record.tPaypalId,jdbcType=VARCHAR},
       </if>
       <if test="record.total != null">
         total = #{record.total,jdbcType=DECIMAL},
@@ -247,11 +254,14 @@
       <if test="record.insurance != null">
         insurance = #{record.insurance,jdbcType=DECIMAL},
       </if>
-      <if test="record.returnUrl != null">
-        return_url = #{record.returnUrl,jdbcType=VARCHAR},
+      <if test="record.selfUrl != null">
+        self_url = #{record.selfUrl,jdbcType=VARCHAR},
       </if>
-      <if test="record.cancelUrl != null">
-        cancel_url = #{record.cancelUrl,jdbcType=VARCHAR},
+      <if test="record.approvalUrl != null">
+        approval_url = #{record.approvalUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.executeUrl != null">
+        execute_url = #{record.executeUrl,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -262,7 +272,7 @@
     update tb_transaction_paypal
     set id = #{record.id,jdbcType=BIGINT},
       tid = #{record.tid,jdbcType=VARCHAR},
-      paypal_id = #{record.paypalId,jdbcType=VARCHAR},
+      t_paypal_id = #{record.tPaypalId,jdbcType=VARCHAR},
       total = #{record.total,jdbcType=DECIMAL},
       currency = #{record.currency,jdbcType=VARCHAR},
       subtotal = #{record.subtotal,jdbcType=DECIMAL},
@@ -271,8 +281,9 @@
       handling_fee = #{record.handlingFee,jdbcType=DECIMAL},
       shipping_discount = #{record.shippingDiscount,jdbcType=DECIMAL},
       insurance = #{record.insurance,jdbcType=DECIMAL},
-      return_url = #{record.returnUrl,jdbcType=VARCHAR},
-      cancel_url = #{record.cancelUrl,jdbcType=VARCHAR}
+      self_url = #{record.selfUrl,jdbcType=VARCHAR},
+      approval_url = #{record.approvalUrl,jdbcType=VARCHAR},
+      execute_url = #{record.executeUrl,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -283,8 +294,8 @@
       <if test="tid != null">
         tid = #{tid,jdbcType=VARCHAR},
       </if>
-      <if test="paypalId != null">
-        paypal_id = #{paypalId,jdbcType=VARCHAR},
+      <if test="tPaypalId != null">
+        t_paypal_id = #{tPaypalId,jdbcType=VARCHAR},
       </if>
       <if test="total != null">
         total = #{total,jdbcType=DECIMAL},
@@ -310,11 +321,14 @@
       <if test="insurance != null">
         insurance = #{insurance,jdbcType=DECIMAL},
       </if>
-      <if test="returnUrl != null">
-        return_url = #{returnUrl,jdbcType=VARCHAR},
+      <if test="selfUrl != null">
+        self_url = #{selfUrl,jdbcType=VARCHAR},
       </if>
-      <if test="cancelUrl != null">
-        cancel_url = #{cancelUrl,jdbcType=VARCHAR},
+      <if test="approvalUrl != null">
+        approval_url = #{approvalUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="executeUrl != null">
+        execute_url = #{executeUrl,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -322,7 +336,7 @@
   <update id="updateByPrimaryKey" parameterType="cn.exrick.manager.pojo.TransactionPaypal">
     update tb_transaction_paypal
     set tid = #{tid,jdbcType=VARCHAR},
-      paypal_id = #{paypalId,jdbcType=VARCHAR},
+      t_paypal_id = #{tPaypalId,jdbcType=VARCHAR},
       total = #{total,jdbcType=DECIMAL},
       currency = #{currency,jdbcType=VARCHAR},
       subtotal = #{subtotal,jdbcType=DECIMAL},
@@ -331,8 +345,9 @@
       handling_fee = #{handlingFee,jdbcType=DECIMAL},
       shipping_discount = #{shippingDiscount,jdbcType=DECIMAL},
       insurance = #{insurance,jdbcType=DECIMAL},
-      return_url = #{returnUrl,jdbcType=VARCHAR},
-      cancel_url = #{cancelUrl,jdbcType=VARCHAR}
+      self_url = #{selfUrl,jdbcType=VARCHAR},
+      approval_url = #{approvalUrl,jdbcType=VARCHAR},
+      execute_url = #{executeUrl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

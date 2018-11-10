@@ -52,7 +52,10 @@
         <table schema="" tableName="tb_item_desc"></table>
         <table schema="" tableName="tb_item_param"></table>
         <table schema="" tableName="tb_item_param_item"></table>
-        <table schema="" tableName="tb_order"></table>
+        <table schema="" tableName="tb_order">
+            <columnOverride column="status" javaType="cn.exrick.common.enums.OrderStatusEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler"></columnOverride>
+        </table>
         <table schema="" tableName="tb_order_item"></table>
         <table schema="" tableName="tb_order_shipping"></table>
         <table schema="" tableName="tb_user"></table>
@@ -85,7 +88,8 @@
         </table>
         <table schema="" tableName="tb_transaction_paypal_item" domainObjectName="TransactionPaypalItem">
         </table>
-        <table schema="" tableName="tb_transaction_paypal_shipping_address" domainObjectName="TransactionPaypalShippingAddress">
+        <table schema="" tableName="tb_transaction_paypal_shipping_address"
+               domainObjectName="TransactionPaypalShippingAddress">
         </table>
     </context>
 </generatorConfiguration>

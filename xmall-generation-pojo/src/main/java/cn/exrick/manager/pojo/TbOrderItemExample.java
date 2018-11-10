@@ -175,6 +175,146 @@ public class TbOrderItemExample {
             return (Criteria) this;
         }
 
+        public Criteria andSkuIsNull() {
+            addCriterion("sku is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIsNotNull() {
+            addCriterion("sku is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuEqualTo(String value) {
+            addCriterion("sku =", value, "sku");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNotEqualTo(String value) {
+            addCriterion("sku <>", value, "sku");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuGreaterThan(String value) {
+            addCriterion("sku >", value, "sku");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuGreaterThanOrEqualTo(String value) {
+            addCriterion("sku >=", value, "sku");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuLessThan(String value) {
+            addCriterion("sku <", value, "sku");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuLessThanOrEqualTo(String value) {
+            addCriterion("sku <=", value, "sku");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuLike(String value) {
+            addCriterion("sku like", value, "sku");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNotLike(String value) {
+            addCriterion("sku not like", value, "sku");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIn(List<String> values) {
+            addCriterion("sku in", values, "sku");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNotIn(List<String> values) {
+            addCriterion("sku not in", values, "sku");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuBetween(String value1, String value2) {
+            addCriterion("sku between", value1, value2, "sku");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNotBetween(String value1, String value2) {
+            addCriterion("sku not between", value1, value2, "sku");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointIsNull() {
+            addCriterion("sell_point is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointIsNotNull() {
+            addCriterion("sell_point is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointEqualTo(String value) {
+            addCriterion("sell_point =", value, "sellPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointNotEqualTo(String value) {
+            addCriterion("sell_point <>", value, "sellPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointGreaterThan(String value) {
+            addCriterion("sell_point >", value, "sellPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointGreaterThanOrEqualTo(String value) {
+            addCriterion("sell_point >=", value, "sellPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointLessThan(String value) {
+            addCriterion("sell_point <", value, "sellPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointLessThanOrEqualTo(String value) {
+            addCriterion("sell_point <=", value, "sellPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointLike(String value) {
+            addCriterion("sell_point like", value, "sellPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointNotLike(String value) {
+            addCriterion("sell_point not like", value, "sellPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointIn(List<String> values) {
+            addCriterion("sell_point in", values, "sellPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointNotIn(List<String> values) {
+            addCriterion("sell_point not in", values, "sellPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointBetween(String value1, String value2) {
+            addCriterion("sell_point between", value1, value2, "sellPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellPointNotBetween(String value1, String value2) {
+            addCriterion("sell_point not between", value1, value2, "sellPoint");
+            return (Criteria) this;
+        }
+
         public Criteria andItemIdIsNull() {
             addCriterion("item_id is null");
             return (Criteria) this;

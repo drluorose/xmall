@@ -3,7 +3,7 @@
 <mapper namespace="cn.exrick.manager.mapper.TransactionPaypalItemMapper">
   <resultMap id="BaseResultMap" type="cn.exrick.manager.pojo.TransactionPaypalItem">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="tid" jdbcType="VARCHAR" property="tid" />
+    <result column="t_paypal_id" jdbcType="VARCHAR" property="tPaypalId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
@@ -71,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, tid, name, description, quantity, price, tax, sku, currency
+    id, t_paypal_id, name, description, quantity, price, tax, sku, currency
   </sql>
   <select id="selectByExample" parameterType="cn.exrick.manager.pojo.TransactionPaypalItemExample" resultMap="BaseResultMap">
     select
@@ -104,10 +104,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.exrick.manager.pojo.TransactionPaypalItem">
-    insert into tb_transaction_paypal_item (id, tid, name, 
+    insert into tb_transaction_paypal_item (id, t_paypal_id, name, 
       description, quantity, price, 
       tax, sku, currency)
-    values (#{id,jdbcType=BIGINT}, #{tid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{tPaypalId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{description,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, 
       #{tax,jdbcType=DECIMAL}, #{sku,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR})
   </insert>
@@ -117,8 +117,8 @@
       <if test="id != null">
         id,
       </if>
-      <if test="tid != null">
-        tid,
+      <if test="tPaypalId != null">
+        t_paypal_id,
       </if>
       <if test="name != null">
         name,
@@ -146,8 +146,8 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="tid != null">
-        #{tid,jdbcType=VARCHAR},
+      <if test="tPaypalId != null">
+        #{tPaypalId,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
@@ -184,8 +184,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.tid != null">
-        tid = #{record.tid,jdbcType=VARCHAR},
+      <if test="record.tPaypalId != null">
+        t_paypal_id = #{record.tPaypalId,jdbcType=VARCHAR},
       </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
@@ -216,7 +216,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_transaction_paypal_item
     set id = #{record.id,jdbcType=BIGINT},
-      tid = #{record.tid,jdbcType=VARCHAR},
+      t_paypal_id = #{record.tPaypalId,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       quantity = #{record.quantity,jdbcType=INTEGER},
@@ -231,8 +231,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="cn.exrick.manager.pojo.TransactionPaypalItem">
     update tb_transaction_paypal_item
     <set>
-      <if test="tid != null">
-        tid = #{tid,jdbcType=VARCHAR},
+      <if test="tPaypalId != null">
+        t_paypal_id = #{tPaypalId,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
@@ -260,7 +260,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.exrick.manager.pojo.TransactionPaypalItem">
     update tb_transaction_paypal_item
-    set tid = #{tid,jdbcType=VARCHAR},
+    set t_paypal_id = #{tPaypalId,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       quantity = #{quantity,jdbcType=INTEGER},

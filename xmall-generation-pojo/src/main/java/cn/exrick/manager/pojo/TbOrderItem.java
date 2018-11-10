@@ -8,6 +8,10 @@ import lombok.Data;
 public class TbOrderItem implements Serializable {
     private String id;
 
+    private String sku;
+
+    private String sellPoint;
+
     private String itemId;
 
     private String orderId;

@@ -1,10 +1,16 @@
 package cn.exrick.front.interceptor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import java.util.Locale;
 
 /**
  * @author Exrickx
@@ -28,6 +34,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
 //        registry.addInterceptor(limitRaterInterceptor).addPathPatterns("/**");
         registry.addInterceptor(jwtAuthInterceptor).addPathPatterns("/**");
         registry.addInterceptor(sessionAuthInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(localeChangeInterceptor()).addPathPatterns("/**");
     }
 
     @Override
@@ -36,5 +43,21 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
             .allowedOrigins("*")
             .allowedMethods("GET", "PUT", "POST", "OPTIONS")
             .allowCredentials(true).maxAge(3600);
+    }
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        SessionLocaleResolver slr = new SessionLocaleResolver();
+        // 默认语言
+        slr.setDefaultLocale(Locale.US);
+        return slr;
+    }
+
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+        // 参数名
+        lci.setParamName("lang");
+        return lci;
     }
 }

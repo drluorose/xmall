@@ -9,6 +9,8 @@ import lombok.Data;
 public class TbItem implements Serializable {
     private Long id;
 
+    private String sku;
+
     private String title;
 
     private String sellPoint;

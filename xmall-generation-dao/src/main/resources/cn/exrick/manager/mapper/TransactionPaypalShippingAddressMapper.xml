@@ -3,7 +3,7 @@
 <mapper namespace="cn.exrick.manager.mapper.TransactionPaypalShippingAddressMapper">
   <resultMap id="BaseResultMap" type="cn.exrick.manager.pojo.TransactionPaypalShippingAddress">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="tid" jdbcType="VARCHAR" property="tid" />
+    <result column="t_paypay_id" jdbcType="VARCHAR" property="tPaypayId" />
     <result column="recipient_name" jdbcType="VARCHAR" property="recipientName" />
     <result column="line1" jdbcType="VARCHAR" property="line1" />
     <result column="line2" jdbcType="VARCHAR" property="line2" />
@@ -72,7 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, tid, recipient_name, line1, line2, city, country_code, postal_code, phone, state
+    id, t_paypay_id, recipient_name, line1, line2, city, country_code, postal_code, phone, 
+    state
   </sql>
   <select id="selectByExample" parameterType="cn.exrick.manager.pojo.TransactionPaypalShippingAddressExample" resultMap="BaseResultMap">
     select
@@ -105,11 +106,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.exrick.manager.pojo.TransactionPaypalShippingAddress">
-    insert into tb_transaction_paypal_shipping_address (id, tid, recipient_name, 
+    insert into tb_transaction_paypal_shipping_address (id, t_paypay_id, recipient_name, 
       line1, line2, city, 
       country_code, postal_code, phone, 
       state)
-    values (#{id,jdbcType=BIGINT}, #{tid,jdbcType=VARCHAR}, #{recipientName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{tPaypayId,jdbcType=VARCHAR}, #{recipientName,jdbcType=VARCHAR}, 
       #{line1,jdbcType=VARCHAR}, #{line2,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
       #{countryCode,jdbcType=VARCHAR}, #{postalCode,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{state,jdbcType=VARCHAR})
@@ -120,8 +121,8 @@
       <if test="id != null">
         id,
       </if>
-      <if test="tid != null">
-        tid,
+      <if test="tPaypayId != null">
+        t_paypay_id,
       </if>
       <if test="recipientName != null">
         recipient_name,
@@ -152,8 +153,8 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="tid != null">
-        #{tid,jdbcType=VARCHAR},
+      <if test="tPaypayId != null">
+        #{tPaypayId,jdbcType=VARCHAR},
       </if>
       <if test="recipientName != null">
         #{recipientName,jdbcType=VARCHAR},
@@ -193,8 +194,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.tid != null">
-        tid = #{record.tid,jdbcType=VARCHAR},
+      <if test="record.tPaypayId != null">
+        t_paypay_id = #{record.tPaypayId,jdbcType=VARCHAR},
       </if>
       <if test="record.recipientName != null">
         recipient_name = #{record.recipientName,jdbcType=VARCHAR},
@@ -228,7 +229,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_transaction_paypal_shipping_address
     set id = #{record.id,jdbcType=BIGINT},
-      tid = #{record.tid,jdbcType=VARCHAR},
+      t_paypay_id = #{record.tPaypayId,jdbcType=VARCHAR},
       recipient_name = #{record.recipientName,jdbcType=VARCHAR},
       line1 = #{record.line1,jdbcType=VARCHAR},
       line2 = #{record.line2,jdbcType=VARCHAR},
@@ -244,8 +245,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="cn.exrick.manager.pojo.TransactionPaypalShippingAddress">
     update tb_transaction_paypal_shipping_address
     <set>
-      <if test="tid != null">
-        tid = #{tid,jdbcType=VARCHAR},
+      <if test="tPaypayId != null">
+        t_paypay_id = #{tPaypayId,jdbcType=VARCHAR},
       </if>
       <if test="recipientName != null">
         recipient_name = #{recipientName,jdbcType=VARCHAR},
@@ -276,7 +277,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.exrick.manager.pojo.TransactionPaypalShippingAddress">
     update tb_transaction_paypal_shipping_address
-    set tid = #{tid,jdbcType=VARCHAR},
+    set t_paypay_id = #{tPaypayId,jdbcType=VARCHAR},
       recipient_name = #{recipientName,jdbcType=VARCHAR},
       line1 = #{line1,jdbcType=VARCHAR},
       line2 = #{line2,jdbcType=VARCHAR},

@@ -24,6 +24,8 @@
         <module>xmall-project-tools</module>
         <module>xmall-search</module>
         <module>xmall-sso</module>
+        <module>xmall-inteface</module>
+        <module>xmall-api</module>
     </modules>
 
 

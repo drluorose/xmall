@@ -3,6 +3,8 @@
 <mapper namespace="cn.exrick.manager.mapper.TbOrderItemMapper">
   <resultMap id="BaseResultMap" type="cn.exrick.manager.pojo.TbOrderItem">
     <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="sell_point" jdbcType="VARCHAR" property="sellPoint" />
     <result column="item_id" jdbcType="VARCHAR" property="itemId" />
     <result column="order_id" jdbcType="VARCHAR" property="orderId" />
     <result column="num" jdbcType="INTEGER" property="num" />
@@ -70,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, item_id, order_id, num, title, price, total_fee, pic_path
+    id, sku, sell_point, item_id, order_id, num, title, price, total_fee, pic_path
   </sql>
   <select id="selectByExample" parameterType="cn.exrick.manager.pojo.TbOrderItemExample" resultMap="BaseResultMap">
     select
@@ -103,18 +105,26 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.exrick.manager.pojo.TbOrderItem">
-    insert into tb_order_item (id, item_id, order_id, 
-      num, title, price, 
-      total_fee, pic_path)
-    values (#{id,jdbcType=VARCHAR}, #{itemId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
-      #{num,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
-      #{totalFee,jdbcType=DECIMAL}, #{picPath,jdbcType=VARCHAR})
+    insert into tb_order_item (id, sku, sell_point, 
+      item_id, order_id, num, 
+      title, price, total_fee, 
+      pic_path)
+    values (#{id,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{sellPoint,jdbcType=VARCHAR}, 
+      #{itemId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, 
+      #{title,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{totalFee,jdbcType=DECIMAL}, 
+      #{picPath,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.exrick.manager.pojo.TbOrderItem">
     insert into tb_order_item
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="sellPoint != null">
+        sell_point,
       </if>
       <if test="itemId != null">
         item_id,
@@ -141,6 +151,12 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="sellPoint != null">
+        #{sellPoint,jdbcType=VARCHAR},
       </if>
       <if test="itemId != null">
         #{itemId,jdbcType=VARCHAR},
@@ -177,6 +193,12 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
+      <if test="record.sku != null">
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sellPoint != null">
+        sell_point = #{record.sellPoint,jdbcType=VARCHAR},
+      </if>
       <if test="record.itemId != null">
         item_id = #{record.itemId,jdbcType=VARCHAR},
       </if>
@@ -206,6 +228,8 @@
   <update id="updateByExample" parameterType="map">
     update tb_order_item
     set id = #{record.id,jdbcType=VARCHAR},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      sell_point = #{record.sellPoint,jdbcType=VARCHAR},
       item_id = #{record.itemId,jdbcType=VARCHAR},
       order_id = #{record.orderId,jdbcType=VARCHAR},
       num = #{record.num,jdbcType=INTEGER},
@@ -220,6 +244,12 @@
   <update id="updateByPrimaryKeySelective" parameterType="cn.exrick.manager.pojo.TbOrderItem">
     update tb_order_item
     <set>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="sellPoint != null">
+        sell_point = #{sellPoint,jdbcType=VARCHAR},
+      </if>
       <if test="itemId != null">
         item_id = #{itemId,jdbcType=VARCHAR},
       </if>
@@ -246,7 +276,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.exrick.manager.pojo.TbOrderItem">
     update tb_order_item
-    set item_id = #{itemId,jdbcType=VARCHAR},
+    set sku = #{sku,jdbcType=VARCHAR},
+      sell_point = #{sellPoint,jdbcType=VARCHAR},
+      item_id = #{itemId,jdbcType=VARCHAR},
       order_id = #{orderId,jdbcType=VARCHAR},
       num = #{num,jdbcType=INTEGER},
       title = #{title,jdbcType=VARCHAR},

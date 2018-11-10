@@ -11,7 +11,7 @@ public class ResultUtil<T> {
 
     private Result<T> result;
 
-    public ResultUtil(){
+    public  ResultUtil(){
         result=new Result<>();
         result.setSuccess(true);
         result.setMessage("success");

@@ -3,6 +3,7 @@
 <mapper namespace="cn.exrick.manager.mapper.TbItemMapper">
   <resultMap id="BaseResultMap" type="cn.exrick.manager.pojo.TbItem">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="sell_point" jdbcType="VARCHAR" property="sellPoint" />
     <result column="price" jdbcType="DECIMAL" property="price" />
@@ -73,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, sell_point, price, num, limit_num, image, cid, status, created, updated
+    id, sku, title, sell_point, price, num, limit_num, image, cid, status, created, updated
   </sql>
   <select id="selectByExample" parameterType="cn.exrick.manager.pojo.TbItemExample" resultMap="BaseResultMap">
     select
@@ -106,20 +107,25 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.exrick.manager.pojo.TbItem">
-    insert into tb_item (id, title, sell_point, 
-      price, num, limit_num, 
-      image, cid, status, 
-      created, updated)
-    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{sellPoint,jdbcType=VARCHAR}, 
-      #{price,jdbcType=DECIMAL}, #{num,jdbcType=INTEGER}, #{limitNum,jdbcType=INTEGER}, 
-      #{image,jdbcType=VARCHAR}, #{cid,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
-      #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP})
+    insert into tb_item (id, sku, title, 
+      sell_point, price, num, 
+      limit_num, image, cid, 
+      status, created, updated
+      )
+    values (#{id,jdbcType=BIGINT}, #{sku,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{sellPoint,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{num,jdbcType=INTEGER}, 
+      #{limitNum,jdbcType=INTEGER}, #{image,jdbcType=VARCHAR}, #{cid,jdbcType=BIGINT}, 
+      #{status,jdbcType=INTEGER}, #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.exrick.manager.pojo.TbItem">
     insert into tb_item
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="sku != null">
+        sku,
       </if>
       <if test="title != null">
         title,
@@ -155,6 +161,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
@@ -200,6 +209,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.sku != null">
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
       </if>
@@ -238,6 +250,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_item
     set id = #{record.id,jdbcType=BIGINT},
+      sku = #{record.sku,jdbcType=VARCHAR},
       title = #{record.title,jdbcType=VARCHAR},
       sell_point = #{record.sellPoint,jdbcType=VARCHAR},
       price = #{record.price,jdbcType=DECIMAL},
@@ -255,6 +268,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="cn.exrick.manager.pojo.TbItem">
     update tb_item
     <set>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
       </if>
@@ -290,7 +306,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.exrick.manager.pojo.TbItem">
     update tb_item
-    set title = #{title,jdbcType=VARCHAR},
+    set sku = #{sku,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
       sell_point = #{sellPoint,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
       num = #{num,jdbcType=INTEGER},

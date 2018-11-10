@@ -20,4 +20,7 @@ spring:
   aop:
     auto: true
     proxy-target-class: true
+  messages:
+    fallback-to-system-locale: false
+    basename: i18n/common
 

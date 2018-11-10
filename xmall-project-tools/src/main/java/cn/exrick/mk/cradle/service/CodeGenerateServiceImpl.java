@@ -194,7 +194,7 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
             .collect(Collectors.toMap(t -> t, CodeGenerateServiceImpl::convertToClassName, (t1, t2) -> t1));
         String json = new Gson().toJson(map);
         return json;
-//        return StringUtils.replace(json, "\"", "\\\"");
+//        return CurrencyStringUtils.replace(json, "\"", "\\\"");
     }
 
     private static String convertToClassName(String t) {

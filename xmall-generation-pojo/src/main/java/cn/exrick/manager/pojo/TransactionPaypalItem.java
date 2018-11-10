@@ -8,7 +8,7 @@ import lombok.Data;
 public class TransactionPaypalItem implements Serializable {
     private Long id;
 
-    private String tid;
+    private String tPaypalId;
 
     private String name;
 

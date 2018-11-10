@@ -7,7 +7,7 @@
     <result column="payment" jdbcType="DECIMAL" property="payment" />
     <result column="payment_type" jdbcType="INTEGER" property="paymentType" />
     <result column="post_fee" jdbcType="DECIMAL" property="postFee" />
-    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="status" jdbcType="INTEGER" property="status" typeHandler="cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
@@ -45,6 +45,25 @@
                 </when>
               </choose>
             </foreach>
+            <foreach collection="criteria.statusCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler} and #{criterion.secondValue,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
           </trim>
         </if>
       </foreach>
@@ -70,6 +89,25 @@
                   and ${criterion.condition}
                   <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.statusCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler} and #{criterion.secondValue,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler}
                   </foreach>
                 </when>
               </choose>
@@ -123,7 +161,7 @@
       buyer_message, buyer_nick, buyer_comment
       )
     values (#{orderId,jdbcType=VARCHAR}, #{mid,jdbcType=VARCHAR}, #{payment,jdbcType=DECIMAL}, 
-      #{paymentType,jdbcType=INTEGER}, #{postFee,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, 
+      #{paymentType,jdbcType=INTEGER}, #{postFee,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{paymentTime,jdbcType=TIMESTAMP}, 
       #{consignTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}, 
       #{shippingName,jdbcType=VARCHAR}, #{shippingCode,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, 
@@ -205,7 +243,7 @@
         #{postFee,jdbcType=DECIMAL},
       </if>
       <if test="status != null">
-        #{status,jdbcType=INTEGER},
+        #{status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -270,7 +308,7 @@
         post_fee = #{record.postFee,jdbcType=DECIMAL},
       </if>
       <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
+        status = #{record.status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -320,7 +358,7 @@
       payment = #{record.payment,jdbcType=DECIMAL},
       payment_type = #{record.paymentType,jdbcType=INTEGER},
       post_fee = #{record.postFee,jdbcType=DECIMAL},
-      status = #{record.status,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       payment_time = #{record.paymentTime,jdbcType=TIMESTAMP},
@@ -353,7 +391,7 @@
         post_fee = #{postFee,jdbcType=DECIMAL},
       </if>
       <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
+        status = #{status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -400,7 +438,7 @@
       payment = #{payment,jdbcType=DECIMAL},
       payment_type = #{paymentType,jdbcType=INTEGER},
       post_fee = #{postFee,jdbcType=DECIMAL},
-      status = #{status,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       payment_time = #{paymentTime,jdbcType=TIMESTAMP},

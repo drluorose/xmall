@@ -164,73 +164,73 @@ public class TransactionPaypalShippingAddressExample {
             return (Criteria) this;
         }
 
-        public Criteria andTidIsNull() {
-            addCriterion("tid is null");
+        public Criteria andTPaypayIdIsNull() {
+            addCriterion("t_paypay_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andTidIsNotNull() {
-            addCriterion("tid is not null");
+        public Criteria andTPaypayIdIsNotNull() {
+            addCriterion("t_paypay_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTidEqualTo(String value) {
-            addCriterion("tid =", value, "tid");
+        public Criteria andTPaypayIdEqualTo(String value) {
+            addCriterion("t_paypay_id =", value, "tPaypayId");
             return (Criteria) this;
         }
 
-        public Criteria andTidNotEqualTo(String value) {
-            addCriterion("tid <>", value, "tid");
+        public Criteria andTPaypayIdNotEqualTo(String value) {
+            addCriterion("t_paypay_id <>", value, "tPaypayId");
             return (Criteria) this;
         }
 
-        public Criteria andTidGreaterThan(String value) {
-            addCriterion("tid >", value, "tid");
+        public Criteria andTPaypayIdGreaterThan(String value) {
+            addCriterion("t_paypay_id >", value, "tPaypayId");
             return (Criteria) this;
         }
 
-        public Criteria andTidGreaterThanOrEqualTo(String value) {
-            addCriterion("tid >=", value, "tid");
+        public Criteria andTPaypayIdGreaterThanOrEqualTo(String value) {
+            addCriterion("t_paypay_id >=", value, "tPaypayId");
             return (Criteria) this;
         }
 
-        public Criteria andTidLessThan(String value) {
-            addCriterion("tid <", value, "tid");
+        public Criteria andTPaypayIdLessThan(String value) {
+            addCriterion("t_paypay_id <", value, "tPaypayId");
             return (Criteria) this;
         }
 
-        public Criteria andTidLessThanOrEqualTo(String value) {
-            addCriterion("tid <=", value, "tid");
+        public Criteria andTPaypayIdLessThanOrEqualTo(String value) {
+            addCriterion("t_paypay_id <=", value, "tPaypayId");
             return (Criteria) this;
         }
 
-        public Criteria andTidLike(String value) {
-            addCriterion("tid like", value, "tid");
+        public Criteria andTPaypayIdLike(String value) {
+            addCriterion("t_paypay_id like", value, "tPaypayId");
             return (Criteria) this;
         }
 
-        public Criteria andTidNotLike(String value) {
-            addCriterion("tid not like", value, "tid");
+        public Criteria andTPaypayIdNotLike(String value) {
+            addCriterion("t_paypay_id not like", value, "tPaypayId");
             return (Criteria) this;
         }
 
-        public Criteria andTidIn(List<String> values) {
-            addCriterion("tid in", values, "tid");
+        public Criteria andTPaypayIdIn(List<String> values) {
+            addCriterion("t_paypay_id in", values, "tPaypayId");
             return (Criteria) this;
         }
 
-        public Criteria andTidNotIn(List<String> values) {
-            addCriterion("tid not in", values, "tid");
+        public Criteria andTPaypayIdNotIn(List<String> values) {
+            addCriterion("t_paypay_id not in", values, "tPaypayId");
             return (Criteria) this;
         }
 
-        public Criteria andTidBetween(String value1, String value2) {
-            addCriterion("tid between", value1, value2, "tid");
+        public Criteria andTPaypayIdBetween(String value1, String value2) {
+            addCriterion("t_paypay_id between", value1, value2, "tPaypayId");
             return (Criteria) this;
         }
 
-        public Criteria andTidNotBetween(String value1, String value2) {
-            addCriterion("tid not between", value1, value2, "tid");
+        public Criteria andTPaypayIdNotBetween(String value1, String value2) {
+            addCriterion("t_paypay_id not between", value1, value2, "tPaypayId");
             return (Criteria) this;
         }
 

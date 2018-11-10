@@ -235,73 +235,73 @@ public class TransactionPaypalExample {
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdIsNull() {
-            addCriterion("paypal_id is null");
+        public Criteria andTPaypalIdIsNull() {
+            addCriterion("t_paypal_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdIsNotNull() {
-            addCriterion("paypal_id is not null");
+        public Criteria andTPaypalIdIsNotNull() {
+            addCriterion("t_paypal_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdEqualTo(String value) {
-            addCriterion("paypal_id =", value, "paypalId");
+        public Criteria andTPaypalIdEqualTo(String value) {
+            addCriterion("t_paypal_id =", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdNotEqualTo(String value) {
-            addCriterion("paypal_id <>", value, "paypalId");
+        public Criteria andTPaypalIdNotEqualTo(String value) {
+            addCriterion("t_paypal_id <>", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdGreaterThan(String value) {
-            addCriterion("paypal_id >", value, "paypalId");
+        public Criteria andTPaypalIdGreaterThan(String value) {
+            addCriterion("t_paypal_id >", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdGreaterThanOrEqualTo(String value) {
-            addCriterion("paypal_id >=", value, "paypalId");
+        public Criteria andTPaypalIdGreaterThanOrEqualTo(String value) {
+            addCriterion("t_paypal_id >=", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdLessThan(String value) {
-            addCriterion("paypal_id <", value, "paypalId");
+        public Criteria andTPaypalIdLessThan(String value) {
+            addCriterion("t_paypal_id <", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdLessThanOrEqualTo(String value) {
-            addCriterion("paypal_id <=", value, "paypalId");
+        public Criteria andTPaypalIdLessThanOrEqualTo(String value) {
+            addCriterion("t_paypal_id <=", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdLike(String value) {
-            addCriterion("paypal_id like", value, "paypalId");
+        public Criteria andTPaypalIdLike(String value) {
+            addCriterion("t_paypal_id like", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdNotLike(String value) {
-            addCriterion("paypal_id not like", value, "paypalId");
+        public Criteria andTPaypalIdNotLike(String value) {
+            addCriterion("t_paypal_id not like", value, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdIn(List<String> values) {
-            addCriterion("paypal_id in", values, "paypalId");
+        public Criteria andTPaypalIdIn(List<String> values) {
+            addCriterion("t_paypal_id in", values, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdNotIn(List<String> values) {
-            addCriterion("paypal_id not in", values, "paypalId");
+        public Criteria andTPaypalIdNotIn(List<String> values) {
+            addCriterion("t_paypal_id not in", values, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdBetween(String value1, String value2) {
-            addCriterion("paypal_id between", value1, value2, "paypalId");
+        public Criteria andTPaypalIdBetween(String value1, String value2) {
+            addCriterion("t_paypal_id between", value1, value2, "tPaypalId");
             return (Criteria) this;
         }
 
-        public Criteria andPaypalIdNotBetween(String value1, String value2) {
-            addCriterion("paypal_id not between", value1, value2, "paypalId");
+        public Criteria andTPaypalIdNotBetween(String value1, String value2) {
+            addCriterion("t_paypal_id not between", value1, value2, "tPaypalId");
             return (Criteria) this;
         }
 
@@ -795,143 +795,213 @@ public class TransactionPaypalExample {
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlIsNull() {
-            addCriterion("return_url is null");
+        public Criteria andSelfUrlIsNull() {
+            addCriterion("self_url is null");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlIsNotNull() {
-            addCriterion("return_url is not null");
+        public Criteria andSelfUrlIsNotNull() {
+            addCriterion("self_url is not null");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlEqualTo(String value) {
-            addCriterion("return_url =", value, "returnUrl");
+        public Criteria andSelfUrlEqualTo(String value) {
+            addCriterion("self_url =", value, "selfUrl");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlNotEqualTo(String value) {
-            addCriterion("return_url <>", value, "returnUrl");
+        public Criteria andSelfUrlNotEqualTo(String value) {
+            addCriterion("self_url <>", value, "selfUrl");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlGreaterThan(String value) {
-            addCriterion("return_url >", value, "returnUrl");
+        public Criteria andSelfUrlGreaterThan(String value) {
+            addCriterion("self_url >", value, "selfUrl");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlGreaterThanOrEqualTo(String value) {
-            addCriterion("return_url >=", value, "returnUrl");
+        public Criteria andSelfUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("self_url >=", value, "selfUrl");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlLessThan(String value) {
-            addCriterion("return_url <", value, "returnUrl");
+        public Criteria andSelfUrlLessThan(String value) {
+            addCriterion("self_url <", value, "selfUrl");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlLessThanOrEqualTo(String value) {
-            addCriterion("return_url <=", value, "returnUrl");
+        public Criteria andSelfUrlLessThanOrEqualTo(String value) {
+            addCriterion("self_url <=", value, "selfUrl");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlLike(String value) {
-            addCriterion("return_url like", value, "returnUrl");
+        public Criteria andSelfUrlLike(String value) {
+            addCriterion("self_url like", value, "selfUrl");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlNotLike(String value) {
-            addCriterion("return_url not like", value, "returnUrl");
+        public Criteria andSelfUrlNotLike(String value) {
+            addCriterion("self_url not like", value, "selfUrl");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlIn(List<String> values) {
-            addCriterion("return_url in", values, "returnUrl");
+        public Criteria andSelfUrlIn(List<String> values) {
+            addCriterion("self_url in", values, "selfUrl");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlNotIn(List<String> values) {
-            addCriterion("return_url not in", values, "returnUrl");
+        public Criteria andSelfUrlNotIn(List<String> values) {
+            addCriterion("self_url not in", values, "selfUrl");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlBetween(String value1, String value2) {
-            addCriterion("return_url between", value1, value2, "returnUrl");
+        public Criteria andSelfUrlBetween(String value1, String value2) {
+            addCriterion("self_url between", value1, value2, "selfUrl");
             return (Criteria) this;
         }
 
-        public Criteria andReturnUrlNotBetween(String value1, String value2) {
-            addCriterion("return_url not between", value1, value2, "returnUrl");
+        public Criteria andSelfUrlNotBetween(String value1, String value2) {
+            addCriterion("self_url not between", value1, value2, "selfUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlIsNull() {
-            addCriterion("cancel_url is null");
+        public Criteria andApprovalUrlIsNull() {
+            addCriterion("approval_url is null");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlIsNotNull() {
-            addCriterion("cancel_url is not null");
+        public Criteria andApprovalUrlIsNotNull() {
+            addCriterion("approval_url is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlEqualTo(String value) {
-            addCriterion("cancel_url =", value, "cancelUrl");
+        public Criteria andApprovalUrlEqualTo(String value) {
+            addCriterion("approval_url =", value, "approvalUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlNotEqualTo(String value) {
-            addCriterion("cancel_url <>", value, "cancelUrl");
+        public Criteria andApprovalUrlNotEqualTo(String value) {
+            addCriterion("approval_url <>", value, "approvalUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlGreaterThan(String value) {
-            addCriterion("cancel_url >", value, "cancelUrl");
+        public Criteria andApprovalUrlGreaterThan(String value) {
+            addCriterion("approval_url >", value, "approvalUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlGreaterThanOrEqualTo(String value) {
-            addCriterion("cancel_url >=", value, "cancelUrl");
+        public Criteria andApprovalUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("approval_url >=", value, "approvalUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlLessThan(String value) {
-            addCriterion("cancel_url <", value, "cancelUrl");
+        public Criteria andApprovalUrlLessThan(String value) {
+            addCriterion("approval_url <", value, "approvalUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlLessThanOrEqualTo(String value) {
-            addCriterion("cancel_url <=", value, "cancelUrl");
+        public Criteria andApprovalUrlLessThanOrEqualTo(String value) {
+            addCriterion("approval_url <=", value, "approvalUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlLike(String value) {
-            addCriterion("cancel_url like", value, "cancelUrl");
+        public Criteria andApprovalUrlLike(String value) {
+            addCriterion("approval_url like", value, "approvalUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlNotLike(String value) {
-            addCriterion("cancel_url not like", value, "cancelUrl");
+        public Criteria andApprovalUrlNotLike(String value) {
+            addCriterion("approval_url not like", value, "approvalUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlIn(List<String> values) {
-            addCriterion("cancel_url in", values, "cancelUrl");
+        public Criteria andApprovalUrlIn(List<String> values) {
+            addCriterion("approval_url in", values, "approvalUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlNotIn(List<String> values) {
-            addCriterion("cancel_url not in", values, "cancelUrl");
+        public Criteria andApprovalUrlNotIn(List<String> values) {
+            addCriterion("approval_url not in", values, "approvalUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlBetween(String value1, String value2) {
-            addCriterion("cancel_url between", value1, value2, "cancelUrl");
+        public Criteria andApprovalUrlBetween(String value1, String value2) {
+            addCriterion("approval_url between", value1, value2, "approvalUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCancelUrlNotBetween(String value1, String value2) {
-            addCriterion("cancel_url not between", value1, value2, "cancelUrl");
+        public Criteria andApprovalUrlNotBetween(String value1, String value2) {
+            addCriterion("approval_url not between", value1, value2, "approvalUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlIsNull() {
+            addCriterion("execute_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlIsNotNull() {
+            addCriterion("execute_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlEqualTo(String value) {
+            addCriterion("execute_url =", value, "executeUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlNotEqualTo(String value) {
+            addCriterion("execute_url <>", value, "executeUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlGreaterThan(String value) {
+            addCriterion("execute_url >", value, "executeUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("execute_url >=", value, "executeUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlLessThan(String value) {
+            addCriterion("execute_url <", value, "executeUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlLessThanOrEqualTo(String value) {
+            addCriterion("execute_url <=", value, "executeUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlLike(String value) {
+            addCriterion("execute_url like", value, "executeUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlNotLike(String value) {
+            addCriterion("execute_url not like", value, "executeUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlIn(List<String> values) {
+            addCriterion("execute_url in", values, "executeUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlNotIn(List<String> values) {
+            addCriterion("execute_url not in", values, "executeUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlBetween(String value1, String value2) {
+            addCriterion("execute_url between", value1, value2, "executeUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuteUrlNotBetween(String value1, String value2) {
+            addCriterion("execute_url not between", value1, value2, "executeUrl");
             return (Criteria) this;
         }
     }
