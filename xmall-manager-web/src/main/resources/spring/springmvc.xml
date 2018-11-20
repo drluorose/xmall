@@ -119,10 +119,10 @@
     <dubbo:application name="xmall-manager-web"/>
     <dubbo:registry protocol="zookeeper" address="${zk.address}"/>
     <dubbo:reference interface="cn.exrick.manager.service.ItemService" id="itemService"/>
-    <dubbo:reference interface="cn.exrick.manager.service.MemberService" id="memberService"/>
+    <dubbo:reference interface="cn.exrick.manager.service.ManagerMemberService" id="memberService"/>
     <dubbo:reference interface="cn.exrick.manager.service.ItemCatService" id="itemCatService"/>
     <dubbo:reference interface="cn.exrick.manager.service.UserService" id="userService"/>
-    <dubbo:reference interface="cn.exrick.manager.service.OrderService" id="orderService"/>
+    <dubbo:reference interface="cn.exrick.manager.service.ManagerOrderService" id="orderService"/>
     <dubbo:reference interface="cn.exrick.manager.service.ThanksService" id="thanksService"/>
     <dubbo:reference interface="cn.exrick.manager.service.SystemService" id="systemService"/>
     <dubbo:reference interface="cn.exrick.content.service.ContentService" id="contentService"/>

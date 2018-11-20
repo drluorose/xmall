@@ -1,6 +1,6 @@
 package cn.exrick.manager.task;
 
-import cn.exrick.manager.service.OrderService;
+import cn.exrick.manager.service.ManagerOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class CancelOrderJob {
     final static Logger log= LoggerFactory.getLogger(CancelOrderJob.class);
 
     @Autowired
-    private OrderService orderService;
+    private ManagerOrderService orderService;
 
     /**
      * 每1个小时判断订单是否失效

@@ -8,7 +8,7 @@ import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.manager.dto.front.Member;
 import cn.exrick.manager.dto.front.OrderPayAction;
 import cn.exrick.manager.dto.front.req.PayOrderReq;
-import cn.exrick.manager.service.OrderService;
+import cn.exrick.manager.service.ManagerOrderService;
 import cn.exrick.manager.service.PaymentService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ import java.util.Locale;
 public class PaymentController {
 
     @Reference
-    private OrderService orderService;
+    private ManagerOrderService orderService;
 
     @Reference
     private PaymentService paymentService;

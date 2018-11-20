@@ -3,7 +3,7 @@ package cn.exrick.manager.controller;
 import cn.exrick.common.pojo.Result;
 import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.manager.pojo.TbThanks;
-import cn.exrick.manager.service.OrderService;
+import cn.exrick.manager.service.ManagerOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class PayController {
     private final static Logger log= LoggerFactory.getLogger(PayController.class);
 
     @Autowired
-    private OrderService orderService;
+    private ManagerOrderService orderService;
 
     @RequestMapping(value = "/pay/pass",method = RequestMethod.GET)
     @ApiOperation(value = "支付审核通过")

@@ -10,7 +10,7 @@ import cn.exrick.manager.dto.front.CommonDto;
 import cn.exrick.manager.dto.front.Member;
 import cn.exrick.manager.dto.front.MemberLoginRegist;
 import cn.exrick.sso.service.LoginService;
-import cn.exrick.sso.service.MemberService;
+import cn.exrick.sso.service.SsoMemberService;
 import cn.exrick.sso.service.RegisterService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.google.gson.Gson;
@@ -47,7 +47,7 @@ public class MemberController {
     private RegisterService registerService;
 
     @Reference
-    private MemberService memberService;
+    private SsoMemberService memberService;
 
     @Autowired
     private JedisClient jedisClient;

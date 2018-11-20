@@ -13,18 +13,14 @@
 
     <modules>
         <module>xmall-parent</module>
-        <module>xmall-project-tools</module>
         <module>xmall-mybatis-tools</module>
         <module>xmall-common</module>
         <module>xmall-generation-pojo</module>
         <module>xmall-generation-dao</module>
         <module>xmall-api</module>
-        <module>xmall-manager-service</module>
-        <module>xmall-search-service</module>
-        <module>xmall-sso-service</module>
-        <module>xmall-content-service</module>
         <module>xmall-front-web</module>
         <module>xmall-manager-web</module>
+        <module>xmall-service</module>
     </modules>
 
 

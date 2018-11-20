@@ -5,7 +5,7 @@ import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.manager.dto.MemberDto;
 import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.manager.pojo.TbMember;
-import cn.exrick.manager.service.MemberService;
+import cn.exrick.manager.service.ManagerMemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ public class MemberController {
     final static Logger log= LoggerFactory.getLogger(MemberController.class);
 
     @Autowired
-    private MemberService memberService;
+    private ManagerMemberService memberService;
 
     @RequestMapping(value = "/member/list",method = RequestMethod.GET)
     @ApiOperation(value = "分页多条件搜索获取会员列表")

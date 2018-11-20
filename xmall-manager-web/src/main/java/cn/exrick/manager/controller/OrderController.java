@@ -4,7 +4,7 @@ import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.common.pojo.Result;
 import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.manager.dto.OrderDetail;
-import cn.exrick.manager.service.OrderService;
+import cn.exrick.manager.service.ManagerOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 public class OrderController {
 
     @Autowired
-    private OrderService orderService;
+    private ManagerOrderService orderService;
 
     @RequestMapping(value = "/order/list",method = RequestMethod.GET)
     @ApiOperation(value = "获取订单列表")
