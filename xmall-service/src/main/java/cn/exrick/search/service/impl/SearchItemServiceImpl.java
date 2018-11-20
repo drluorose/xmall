@@ -2,6 +2,7 @@ package cn.exrick.search.service.impl;
 
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.utils.HttpUtil;
+import cn.exrick.config.EsConfig;
 import cn.exrick.manager.dto.EsCount;
 import cn.exrick.manager.dto.EsInfo;
 import cn.exrick.manager.dto.front.SearchItem;
@@ -9,29 +10,29 @@ import cn.exrick.manager.mapper.ext.TbItemExtMapper;
 import cn.exrick.search.service.SearchItemService;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
-import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
-import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
-import org.elasticsearch.action.bulk.BulkRequestBuilder;
-import org.elasticsearch.action.bulk.BulkResponse;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.TransportAddress;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.entity.ContentType;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.apache.http.nio.entity.NStringEntity;
+import org.elasticsearch.client.Response;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.net.InetAddress;
+import java.util.Collections;
 import java.util.List;
-
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+import java.util.Objects;
 
 /**
  * @author Exrickx
@@ -44,74 +45,79 @@ public class SearchItemServiceImpl implements SearchItemService {
     @Autowired
     private TbItemExtMapper tbItemExtMapper;
 
-    @Value("${es.connectIp}")
-    private String esConnectIp;
+    @Autowired
+    private EsConfig esConfig;
 
-    @Value("${es.nodeClientPort}")
-    private String esNodeClientPort;
+    private Gson gson = new GsonBuilder().create();
 
-    @Value("${es.clusterName}")
-    private String esClusterName;
-
-    @Value("${es.itemIndex}")
-    private String esItemIndex;
-
-    @Value("${es.itemType}")
-    private String esItemType;
+    private RestClient restClient;
 
     @PostConstruct
-    private void initIndex() {
+    private void initIndex() throws IOException {
         int itemImportSize = importAllItems();
         log.info("Import {} Items into index", itemImportSize);
     }
 
-    private void clearIndex(TransportClient client) {
-        client.admin().indices().prepareDelete(esItemIndex).execute().actionGet();
+    public String buildEndpoint(Long productId) {
+        return esConfig.getSearchItemIndexName() + "/" + esConfig.getSearchItemIndexType() + "/" + productId;
     }
 
-    private boolean existsIndex(TransportClient client) {
-        IndicesExistsRequest indicesExistsRequest = client.admin().indices().prepareExists(esItemIndex).request();
-        IndicesExistsResponse response = client.admin().indices().exists(indicesExistsRequest).actionGet();
-        return response.isExists();
+    private void putSearchItemNStringEntity(SearchItem searchItem) throws IOException {
+        NStringEntity searchItemNStringEntity = buildItemNStringEntity(searchItem);
+        restClient.performRequest("PUT",
+            buildEndpoint(searchItem.getProductId()),
+            Collections.<String, String>emptyMap(),
+            searchItemNStringEntity);
     }
 
-    private void buildIndex(TransportClient client) throws IOException {
-        CreateIndexRequestBuilder createBuilder = client.admin().indices().prepareCreate(esItemIndex);
-        XContentBuilder xContentBuilder = XContentFactory.jsonBuilder().startObject()
-            .startObject("properties");
-
-        xContentBuilder = builderField(xContentBuilder, "productId", "long");
-        xContentBuilder = builderField(xContentBuilder, "salePrice", "double");
-        xContentBuilder = builderField(xContentBuilder, "productName", "string");
-        xContentBuilder = builderField(xContentBuilder, "subTitle", "string");
-        xContentBuilder = builderField(xContentBuilder, "productImageBig", "string");
-        xContentBuilder = builderField(xContentBuilder, "categoryName", "string");
-        xContentBuilder = builderField(xContentBuilder, "cid", "integer");
-        xContentBuilder.endObject().endObject();
-        client.admin().indices().create(createBuilder.request()).actionGet();
+    private NStringEntity buildItemNStringEntity(SearchItem searchItem) {
+        String searchItemStr = gson.toJson(searchItem);
+        NStringEntity searchItemStrNStringEntity = new NStringEntity(searchItemStr, ContentType.APPLICATION_JSON);
+        return searchItemStrNStringEntity;
     }
 
-    private XContentBuilder builderField(XContentBuilder xContentBuilder, String fieldName, String type) throws IOException {
-        xContentBuilder.startObject(fieldName)
-            .field("type", type)
-            .endObject();
-        return xContentBuilder;
+    private void createIndex() throws IOException {
+        if (Objects.isNull(restClient)) {
+            return;
+        }
+        restClient.performRequest("PUT", esConfig.getSearchItemIndexName());
+    }
+
+    private boolean existsIndex() throws IOException {
+        if (Objects.isNull(restClient)) {
+            return false;
+        }
+
+        Response response = restClient.performRequest("HEAD", esConfig.getSearchItemIndexName());
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode == HttpStatus.OK.value()) {
+            return true;
+        }
+        if (statusCode == HttpStatus.NOT_FOUND.value()) {
+            return false;
+        }
+        return false;
     }
 
     @Override
-    public int importAllItems() {
+    public int importAllItems() throws IOException {
+        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+        credentialsProvider.setCredentials(AuthScope.ANY,
+            new UsernamePasswordCredentials(esConfig.getUsername(), esConfig.getPassword()));
+
+        restClient = RestClient.builder(new HttpHost(esConfig.getHost(), esConfig.getPort()))
+            .setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
+                @Override
+                public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
+                    return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+                }
+            }).build();
+
+        if (!existsIndex()) {
+            createIndex();
+        }
 
         try {
-            Settings settings = Settings.builder()
-                .put("cluster.name", esClusterName).build();
-            TransportClient client = new PreBuiltTransportClient(settings)
-                .addTransportAddress(new TransportAddress(InetAddress.getByName(esConnectIp), 9300));
-            if (this.existsIndex(client)) {
-                this.clearIndex(client);
-            }
-            this.buildIndex(client);
-            //批量添加
-            BulkRequestBuilder bulkRequest = client.prepareBulk();
 
             //查询商品列表
             List<SearchItem> itemList = tbItemExtMapper.getItemList();
@@ -126,26 +132,10 @@ public class SearchItemServiceImpl implements SearchItemService {
                     image = "";
                 }
                 searchItem.setProductImageBig(image);
-                bulkRequest.add(client.prepareIndex(esItemIndex, esItemType, String.valueOf(searchItem.getProductId()))
-                    .setSource(jsonBuilder()
-                        .startObject()
-                        .field("productId", searchItem.getProductId())
-                        .field("salePrice", searchItem.getSalePrice().doubleValue())
-                        .field("productName", searchItem.getProductName())
-                        .field("subTitle", searchItem.getSubTitle())
-                        .field("productImageBig", searchItem.getProductImageBig())
-                        .field("categoryName", searchItem.getCategoryName())
-                        .field("cid", searchItem.getCid())
-                        .endObject()
-                    )
-                );
+                putSearchItemNStringEntity(searchItem);
             }
 
-            BulkResponse bulkResponse = bulkRequest.get();
-
             log.info("更新索引成功");
-
-            client.close();
         } catch (Exception e) {
             log.error("ex", e);
             throw new XmallException("导入ES索引库出错，请再次尝试", e);
@@ -157,8 +147,8 @@ public class SearchItemServiceImpl implements SearchItemService {
     @Override
     public EsInfo getEsInfo() {
 
-        String healthUrl = "http://" + esConnectIp + ":" + esNodeClientPort + "/_cluster/health";
-        String countUrl = "http://" + esConnectIp + ":" + esNodeClientPort + "/_count";
+        String healthUrl = "http://" + "x" + ":" + "x" + "/_cluster/health";
+        String countUrl = "http://" + "x" + ":" + "x" + "/_count";
         String healthResult = HttpUtil.sendGet(healthUrl);
         String countResult = HttpUtil.sendGet(countUrl);
         if (StringUtils.isBlank(healthResult) || StringUtils.isBlank(countResult)) {

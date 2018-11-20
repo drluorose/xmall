@@ -23,11 +23,12 @@ spring:
 activemq:
   brokerUrl: tcp://192.168.31.234:61616
 es:
-  connectIp: 192.168.31.234
-  nodeClientPort: 9200
-  clusterName: elasticsearch
-  itemIndex: item
-  itemType: itemList
+  host: es-cn-v0h0vok2w000viwfj.public.elasticsearch.aliyuncs.com
+  port: 9200
+  username: elastic
+  password: Dong890418@
+  searchItemIndexName: item
+  searchItemIndexType: itemType
 redis:
   host: 192.168.31.234
   port: 6379
