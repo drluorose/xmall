@@ -1,0 +1,43 @@
+{
+    "from": $from,
+    "size": $size,
+    "sort": [
+        {
+            "salePrice": {
+                "order": "$sortDirection"
+            }
+        }
+    ],
+    "query": {
+        "bool": {
+            "filter": [
+                #if($searchProductName!='')
+                {
+                    "term": {
+                        "productName": "$searchProductName"
+                    }
+                },
+                #end
+                {
+                    "range": {
+                        "salePrice": {
+                            "gt": $filterGtValue,
+                            "lt": $filterLtValue
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "highlight": {
+        "pre_tags": [
+            "<a style='color: #e4393c'>"
+        ],
+        "post_tags": [
+            "</a>"
+        ],
+        "fields": {
+            "productName": {}
+        }
+    }
+}

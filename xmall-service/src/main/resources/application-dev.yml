@@ -20,15 +20,13 @@ spring:
       name: dubbo
       port: 20880
     registry: zookeeper://192.168.31.234:2181
-activemq:
-  brokerUrl: tcp://192.168.31.234:61616
 es:
   host: es-cn-v0h0vok2w000viwfj.public.elasticsearch.aliyuncs.com
   port: 9200
   username: elastic
   password: Dong890418@
   searchItemIndexName: item
-  searchItemIndexType: itemType
+  searchItemIndexType: product
 redis:
   host: 192.168.31.234
   port: 6379
@@ -38,7 +36,6 @@ CART_PRE: CART
 PAY_EXPIRE: 1209600
 
 SERVER_URL: http://localhost:8888
----
 ---
 payment:
   paypal:

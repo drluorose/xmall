@@ -18,7 +18,6 @@ import java.util.List;
  * @author Exrick
  * @date 2017/8/25
  */
-@Slf4j
 public class DtoUtil {
 
     public static TbMember MemberDto2Member(MemberDto memberDto) {

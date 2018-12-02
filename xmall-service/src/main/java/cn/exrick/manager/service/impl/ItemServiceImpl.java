@@ -6,6 +6,7 @@ import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.common.utils.IDUtil;
 import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.dto.ItemDto;
+import cn.exrick.manager.dto.front.SearchItem;
 import cn.exrick.manager.mapper.TbItemCatMapper;
 import cn.exrick.manager.mapper.TbItemDescMapper;
 import cn.exrick.manager.mapper.TbItemMapper;
@@ -15,24 +16,19 @@ import cn.exrick.manager.pojo.TbItemCat;
 import cn.exrick.manager.pojo.TbItemDesc;
 import cn.exrick.manager.pojo.TbItemExample;
 import cn.exrick.manager.service.ItemService;
+import cn.exrick.search.biz.ElasticSearchBiz;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
-import javax.jms.TextMessage;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Exrick on 2017/7/29.
@@ -55,55 +51,43 @@ public class ItemServiceImpl implements ItemService {
     private TbItemCatMapper tbItemCatMapper;
 
     @Autowired
-    private JmsTemplate jmsTemplate;
-
-    @Resource
-    private ActiveMQTopic topicDestination;
-
-    @Autowired
     private JedisClient jedisClient;
 
     @Value("${PRODUCT_ITEM}")
     private String PRODUCT_ITEM;
 
+    @Autowired
+    private ElasticSearchBiz elasticSearchBiz;
+
     @Override
     public ItemDto getItemById(Long id) {
-        ItemDto itemDto = new ItemDto();
-
+        ItemDto itemDto;
         TbItem tbItem = tbItemMapper.selectByPrimaryKey(id);
         itemDto = DtoUtil.TbItem2ItemDto(tbItem);
-
         TbItemCat tbItemCat = tbItemCatMapper.selectByPrimaryKey(itemDto.getCid());
         itemDto.setCname(tbItemCat.getName());
-
         TbItemDesc tbItemDesc = tbItemDescMapper.selectByPrimaryKey(id);
         itemDto.setDetail(tbItemDesc.getItemDesc());
-
         return itemDto;
     }
 
     @Override
     public TbItem getNormalItemById(Long id) {
-
         return tbItemMapper.selectByPrimaryKey(id);
     }
 
     @Override
     public DataTablesResult getItemList(int draw, int start, int length, int cid, String search,
                                         String orderCol, String orderDir) {
-
         DataTablesResult result = new DataTablesResult();
-
         //分页执行查询返回结果
         PageHelper.startPage(start / length + 1, length);
         List<TbItem> list = tbItemExtMapper.selectItemByCondition(cid, "%" + search + "%", orderCol, orderDir);
         PageInfo<TbItem> pageInfo = new PageInfo<>(list);
         result.setRecordsFiltered((int) pageInfo.getTotal());
         result.setRecordsTotal(getAllItemCount().getRecordsTotal());
-
         result.setDraw(draw);
         result.setData(list);
-
         return result;
     }
 
@@ -112,7 +96,6 @@ public class ItemServiceImpl implements ItemService {
                                               String minDate, String maxDate, String orderCol, String orderDir) {
 
         DataTablesResult result = new DataTablesResult();
-
         //分页执行查询返回结果
         PageHelper.startPage(start / length + 1, length);
         List<TbItem> list = tbItemExtMapper.selectItemByMultiCondition(cid, "%" + search + "%", minDate, maxDate, orderCol, orderDir);
@@ -122,7 +105,6 @@ public class ItemServiceImpl implements ItemService {
 
         result.setDraw(draw);
         result.setData(list);
-
         return result;
     }
 
@@ -137,11 +119,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public TbItem alertItemState(Long id, Integer state) {
-
         TbItem tbMember = getNormalItemById(id);
         tbMember.setStatus(state);
         tbMember.setUpdated(new Date());
-
         if (tbItemMapper.updateByPrimaryKey(tbMember) != 1) {
             throw new XmallException("修改商品状态失败");
         }
@@ -150,24 +130,18 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public int deleteItem(Long id) {
-
         if (tbItemMapper.deleteByPrimaryKey(id) != 1) {
             throw new XmallException("删除商品失败");
         }
         if (tbItemDescMapper.deleteByPrimaryKey(id) != 1) {
             throw new XmallException("删除商品详情失败");
         }
-        //发送消息同步索引库
-        try {
-            sendRefreshESMessage("delete", id);
-        } catch (Exception e) {
-            log.error("同步索引出错");
-        }
+        deleteIndex(id);
         return 0;
     }
 
     @Override
-    public TbItem addItem(ItemDto itemDto) {
+    public TbItem addItem(ItemDto itemDto) throws IOException {
         long id = IDUtil.getRandomId();
         TbItem tbItem = DtoUtil.ItemDto2TbItem(itemDto);
         tbItem.setId(id);
@@ -190,12 +164,7 @@ public class ItemServiceImpl implements ItemService {
         if (tbItemDescMapper.insert(tbItemDesc) != 1) {
             throw new XmallException("添加商品详情失败");
         }
-        //发送消息同步索引库
-        try {
-            sendRefreshESMessage("add", id);
-        } catch (Exception e) {
-            log.error("同步索引出错");
-        }
+        updateIndex(id);
         return getNormalItemById(id);
     }
 
@@ -229,12 +198,7 @@ public class ItemServiceImpl implements ItemService {
         }
         //同步缓存
         deleteProductDetRedis(id);
-        //发送消息同步索引库
-        try {
-            sendRefreshESMessage("add", id);
-        } catch (Exception e) {
-            log.error("同步索引出错");
-        }
+        deleteIndex(id);
         return getNormalItemById(id);
     }
 
@@ -251,19 +215,17 @@ public class ItemServiceImpl implements ItemService {
         }
     }
 
-    /**
-     * 发送消息同步索引库
-     *
-     * @param type
-     * @param id
-     */
-    public void sendRefreshESMessage(String type, Long id) {
-        jmsTemplate.send(topicDestination, new MessageCreator() {
-            @Override
-            public Message createMessage(Session session) throws JMSException {
-                TextMessage textMessage = session.createTextMessage(type + "," + String.valueOf(id));
-                return textMessage;
-            }
-        });
+    public void updateIndex(Long id) throws IOException {
+        SearchItem searchItem = tbItemExtMapper.getItemById(id);
+        if (Objects.nonNull(searchItem)) {
+            elasticSearchBiz.updateSearchIndexDoc(searchItem);
+        }
+    }
+
+    private void deleteIndex(Long id) {
+        SearchItem searchItem = tbItemExtMapper.getItemById(id);
+        if (Objects.nonNull(searchItem)) {
+            elasticSearchBiz.removeSearchIndexDoc(searchItem);
+        }
     }
 }

@@ -3,6 +3,8 @@ package cn.exrick.search.service;
 
 import cn.exrick.manager.dto.front.SearchResult;
 
+import java.io.IOException;
+
 /**
  * @author Exrickx
  */
@@ -18,5 +20,5 @@ public interface SearchService {
 	 * @param priceLte
 	 * @return
 	 */
-	SearchResult search(String keyword, int page, int size, String sort, int priceGt, int priceLte);
+	SearchResult search(String keyword, int page, int size, String sort, int priceGt, int priceLte) throws IOException;
 }

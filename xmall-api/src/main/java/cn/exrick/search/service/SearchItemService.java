@@ -1,8 +1,5 @@
 package cn.exrick.search.service;
 
-
-import cn.exrick.manager.dto.EsInfo;
-
 import java.io.IOException;
 
 /**
@@ -15,10 +12,4 @@ public interface SearchItemService {
 	 * @return
 	 */
 	int importAllItems() throws IOException;
-
-	/**
-	 * 获取ES基本信息
-	 * @return
-	 */
-	EsInfo getEsInfo();
 }

@@ -35,7 +35,6 @@
         <dubbo.version>2.6.1</dubbo.version>
         <zookeeper.version>3.4.10</zookeeper.version>
         <curator.version>4.0.1</curator.version>
-        <activemq.version>5.11.2</activemq.version>
         <swagger2.version>2.7.0</swagger2.version>
         <swagger-ui.version>2.7.0</swagger-ui.version>
         <!--指定了版本范围，每次会尝试去下载最新版本-->
@@ -212,11 +211,6 @@
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>spring-jms</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
                 <artifactId>spring-context-support</artifactId>
                 <version>${spring.version}</version>
             </dependency>
@@ -297,11 +291,6 @@
                 <artifactId>curator-framework</artifactId>
                 <version>${curator.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-client</artifactId>
-                <version>${activemq.version}</version>
-            </dependency>
             <!-- Swagger2 -->
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -313,16 +302,15 @@
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${swagger-ui.version}</version>
             </dependency>
-            <!-- 七牛云图片上传SDK -->
-            <dependency>
-                <groupId>com.qiniu</groupId>
-                <artifactId>qiniu-java-sdk</artifactId>
-                <version>${qiniu.version}</version>
-            </dependency>
             <!-- Elasticsearch -->
             <dependency>
                 <groupId>org.elasticsearch.client</groupId>
                 <artifactId>rest</artifactId>
+                <version>${elasticsearch.rest.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
                 <version>${elasticsearch.rest.version}</version>
             </dependency>
             <dependency>
@@ -365,6 +353,21 @@
                 <artifactId>rest-api-sdk</artifactId>
                 <version>${paypay-rest-api-sdk}</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.velocity/velocity -->
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>1.7</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>2.8.3</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

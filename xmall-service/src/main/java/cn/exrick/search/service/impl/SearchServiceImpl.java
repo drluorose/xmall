@@ -1,10 +1,31 @@
 package cn.exrick.search.service.impl;
 
+import cn.exrick.config.EsConfig;
+import cn.exrick.manager.dto.front.SearchItem;
 import cn.exrick.manager.dto.front.SearchResult;
 import cn.exrick.search.service.SearchService;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.entity.ContentType;
+import org.apache.http.nio.entity.NStringEntity;
+import org.apache.http.util.EntityUtils;
+import org.elasticsearch.client.Response;
+import org.elasticsearch.client.RestClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Exrickx
@@ -14,6 +35,53 @@ import org.springframework.stereotype.Component;
 @Service(interfaceClass = SearchService.class)
 public class SearchServiceImpl implements SearchService {
 
+    @Autowired
+    private EsConfig esConfig;
+
+    @Autowired
+    private RestClient restClient;
+
+    @Autowired
+    private ElasticSearchVelocityHelper elasticSearchVelocityHelper;
+
+    private Gson gson = new GsonBuilder().create();
+
+    private static final String ASE_SORT = "1";
+
+    private static final String DESC_SORT = "-1";
+
+    private static final String ASC = "asc";
+
+    private static final String DESC = "desc";
+
+    private String buildEndpoint() {
+        return "/" + esConfig.getSearchItemIndexName() + "/" + esConfig.getSearchItemIndexType() + "/_search";
+    }
+
+    private NStringEntity buildSearchEntity(String key, String sort, int priceGt, int priceLte, int page, int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("查询参数异常");
+        }
+        if (page <= 0) {
+            page = 1;
+        }
+        int start = (page - 1) * size;
+        String sortType = ASC;
+        if (Objects.equals(sort, DESC_SORT)) {
+            sortType = DESC;
+        }
+        Map<String, Object> searchParam = Maps.newHashMap();
+        searchParam.put("from", start);
+        searchParam.put("size", size);
+        searchParam.put("sortDirection", sortType);
+        searchParam.put("searchProductName", key);
+        searchParam.put("filterGtValue", priceGt);
+        searchParam.put("filterLtValue", priceLte);
+        String searchStr = elasticSearchVelocityHelper.getElasticSearchString(ElasticSearchVelocityHelper.SEARCH_ITEM_INDEX, searchParam);
+        log.info("searchStr;{}", searchStr);
+        return new NStringEntity(searchStr, ContentType.APPLICATION_JSON);
+    }
+
     /**
      * 使用QueryBuilder
      * termQuery("key", obj) 完全匹配
@@ -22,122 +90,39 @@ public class SearchServiceImpl implements SearchService {
      * multiMatchQuery("text", "field1", "field2"..);  匹配多个字段, field有通配符忒行
      */
     @Override
-    public SearchResult search(String key, int page, int size, String sort, int priceGt, int priceLte) {
-
-//        try {
-//            Settings settings = Settings.builder()
-//                .put("cluster.name", clusterName).build();
-//            TransportClient client = new PreBuiltTransportClient(settings)
-//                .addTransportAddress(new TransportAddress(InetAddress.getByName(connectIp), 9300));
-//
-//            SearchResult searchResult = new SearchResult();
-//
-//            //设置查询条件
-//            //单字段搜索
-//            QueryBuilder qb = matchQuery("productName", key);
-//
-//            //设置分页
-//            if (page <= 0) {
-//                page = 1;
-//            }
-//            int start = (page - 1) * size;
-//
-//            //设置高亮显示
-//            HighlightBuilder hiBuilder = new HighlightBuilder();
-//            hiBuilder.preTags("<a style=\"color: #e4393c\">");
-//            hiBuilder.postTags("</a>");
-//            hiBuilder.field("productName");
-//
-//            //执行搜索
-//            SearchResponse searchResponse = null;
-//
-//            if (priceGt >= 0 && priceLte >= 0 && sort.isEmpty()) {
-//                searchResponse = client.prepareSearch(itemIndex)
-//                    .setTypes(itemType)
-//                    .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-//                    .setQuery(qb)    // Query
-//                    .setFrom(start).setSize(size).setExplain(true)//从第几个开始，显示size个数据
-//                    .highlighter(hiBuilder)
-//                    .setPostFilter(QueryBuilders.rangeQuery("salePrice").gt(priceGt).lt(priceLte))    //过滤条件
-//                    .get();
-//            } else if (priceGt >= 0 && priceLte >= 0 && sort.equals("1")) {
-//                searchResponse = client.prepareSearch(itemIndex)
-//                    .setTypes(itemType)
-//                    .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-//                    .setQuery(qb)    // Query
-//                    .setFrom(start).setSize(size).setExplain(true)    //从第几个开始，显示size个数据
-//                    .highlighter(hiBuilder)
-//                    .setPostFilter(QueryBuilders.rangeQuery("salePrice").gt(priceGt).lt(priceLte))    //过滤条件
-//                    .addSort("salePrice", SortOrder.ASC)
-//                    .get();
-//            } else if (priceGt >= 0 && priceLte >= 0 && sort.equals("-1")) {
-//                searchResponse = client.prepareSearch(itemIndex)
-//                    .setTypes(itemType)
-//                    .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-//                    .setQuery(qb)    // Query
-//                    .setFrom(start).setSize(size).setExplain(true)    //从第几个开始，显示size个数据
-//                    .highlighter(hiBuilder)     //设置高亮显示
-//                    .setPostFilter(QueryBuilders.rangeQuery("salePrice").gt(priceGt).lt(priceLte))    //过滤条件
-//                    .addSort("salePrice", SortOrder.DESC)
-//                    .get();
-//            } else if ((priceGt < 0 || priceLte < 0) && sort.isEmpty()) {
-//                searchResponse = client.prepareSearch(itemIndex)
-//                    .setTypes(itemType)
-//                    .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-//                    .setQuery(qb)    // Query
-//                    .setFrom(start).setSize(size).setExplain(true)    //从第几个开始，显示size个数据
-//                    .highlighter(hiBuilder)     //设置高亮显示
-//                    .get();
-//            } else if ((priceGt < 0 || priceLte < 0) && sort.equals("1")) {
-//                searchResponse = client.prepareSearch(itemIndex)
-//                    .setTypes(itemType)
-//                    .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-//                    .setQuery(qb)    // Query
-//                    .setFrom(start).setSize(size).setExplain(true)    //从第几个开始，显示size个数据
-//                    .highlighter(hiBuilder)      //设置高亮显示
-//                    .addSort("salePrice", SortOrder.ASC)
-//                    .get();
-//            } else if ((priceGt < 0 || priceLte < 0) && sort.equals("-1")) {
-//                searchResponse = client.prepareSearch(itemIndex)
-//                    .setTypes(itemType)
-//                    .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-//                    .setQuery(qb)    // Query
-//                    .setFrom(start).setSize(size).setExplain(true)    //从第几个开始，显示size个数据
-//                    .highlighter(hiBuilder)
-//                    .addSort("salePrice", SortOrder.DESC)
-//                    .get();
-//            }
-//
-//            SearchHits hits = searchResponse.getHits();
-//            //返回总结果数
-//            searchResult.setRecordCount(hits.totalHits);
-//            List<SearchItem> list = new ArrayList<>();
-//            if (hits.totalHits > 0) {
-//                for (SearchHit hit : hits) {
-//                    //总页数
-//                    int totalPage = (int) (hit.getScore() / size);
-//                    if ((hit.getScore() % size) != 0) {
-//                        totalPage++;
-//                    }
-//                    //返回结果总页数
-//                    searchResult.setTotalPages(totalPage);
-//                    //设置高亮字段
-//                    SearchItem searchItem = new Gson().fromJson(hit.getSourceAsString(), SearchItem.class);
-//                    String productName = hit.getHighlightFields().get("productName").getFragments()[0].toString();
-//                    searchItem.setProductName(productName);
-//                    //返回结果
-//                    list.add(searchItem);
-//                }
-//            }
-//            searchResult.setItemList(list);
-//            //因个人服务器配置过低此处取消关闭减轻搜索压力增快搜索速度
-//            //client.close();
-//
-//            return searchResult;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw new XmallException("查询ES索引库出错");
-//        }
+    public SearchResult search(String key, int page, int size, String sort, int priceGt, int priceLte) throws IOException {
+        try {
+            NStringEntity searchStr = buildSearchEntity(key, sort, priceGt, priceLte, page, size);
+            Response response = restClient.performRequest("GET", buildEndpoint(), Collections.<String, String>emptyMap(), searchStr);
+            String searchResultStr = EntityUtils.toString(response.getEntity());
+            return parseSearchResult(searchResultStr, size);
+        } catch (Exception e) {
+            log.error("e", e);
+        }
         return null;
+    }
+
+    public SearchResult parseSearchResult(String searchResultJson, int size) {
+        SearchResult searchResult = new SearchResult();
+        JsonObject searchResultJsonObject = gson.fromJson(searchResultJson, JsonObject.class);
+        searchResultJsonObject = (JsonObject) searchResultJsonObject.get("hits");
+        searchResult.setRecordCount(searchResultJsonObject.get("total").getAsLong());
+        searchResult.setTotalPages(searchResult.getRecordCount().intValue() / size);
+        searchResult.setItemList(parseSearchResult((JsonArray) searchResultJsonObject.get("hits")));
+        return searchResult;
+    }
+
+    public List<SearchItem> parseSearchResult(JsonArray hits) {
+        List<SearchItem> searchItems = Lists.newArrayList();
+        for (JsonElement element : hits) {
+            JsonObject hit = (JsonObject) element;
+            SearchItem searchItem = gson.fromJson(hit.get("_source"), SearchItem.class);
+            if (Objects.nonNull(hit.get("hightlight"))) {
+                JsonElement highlightProductName = ((JsonObject) hit.get("highlight")).get("productName");
+                searchItem.setProductName(highlightProductName.getAsString());
+            }
+            searchItems.add(searchItem);
+        }
+        return searchItems;
     }
 }

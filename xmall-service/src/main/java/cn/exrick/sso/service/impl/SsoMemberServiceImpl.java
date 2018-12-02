@@ -2,7 +2,6 @@ package cn.exrick.sso.service.impl;
 
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.jedis.JedisClient;
-import cn.exrick.common.utils.QiniuUtil;
 import cn.exrick.manager.dto.front.Member;
 import cn.exrick.manager.mapper.TbMemberMapper;
 import cn.exrick.manager.pojo.TbMember;
@@ -38,23 +37,20 @@ public class SsoMemberServiceImpl implements SsoMemberService {
     @Override
     public String imageUpload(Long userId, String token, String imgData) {
 
-        //过滤data:URL
-        String base64 = QiniuUtil.base64Data(imgData);
-        String imgPath = QiniuUtil.qiniuBase64Upload(base64);
 
         TbMember tbMember = tbMemberMapper.selectByPrimaryKey(userId);
         if (tbMember == null) {
             throw new XmallException("通过id获取用户失败");
         }
-        tbMember.setFile(imgPath);
+        tbMember.setFile("");
         if (tbMemberMapper.updateByPrimaryKey(tbMember) != 1) {
             throw new XmallException("更新用户头像失败");
         }
 
         //更新缓存
         Member member = loginService.getUserByToken(token);
-        member.setFile(imgPath);
+        member.setFile("");
         jedisClient.set("SESSION:" + token, new Gson().toJson(member));
-        return imgPath;
+        return "";
     }
 }

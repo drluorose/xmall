@@ -4,6 +4,8 @@ import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.manager.dto.ItemDto;
 import cn.exrick.manager.pojo.TbItem;
 
+import java.io.IOException;
+
 /**
  * @author Exrick
  * @date 2017/7/29
@@ -81,7 +83,7 @@ public interface ItemService {
      * @param itemDto
      * @return
      */
-    TbItem addItem(ItemDto itemDto);
+    TbItem addItem(ItemDto itemDto) throws IOException;
 
     /**
      * 更新商品

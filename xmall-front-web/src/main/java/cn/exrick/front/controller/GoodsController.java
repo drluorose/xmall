@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -68,8 +69,8 @@ public class GoodsController {
                                               @RequestParam(defaultValue = "1") int page,
                                               @RequestParam(defaultValue = "20") int size,
                                               @RequestParam(defaultValue = "") String sort,
-                                              @RequestParam(defaultValue = "-1") int priceGt,
-                                              @RequestParam(defaultValue = "-1") int priceLte) {
+                                              @RequestParam(defaultValue = "0") int priceGt,
+                                              @RequestParam(defaultValue = "1000000") int priceLte) throws IOException {
 
         SearchResult searchResult = searchService.search(key, page, size, sort, priceGt, priceLte);
         return new ResultUtil<SearchResult>().setData(searchResult);

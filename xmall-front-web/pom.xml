@@ -122,11 +122,6 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
-        <!-- 七牛云图片上传SDK -->
-        <dependency>
-            <groupId>com.qiniu</groupId>
-            <artifactId>qiniu-java-sdk</artifactId>
-        </dependency>
         <!-- 文件上传组件 -->
         <dependency>
             <groupId>commons-fileupload</groupId>
