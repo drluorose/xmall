@@ -16,6 +16,8 @@ public interface TbRolePermMapper {
 
     int insertSelective(TbRolePerm record);
 
+    TbRolePerm selectOneByExample(TbRolePermExample example);
+
     List<TbRolePerm> selectByExample(TbRolePermExample example);
 
     TbRolePerm selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbRolePermMapper {
     int updateByPrimaryKeySelective(TbRolePerm record);
 
     int updateByPrimaryKey(TbRolePerm record);
+
+    int insertBatch(List<TbRolePerm> records);
 }

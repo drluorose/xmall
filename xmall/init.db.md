@@ -21,3 +21,8 @@ ALTER USER 'xmall'@'%' IDENTIFIED WITH mysql_native_password BY 'EusbI7pr91%h$3B
 GRANT SELECT ON xmall.invoice TO 'xmall'@'%';
 ALTER USER 'jeffrey'@'localhost' WITH MAX_QUERIES_PER_HOUR 90;
 ~~~
+
+~~~
+mysql_config_editor set --login-path=xmall --host=127.0.0.1 --user=xmall --password
+mysql --login-path=xmall
+~~~

@@ -88,6 +88,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -288,4 +296,91 @@
       state = #{state,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <insert id="insertBatch" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_transaction_paypal_shipping_address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].id!=null">
+        id,
+      </if>
+      <if test="list[0].tPaypayId!=null">
+        t_paypay_id,
+      </if>
+      <if test="list[0].recipientName!=null">
+        recipient_name,
+      </if>
+      <if test="list[0].line1!=null">
+        line1,
+      </if>
+      <if test="list[0].line2!=null">
+        line2,
+      </if>
+      <if test="list[0].city!=null">
+        city,
+      </if>
+      <if test="list[0].countryCode!=null">
+        country_code,
+      </if>
+      <if test="list[0].postalCode!=null">
+        postal_code,
+      </if>
+      <if test="list[0].phone!=null">
+        phone,
+      </if>
+      <if test="list[0].state!=null">
+        state,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.id!=null">
+          #{item.id,jdbcType=BIGINT},
+        </if>
+        <if test="item.tPaypayId!=null">
+          #{item.tPaypayId,jdbcType=VARCHAR},
+        </if>
+        <if test="item.recipientName!=null">
+          #{item.recipientName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.line1!=null">
+          #{item.line1,jdbcType=VARCHAR},
+        </if>
+        <if test="item.line2!=null">
+          #{item.line2,jdbcType=VARCHAR},
+        </if>
+        <if test="item.city!=null">
+          #{item.city,jdbcType=VARCHAR},
+        </if>
+        <if test="item.countryCode!=null">
+          #{item.countryCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.postalCode!=null">
+          #{item.postalCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.phone!=null">
+          #{item.phone,jdbcType=VARCHAR},
+        </if>
+        <if test="item.state!=null">
+          #{item.state,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TransactionPaypalShippingAddressExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from tb_transaction_paypal_shipping_address
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

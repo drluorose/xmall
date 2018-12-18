@@ -86,6 +86,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -270,4 +278,85 @@
       currency = #{currency,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <insert id="insertBatch" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_transaction_paypal_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].id!=null">
+        id,
+      </if>
+      <if test="list[0].tPaypalId!=null">
+        t_paypal_id,
+      </if>
+      <if test="list[0].name!=null">
+        name,
+      </if>
+      <if test="list[0].description!=null">
+        description,
+      </if>
+      <if test="list[0].quantity!=null">
+        quantity,
+      </if>
+      <if test="list[0].price!=null">
+        price,
+      </if>
+      <if test="list[0].tax!=null">
+        tax,
+      </if>
+      <if test="list[0].sku!=null">
+        sku,
+      </if>
+      <if test="list[0].currency!=null">
+        currency,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.id!=null">
+          #{item.id,jdbcType=BIGINT},
+        </if>
+        <if test="item.tPaypalId!=null">
+          #{item.tPaypalId,jdbcType=VARCHAR},
+        </if>
+        <if test="item.name!=null">
+          #{item.name,jdbcType=VARCHAR},
+        </if>
+        <if test="item.description!=null">
+          #{item.description,jdbcType=VARCHAR},
+        </if>
+        <if test="item.quantity!=null">
+          #{item.quantity,jdbcType=INTEGER},
+        </if>
+        <if test="item.price!=null">
+          #{item.price,jdbcType=DECIMAL},
+        </if>
+        <if test="item.tax!=null">
+          #{item.tax,jdbcType=DECIMAL},
+        </if>
+        <if test="item.sku!=null">
+          #{item.sku,jdbcType=VARCHAR},
+        </if>
+        <if test="item.currency!=null">
+          #{item.currency,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TransactionPaypalItemExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from tb_transaction_paypal_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

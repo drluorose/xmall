@@ -16,6 +16,8 @@ public interface TbLogMapper {
 
     int insertSelective(TbLog record);
 
+    TbLog selectOneByExample(TbLogExample example);
+
     List<TbLog> selectByExample(TbLogExample example);
 
     TbLog selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbLogMapper {
     int updateByPrimaryKeySelective(TbLog record);
 
     int updateByPrimaryKey(TbLog record);
+
+    int insertBatch(List<TbLog> records);
 }

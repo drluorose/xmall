@@ -16,6 +16,8 @@ public interface TbContinentMapper {
 
     int insertSelective(TbContinent record);
 
+    TbContinent selectOneByExample(TbContinentExample example);
+
     List<TbContinent> selectByExample(TbContinentExample example);
 
     TbContinent selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbContinentMapper {
     int updateByPrimaryKeySelective(TbContinent record);
 
     int updateByPrimaryKey(TbContinent record);
+
+    int insertBatch(List<TbContinent> records);
 }

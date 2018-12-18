@@ -16,7 +16,11 @@ public interface TbItemDescMapper {
 
     int insertSelective(TbItemDesc record);
 
+    TbItemDesc selectOneByExample(TbItemDescExample example);
+
     List<TbItemDesc> selectByExampleWithBLOBs(TbItemDescExample example);
+
+    TbItemDesc selectOneByExample(TbItemDescExample example);
 
     List<TbItemDesc> selectByExample(TbItemDescExample example);
 
@@ -33,4 +37,6 @@ public interface TbItemDescMapper {
     int updateByPrimaryKeyWithBLOBs(TbItemDesc record);
 
     int updateByPrimaryKey(TbItemDesc record);
+
+    int insertBatch(List<TbItemDesc> records);
 }

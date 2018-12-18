@@ -1,6 +1,7 @@
 package cn.exrick;
 
-import com.alibaba.dubbo.spring.boot.annotation.EnableDubboConfiguration;
+import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
+import com.alibaba.dubbo.config.spring.context.annotation.EnableDubboConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -9,7 +10,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  * @author dongjiejie dongjiejie@qq.com
  */
 @EnableWebMvc
-@EnableDubboConfiguration
+@EnableDubbo
+@EnableDubboConfig
 @SpringBootApplication
 public class XmallServiceWebApplication {
 

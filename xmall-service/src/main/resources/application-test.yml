@@ -1,0 +1,61 @@
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://47.74.235.50:3306/xmall?characterEncoding=utf-8
+      username: xmall
+      password: EusbI7pr91%h$3BCX
+      driver-class-name: com.mysql.jdbc.Driver
+      validationQuery: select 1
+      filter:
+        stat:
+          enabled: true
+        config:
+          enabled: true
+        encoding:
+          enabled: true
+  dubbo:
+    server: true
+    application: xmall-search
+    protocol: dubbo
+    port: 20880
+    registry: zookeeper://47.74.235.50:2181
+es:
+  host: es-cn-v0h0vok2w000viwfj.public.elasticsearch.aliyuncs.com
+  port: 9200
+  username: elastic
+  password: Dong890418@
+  searchItemIndexName: item
+  searchItemIndexType: product
+redis:
+  host: 47.74.235.50
+  port: 6379
+SESSION_EXPIRE: 1800
+CART_PRE: CART
+
+PAY_EXPIRE: 1209600
+
+SERVER_URL: http://localhost:8888
+---
+payment:
+  paypal:
+    clientId: AbcuorkoOGyEL1gIX8sdfxwf7C_cw9sWr0taYYupF1IM12ATWjMDpBaaaQGvOLdAOHG6DyO99D9E-JtG
+    clientSecret: EFsyLB6nLKpo4sNQYbvQzNkG8kjjE-GZngX72UnNi5Eam8olgMMneqYFodCy7LUHHR1rXkH6DpXtMpdd
+    sandbox: true
+    cancelUrl:
+    returnUrl:
+---
+PRODUCT_HOME: PRODUCT_HOME
+PRODUCT_ITEM: PRODUCT_ITEM
+ITEM_EXPIRE: 604800
+RECOMEED_PANEL_ID: 6
+RECOMEED_PANEL: RECOMEED_PANEL
+THANK_PANEL_ID: 4
+THANK_PANEL: THANK_PANEL
+
+
+EMAIL_HOST: smtp.qq.com
+EMAIL_USERNAME: dongjiejie@qq.com
+EMAIL_PASSWORD: dongjiejie
+EMAIL_SENDER: dongjiejie
+
+BASE_ID: 1

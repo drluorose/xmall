@@ -2,8 +2,8 @@ package cn.exrick.manager.dto.front.req;
 
 import cn.exrick.common.enums.PaymentEnum;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**

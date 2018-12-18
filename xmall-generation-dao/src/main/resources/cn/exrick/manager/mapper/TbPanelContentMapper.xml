@@ -89,6 +89,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -303,4 +311,97 @@
       updated = #{updated,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <insert id="insertBatch" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_panel_content
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].id!=null">
+        id,
+      </if>
+      <if test="list[0].panelId!=null">
+        panel_id,
+      </if>
+      <if test="list[0].type!=null">
+        type,
+      </if>
+      <if test="list[0].productId!=null">
+        product_id,
+      </if>
+      <if test="list[0].sortOrder!=null">
+        sort_order,
+      </if>
+      <if test="list[0].fullUrl!=null">
+        full_url,
+      </if>
+      <if test="list[0].picUrl!=null">
+        pic_url,
+      </if>
+      <if test="list[0].picUrl2!=null">
+        pic_url2,
+      </if>
+      <if test="list[0].picUrl3!=null">
+        pic_url3,
+      </if>
+      <if test="list[0].created!=null">
+        created,
+      </if>
+      <if test="list[0].updated!=null">
+        updated,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.id!=null">
+          #{item.id,jdbcType=INTEGER},
+        </if>
+        <if test="item.panelId!=null">
+          #{item.panelId,jdbcType=INTEGER},
+        </if>
+        <if test="item.type!=null">
+          #{item.type,jdbcType=INTEGER},
+        </if>
+        <if test="item.productId!=null">
+          #{item.productId,jdbcType=BIGINT},
+        </if>
+        <if test="item.sortOrder!=null">
+          #{item.sortOrder,jdbcType=INTEGER},
+        </if>
+        <if test="item.fullUrl!=null">
+          #{item.fullUrl,jdbcType=VARCHAR},
+        </if>
+        <if test="item.picUrl!=null">
+          #{item.picUrl,jdbcType=VARCHAR},
+        </if>
+        <if test="item.picUrl2!=null">
+          #{item.picUrl2,jdbcType=VARCHAR},
+        </if>
+        <if test="item.picUrl3!=null">
+          #{item.picUrl3,jdbcType=VARCHAR},
+        </if>
+        <if test="item.created!=null">
+          #{item.created,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.updated!=null">
+          #{item.updated,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TbPanelContentExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from tb_panel_content
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

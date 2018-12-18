@@ -96,13 +96,11 @@ public class DtoUtil {
 
         zTreeNode.setId(tbPanel.getId());
         zTreeNode.setIsParent(false);
-        zTreeNode.setpId(0);
         zTreeNode.setName(tbPanel.getName());
         zTreeNode.setSortOrder(tbPanel.getSortOrder());
         zTreeNode.setStatus(tbPanel.getStatus());
         zTreeNode.setRemark(tbPanel.getRemark());
         zTreeNode.setLimitNum(tbPanel.getLimitNum());
-        zTreeNode.setType(tbPanel.getType());
 
         return zTreeNode;
     }
@@ -115,7 +113,6 @@ public class DtoUtil {
         zTreeNode.setStatus(tbItemCat.getStatus());
         zTreeNode.setSortOrder(tbItemCat.getSortOrder());
         zTreeNode.setName(tbItemCat.getName());
-        zTreeNode.setpId(Math.toIntExact(tbItemCat.getParentId()));
         zTreeNode.setIsParent(tbItemCat.getIsParent());
         zTreeNode.setRemark(tbItemCat.getRemark());
 

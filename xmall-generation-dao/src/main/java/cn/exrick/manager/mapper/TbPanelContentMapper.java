@@ -16,6 +16,8 @@ public interface TbPanelContentMapper {
 
     int insertSelective(TbPanelContent record);
 
+    TbPanelContent selectOneByExample(TbPanelContentExample example);
+
     List<TbPanelContent> selectByExample(TbPanelContentExample example);
 
     TbPanelContent selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbPanelContentMapper {
     int updateByPrimaryKeySelective(TbPanelContent record);
 
     int updateByPrimaryKey(TbPanelContent record);
+
+    int insertBatch(List<TbPanelContent> records);
 }

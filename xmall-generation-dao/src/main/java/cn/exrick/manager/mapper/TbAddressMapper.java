@@ -16,6 +16,8 @@ public interface TbAddressMapper {
 
     int insertSelective(TbAddress record);
 
+    TbAddress selectOneByExample(TbAddressExample example);
+
     List<TbAddress> selectByExample(TbAddressExample example);
 
     TbAddress selectByPrimaryKey(Long addressId);
@@ -27,4 +29,6 @@ public interface TbAddressMapper {
     int updateByPrimaryKeySelective(TbAddress record);
 
     int updateByPrimaryKey(TbAddress record);
+
+    int insertBatch(List<TbAddress> records);
 }

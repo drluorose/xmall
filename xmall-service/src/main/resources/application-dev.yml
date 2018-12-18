@@ -13,13 +13,19 @@ spring:
           enabled: true
         encoding:
           enabled: true
-  dubbo:
-    server: true
-    application: xmall-search
-    protocol:
-      name: dubbo
-      port: 20880
-    registry: zookeeper://192.168.31.234:2181
+dubbo:
+  application:
+    id: xmallService
+    name: xmallService
+  registry:
+    address: zookeeper://192.168.31.234:2181
+    protocol: zookeeper
+  protocol:
+    name: dubbo
+    port: 20880
+  provider:
+    version: 1.0.1
+    group: xmall
 es:
   host: es-cn-v0h0vok2w000viwfj.public.elasticsearch.aliyuncs.com
   port: 9200

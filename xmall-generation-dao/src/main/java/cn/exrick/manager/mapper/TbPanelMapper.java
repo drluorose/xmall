@@ -16,6 +16,8 @@ public interface TbPanelMapper {
 
     int insertSelective(TbPanel record);
 
+    TbPanel selectOneByExample(TbPanelExample example);
+
     List<TbPanel> selectByExample(TbPanelExample example);
 
     TbPanel selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbPanelMapper {
     int updateByPrimaryKeySelective(TbPanel record);
 
     int updateByPrimaryKey(TbPanel record);
+
+    int insertBatch(List<TbPanel> records);
 }

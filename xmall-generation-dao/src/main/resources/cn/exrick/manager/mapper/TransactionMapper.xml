@@ -123,6 +123,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -295,4 +303,79 @@
       payment_des = #{paymentDes,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <insert id="insertBatch" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_transaction
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].id!=null">
+        id,
+      </if>
+      <if test="list[0].orderId!=null">
+        order_id,
+      </if>
+      <if test="list[0].tid!=null">
+        tid,
+      </if>
+      <if test="list[0].tidNum!=null">
+        tid_num,
+      </if>
+      <if test="list[0].total!=null">
+        total,
+      </if>
+      <if test="list[0].currency!=null">
+        currency,
+      </if>
+      <if test="list[0].payment!=null">
+        payment,
+      </if>
+      <if test="list[0].paymentDes!=null">
+        payment_des,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.id!=null">
+          #{item.id,jdbcType=BIGINT},
+        </if>
+        <if test="item.orderId!=null">
+          #{item.orderId,jdbcType=VARCHAR},
+        </if>
+        <if test="item.tid!=null">
+          #{item.tid,jdbcType=VARCHAR},
+        </if>
+        <if test="item.tidNum!=null">
+          #{item.tidNum,jdbcType=VARCHAR},
+        </if>
+        <if test="item.total!=null">
+          #{item.total,jdbcType=DECIMAL},
+        </if>
+        <if test="item.currency!=null">
+          #{item.currency,jdbcType=VARCHAR},
+        </if>
+        <if test="item.payment!=null">
+          #{item.payment,jdbcType=TINYINT},
+        </if>
+        <if test="item.paymentDes!=null">
+          #{item.paymentDes,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TransactionExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from tb_transaction
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

@@ -102,6 +102,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
@@ -231,4 +239,57 @@
       updated = #{updated,jdbcType=TIMESTAMP}
     where item_id = #{itemId,jdbcType=BIGINT}
   </update>
+  <insert id="insertBatch" keyProperty="itemId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_item_desc
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].itemId!=null">
+        item_id,
+      </if>
+      <if test="list[0].created!=null">
+        created,
+      </if>
+      <if test="list[0].updated!=null">
+        updated,
+      </if>
+      <if test="list[0].itemDesc!=null">
+        item_desc,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.itemId!=null">
+          #{item.itemId,jdbcType=BIGINT},
+        </if>
+        <if test="item.created!=null">
+          #{item.created,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.updated!=null">
+          #{item.updated,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.itemDesc!=null">
+          #{item.itemDesc,jdbcType=LONGVARCHAR},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TbItemDescExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_item_desc
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

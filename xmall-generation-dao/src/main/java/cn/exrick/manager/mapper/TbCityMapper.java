@@ -16,6 +16,8 @@ public interface TbCityMapper {
 
     int insertSelective(TbCity record);
 
+    TbCity selectOneByExample(TbCityExample example);
+
     List<TbCity> selectByExample(TbCityExample example);
 
     TbCity selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbCityMapper {
     int updateByPrimaryKeySelective(TbCity record);
 
     int updateByPrimaryKey(TbCity record);
+
+    int insertBatch(List<TbCity> records);
 }

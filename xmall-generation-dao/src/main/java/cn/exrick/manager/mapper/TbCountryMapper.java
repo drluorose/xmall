@@ -16,7 +16,11 @@ public interface TbCountryMapper {
 
     int insertSelective(TbCountry record);
 
+    TbCountry selectOneByExample(TbCountryExample example);
+
     List<TbCountry> selectByExampleWithBLOBs(TbCountryExample example);
+
+    TbCountry selectOneByExample(TbCountryExample example);
 
     List<TbCountry> selectByExample(TbCountryExample example);
 
@@ -33,4 +37,6 @@ public interface TbCountryMapper {
     int updateByPrimaryKeyWithBLOBs(TbCountry record);
 
     int updateByPrimaryKey(TbCountry record);
+
+    int insertBatch(List<TbCountry> records);
 }

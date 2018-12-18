@@ -16,6 +16,8 @@ public interface TbExpressMapper {
 
     int insertSelective(TbExpress record);
 
+    TbExpress selectOneByExample(TbExpressExample example);
+
     List<TbExpress> selectByExample(TbExpressExample example);
 
     TbExpress selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbExpressMapper {
     int updateByPrimaryKeySelective(TbExpress record);
 
     int updateByPrimaryKey(TbExpress record);
+
+    int insertBatch(List<TbExpress> records);
 }

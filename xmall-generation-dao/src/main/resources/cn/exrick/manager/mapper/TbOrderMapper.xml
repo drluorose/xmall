@@ -135,6 +135,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -453,4 +461,139 @@
       buyer_comment = #{buyerComment,jdbcType=BIT}
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
+  <insert id="insertBatch" keyProperty="orderId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].orderId!=null">
+        order_id,
+      </if>
+      <if test="list[0].mid!=null">
+        mid,
+      </if>
+      <if test="list[0].payment!=null">
+        payment,
+      </if>
+      <if test="list[0].paymentType!=null">
+        payment_type,
+      </if>
+      <if test="list[0].postFee!=null">
+        post_fee,
+      </if>
+      <if test="list[0].status!=null">
+        status,
+      </if>
+      <if test="list[0].createTime!=null">
+        create_time,
+      </if>
+      <if test="list[0].updateTime!=null">
+        update_time,
+      </if>
+      <if test="list[0].paymentTime!=null">
+        payment_time,
+      </if>
+      <if test="list[0].consignTime!=null">
+        consign_time,
+      </if>
+      <if test="list[0].endTime!=null">
+        end_time,
+      </if>
+      <if test="list[0].closeTime!=null">
+        close_time,
+      </if>
+      <if test="list[0].shippingName!=null">
+        shipping_name,
+      </if>
+      <if test="list[0].shippingCode!=null">
+        shipping_code,
+      </if>
+      <if test="list[0].userId!=null">
+        user_id,
+      </if>
+      <if test="list[0].buyerMessage!=null">
+        buyer_message,
+      </if>
+      <if test="list[0].buyerNick!=null">
+        buyer_nick,
+      </if>
+      <if test="list[0].buyerComment!=null">
+        buyer_comment,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.orderId!=null">
+          #{item.orderId,jdbcType=VARCHAR},
+        </if>
+        <if test="item.mid!=null">
+          #{item.mid,jdbcType=VARCHAR},
+        </if>
+        <if test="item.payment!=null">
+          #{item.payment,jdbcType=DECIMAL},
+        </if>
+        <if test="item.paymentType!=null">
+          #{item.paymentType,jdbcType=INTEGER},
+        </if>
+        <if test="item.postFee!=null">
+          #{item.postFee,jdbcType=DECIMAL},
+        </if>
+        <if test="item.status!=null">
+          #{item.status,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime!=null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.updateTime!=null">
+          #{item.updateTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.paymentTime!=null">
+          #{item.paymentTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.consignTime!=null">
+          #{item.consignTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.endTime!=null">
+          #{item.endTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.closeTime!=null">
+          #{item.closeTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.shippingName!=null">
+          #{item.shippingName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.shippingCode!=null">
+          #{item.shippingCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.userId!=null">
+          #{item.userId,jdbcType=BIGINT},
+        </if>
+        <if test="item.buyerMessage!=null">
+          #{item.buyerMessage,jdbcType=VARCHAR},
+        </if>
+        <if test="item.buyerNick!=null">
+          #{item.buyerNick,jdbcType=VARCHAR},
+        </if>
+        <if test="item.buyerComment!=null">
+          #{item.buyerComment,jdbcType=BIT},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TbOrderExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from tb_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

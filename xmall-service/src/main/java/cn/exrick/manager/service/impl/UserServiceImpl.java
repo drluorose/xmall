@@ -1,44 +1,46 @@
 package cn.exrick.manager.service.impl;
 
+import cn.exrick.common.enums.EnableStatusEnum;
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.manager.dto.RoleDto;
 import cn.exrick.manager.dto.TbRoleDto;
 import cn.exrick.manager.dto.TbUserDto;
+import cn.exrick.manager.dto.manager.ManagerUserDto;
+import cn.exrick.manager.dto.manager.MenuDto;
+import cn.exrick.manager.mapper.MenuMapper;
+import cn.exrick.manager.mapper.RoleMenuMapper;
 import cn.exrick.manager.mapper.TbPermissionMapper;
 import cn.exrick.manager.mapper.TbRoleMapper;
 import cn.exrick.manager.mapper.TbRolePermMapper;
 import cn.exrick.manager.mapper.TbUserMapper;
 import cn.exrick.manager.mapper.ext.TbRoleExtMapper;
 import cn.exrick.manager.mapper.ext.TbUserExtMapper;
-import cn.exrick.manager.pojo.TbPermission;
-import cn.exrick.manager.pojo.TbPermissionExample;
-import cn.exrick.manager.pojo.TbRole;
-import cn.exrick.manager.pojo.TbRoleExample;
-import cn.exrick.manager.pojo.TbRolePerm;
-import cn.exrick.manager.pojo.TbRolePermExample;
-import cn.exrick.manager.pojo.TbUser;
-import cn.exrick.manager.pojo.TbUserExample;
+import cn.exrick.manager.pojo.*;
 import cn.exrick.manager.service.UserService;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.dubbo.config.support.Parameter;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Exrickx
  */
 @Slf4j
 @Component
-@Service(interfaceClass = UserService.class)
+@Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -59,23 +61,105 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private TbRolePermMapper tbRolePermMapper;
 
+    @Autowired
+    private MenuMapper menuMapper;
+
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
+
     @Override
-    public TbUser getUserByUsername(String username) {
+    public String getAuthSecret() {
+        return "LU2D7U74KG52GKDN";
+    }
+
+    @Override
+    public List<MenuDto> getUserMenu(long id) {
+        //这里默认id有效
+        TbUser tbUser = this.tbUserMapper.selectByPrimaryKey(id);
+        if (Objects.isNull(tbUser)) {
+            return Lists.newArrayList();
+        }
+        TbRole tbRole = this.tbRoleMapper.selectByPrimaryKey(tbUser.getRoleId());
+        if (Objects.isNull(tbRole)) {
+            return Lists.newArrayList();
+        }
+        return getMenuDtoByRoles(Lists.newArrayList(tbRole));
+    }
+
+    private List<MenuDto> getMenuDtoByRoles(List<TbRole> tbRoles) {
+        if (CollectionUtils.isEmpty(tbRoles)) {
+            return Lists.newArrayList();
+        }
+        List<Integer> roleIds = tbRoles.stream().map(TbRole::getId).collect(Collectors.toList());
+        RoleMenuExample roleMenuExample = new RoleMenuExample();
+        roleMenuExample.createCriteria()
+            .andRoleIdIn(roleIds)
+            .andValidEqualTo(EnableStatusEnum.ENABLED);
+        List<RoleMenu> roleMenus = roleMenuMapper.selectByExample(roleMenuExample);
+        if (CollectionUtils.isEmpty(roleMenus)) {
+            return Lists.newArrayList();
+        }
+        return getMenuDtoByRoleMenuCollection(roleMenus);
+    }
+
+    private List<MenuDto> getMenuDtoByRoleMenuCollection(List<RoleMenu> roleMenus) {
+        if (CollectionUtils.isEmpty(roleMenus)) {
+            return Lists.newArrayList();
+        }
+        List<Integer> menuIds = roleMenus.stream().map(RoleMenu::getMenuId).collect(Collectors.toList());
+
+        MenuExample menuExample = new MenuExample();
+        menuExample.createCriteria()
+            .andIdIn(menuIds)
+            .andPidIsNull()
+            .andValidEqualTo(EnableStatusEnum.ENABLED);
+        List<Menu> menus = menuMapper.selectByExample(menuExample);
+        if (CollectionUtils.isEmpty(menus)) {
+            return Lists.newArrayList();
+        }
+        List<MenuDto> menuDtos = Lists.newArrayListWithCapacity(menus.size());
+        for (Menu menu : menus) {
+            menuDtos.add(makeTopLevelMenu(menu, menuIds));
+        }
+        return menuDtos;
+    }
+
+    private MenuDto makeTopLevelMenu(Menu menu, List<Integer> menuIds) {
+        MenuDto menuDto = new MenuDto(menu);
+        List<Menu> children = getChildrenByParentMenu(menu, menuIds);
+        List<MenuDto> childrenMenuDto = children.stream().map(MenuDto::new).collect(Collectors.toList());
+        menuDto.setChildren(childrenMenuDto);
+        return menuDto;
+    }
+
+    private List<Menu> getChildrenByParentMenu(Menu menu, List<Integer> menuIds) {
+        MenuExample menuExample = new MenuExample();
+        menuExample.createCriteria()
+            .andIdIn(menuIds)
+            .andPidEqualTo(menu.getId())
+            .andValidEqualTo(EnableStatusEnum.ENABLED);
+        List<Menu> children = menuMapper.selectByExample(menuExample);
+        if (CollectionUtils.isEmpty(children)) {
+            return Lists.newArrayList();
+        }
+        return children;
+    }
+
+    @Override
+    public ManagerUserDto getUserByUsername(String username) {
 
         List<TbUser> list;
         TbUserExample example = new TbUserExample();
         TbUserExample.Criteria criteria = example.createCriteria();
         criteria.andUsernameEqualTo(username);
         criteria.andStateEqualTo(1);
-        try {
-            list = tbUserMapper.selectByExample(example);
-        } catch (Exception e) {
+
+        TbUser tbUser = tbUserMapper.selectOneByExample(example);
+        if (Objects.isNull(tbUser)) {
             throw new XmallException("通过ID获取用户信息失败");
         }
-        if (!list.isEmpty()) {
-            return list.get(0);
-        }
-        return null;
+        Set<String> permissions = tbUserExtMapper.getPermissions(tbUser.getUsername());
+        return new ManagerUserDto(tbUser, permissions);
     }
 
     @Override

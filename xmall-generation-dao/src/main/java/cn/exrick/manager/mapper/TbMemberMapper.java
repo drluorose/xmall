@@ -16,6 +16,8 @@ public interface TbMemberMapper {
 
     int insertSelective(TbMember record);
 
+    TbMember selectOneByExample(TbMemberExample example);
+
     List<TbMember> selectByExample(TbMemberExample example);
 
     TbMember selectByPrimaryKey(Long id);
@@ -27,4 +29,6 @@ public interface TbMemberMapper {
     int updateByPrimaryKeySelective(TbMember record);
 
     int updateByPrimaryKey(TbMember record);
+
+    int insertBatch(List<TbMember> records);
 }

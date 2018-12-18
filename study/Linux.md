@@ -177,3 +177,6 @@ firewall-cmd --zone= public --query-port=80/tcp
 删除
 firewall-cmd --zone= public --remove-port=80/tcp --permanent
 ~~~
+
+
+nohup /mnt/Nand3/H2000G >/dev/null 2>&1 &

@@ -10,6 +10,7 @@
     <result column="limit_num" jdbcType="INTEGER" property="limitNum" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="valid" jdbcType="INTEGER" property="valid" />
     <result column="created" jdbcType="TIMESTAMP" property="created" />
     <result column="updated" jdbcType="TIMESTAMP" property="updated" />
   </resultMap>
@@ -72,7 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, type, sort_order, position, limit_num, status, remark, created, updated
+    id, name, type, sort_order, position, limit_num, status, remark, valid, created, 
+    updated
   </sql>
   <select id="selectByExample" parameterType="cn.exrick.manager.pojo.TbPanelExample" resultMap="BaseResultMap">
     select
@@ -86,6 +88,14 @@
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -107,12 +117,12 @@
   <insert id="insert" parameterType="cn.exrick.manager.pojo.TbPanel">
     insert into tb_panel (id, name, type, 
       sort_order, position, limit_num, 
-      status, remark, created, 
-      updated)
+      status, remark, valid, 
+      created, updated)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
       #{sortOrder,jdbcType=INTEGER}, #{position,jdbcType=INTEGER}, #{limitNum,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, 
-      #{updated,jdbcType=TIMESTAMP})
+      #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{valid,jdbcType=INTEGER}, 
+      #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="cn.exrick.manager.pojo.TbPanel">
     insert into tb_panel
@@ -140,6 +150,9 @@
       </if>
       <if test="remark != null">
         remark,
+      </if>
+      <if test="valid != null">
+        valid,
       </if>
       <if test="created != null">
         created,
@@ -172,6 +185,9 @@
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=INTEGER},
       </if>
       <if test="created != null">
         #{created,jdbcType=TIMESTAMP},
@@ -214,6 +230,9 @@
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
+      <if test="record.valid != null">
+        valid = #{record.valid,jdbcType=INTEGER},
+      </if>
       <if test="record.created != null">
         created = #{record.created,jdbcType=TIMESTAMP},
       </if>
@@ -235,6 +254,7 @@
       limit_num = #{record.limitNum,jdbcType=INTEGER},
       status = #{record.status,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
+      valid = #{record.valid,jdbcType=INTEGER},
       created = #{record.created,jdbcType=TIMESTAMP},
       updated = #{record.updated,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -265,6 +285,9 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=INTEGER},
+      </if>
       <if test="created != null">
         created = #{created,jdbcType=TIMESTAMP},
       </if>
@@ -283,8 +306,102 @@
       limit_num = #{limitNum,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
+      valid = #{valid,jdbcType=INTEGER},
       created = #{created,jdbcType=TIMESTAMP},
       updated = #{updated,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <insert id="insertBatch" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_panel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].id!=null">
+        id,
+      </if>
+      <if test="list[0].name!=null">
+        name,
+      </if>
+      <if test="list[0].type!=null">
+        type,
+      </if>
+      <if test="list[0].sortOrder!=null">
+        sort_order,
+      </if>
+      <if test="list[0].position!=null">
+        position,
+      </if>
+      <if test="list[0].limitNum!=null">
+        limit_num,
+      </if>
+      <if test="list[0].status!=null">
+        status,
+      </if>
+      <if test="list[0].remark!=null">
+        remark,
+      </if>
+      <if test="list[0].valid!=null">
+        valid,
+      </if>
+      <if test="list[0].created!=null">
+        created,
+      </if>
+      <if test="list[0].updated!=null">
+        updated,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.id!=null">
+          #{item.id,jdbcType=INTEGER},
+        </if>
+        <if test="item.name!=null">
+          #{item.name,jdbcType=VARCHAR},
+        </if>
+        <if test="item.type!=null">
+          #{item.type,jdbcType=INTEGER},
+        </if>
+        <if test="item.sortOrder!=null">
+          #{item.sortOrder,jdbcType=INTEGER},
+        </if>
+        <if test="item.position!=null">
+          #{item.position,jdbcType=INTEGER},
+        </if>
+        <if test="item.limitNum!=null">
+          #{item.limitNum,jdbcType=INTEGER},
+        </if>
+        <if test="item.status!=null">
+          #{item.status,jdbcType=INTEGER},
+        </if>
+        <if test="item.remark!=null">
+          #{item.remark,jdbcType=VARCHAR},
+        </if>
+        <if test="item.valid!=null">
+          #{item.valid,jdbcType=INTEGER},
+        </if>
+        <if test="item.created!=null">
+          #{item.created,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.updated!=null">
+          #{item.updated,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TbPanelExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from tb_panel
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

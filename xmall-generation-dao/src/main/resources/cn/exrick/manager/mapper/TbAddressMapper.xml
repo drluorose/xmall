@@ -85,6 +85,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -255,4 +263,79 @@
       is_default = #{isDefault,jdbcType=BIT}
     where address_id = #{addressId,jdbcType=BIGINT}
   </update>
+  <insert id="insertBatch" keyProperty="addressId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].addressId!=null">
+        address_id,
+      </if>
+      <if test="list[0].userId!=null">
+        user_id,
+      </if>
+      <if test="list[0].mid!=null">
+        mid,
+      </if>
+      <if test="list[0].cityId!=null">
+        city_id,
+      </if>
+      <if test="list[0].userName!=null">
+        user_name,
+      </if>
+      <if test="list[0].tel!=null">
+        tel,
+      </if>
+      <if test="list[0].streetName!=null">
+        street_name,
+      </if>
+      <if test="list[0].isDefault!=null">
+        is_default,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.addressId!=null">
+          #{item.addressId,jdbcType=BIGINT},
+        </if>
+        <if test="item.userId!=null">
+          #{item.userId,jdbcType=BIGINT},
+        </if>
+        <if test="item.mid!=null">
+          #{item.mid,jdbcType=VARCHAR},
+        </if>
+        <if test="item.cityId!=null">
+          #{item.cityId,jdbcType=INTEGER},
+        </if>
+        <if test="item.userName!=null">
+          #{item.userName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.tel!=null">
+          #{item.tel,jdbcType=VARCHAR},
+        </if>
+        <if test="item.streetName!=null">
+          #{item.streetName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.isDefault!=null">
+          #{item.isDefault,jdbcType=BIT},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TbAddressExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from tb_address
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

@@ -16,6 +16,8 @@ public interface TbOrderShippingMapper {
 
     int insertSelective(TbOrderShipping record);
 
+    TbOrderShipping selectOneByExample(TbOrderShippingExample example);
+
     List<TbOrderShipping> selectByExample(TbOrderShippingExample example);
 
     TbOrderShipping selectByPrimaryKey(String orderId);
@@ -27,4 +29,6 @@ public interface TbOrderShippingMapper {
     int updateByPrimaryKeySelective(TbOrderShipping record);
 
     int updateByPrimaryKey(TbOrderShipping record);
+
+    int insertBatch(List<TbOrderShipping> records);
 }

@@ -16,6 +16,8 @@ public interface TbOrderMapper {
 
     int insertSelective(TbOrder record);
 
+    TbOrder selectOneByExample(TbOrderExample example);
+
     List<TbOrder> selectByExample(TbOrderExample example);
 
     TbOrder selectByPrimaryKey(String orderId);
@@ -27,4 +29,6 @@ public interface TbOrderMapper {
     int updateByPrimaryKeySelective(TbOrder record);
 
     int updateByPrimaryKey(TbOrder record);
+
+    int insertBatch(List<TbOrder> records);
 }

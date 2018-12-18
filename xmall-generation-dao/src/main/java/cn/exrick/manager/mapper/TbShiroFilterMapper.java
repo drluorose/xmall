@@ -16,6 +16,8 @@ public interface TbShiroFilterMapper {
 
     int insertSelective(TbShiroFilter record);
 
+    TbShiroFilter selectOneByExample(TbShiroFilterExample example);
+
     List<TbShiroFilter> selectByExample(TbShiroFilterExample example);
 
     TbShiroFilter selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbShiroFilterMapper {
     int updateByPrimaryKeySelective(TbShiroFilter record);
 
     int updateByPrimaryKey(TbShiroFilter record);
+
+    int insertBatch(List<TbShiroFilter> records);
 }

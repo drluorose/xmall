@@ -16,6 +16,8 @@ public interface TbThanksMapper {
 
     int insertSelective(TbThanks record);
 
+    TbThanks selectOneByExample(TbThanksExample example);
+
     List<TbThanks> selectByExample(TbThanksExample example);
 
     TbThanks selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbThanksMapper {
     int updateByPrimaryKeySelective(TbThanks record);
 
     int updateByPrimaryKey(TbThanks record);
+
+    int insertBatch(List<TbThanks> records);
 }

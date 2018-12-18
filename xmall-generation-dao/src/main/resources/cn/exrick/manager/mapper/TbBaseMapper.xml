@@ -93,6 +93,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -367,4 +375,121 @@
       front_url = #{frontUrl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <insert id="insertBatch" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_base
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].id!=null">
+        id,
+      </if>
+      <if test="list[0].webName!=null">
+        web_name,
+      </if>
+      <if test="list[0].keyWord!=null">
+        key_word,
+      </if>
+      <if test="list[0].description!=null">
+        description,
+      </if>
+      <if test="list[0].sourcePath!=null">
+        source_path,
+      </if>
+      <if test="list[0].uploadPath!=null">
+        upload_path,
+      </if>
+      <if test="list[0].copyright!=null">
+        copyright,
+      </if>
+      <if test="list[0].countCode!=null">
+        count_code,
+      </if>
+      <if test="list[0].hasLogNotice!=null">
+        has_log_notice,
+      </if>
+      <if test="list[0].logNotice!=null">
+        log_notice,
+      </if>
+      <if test="list[0].hasAllNotice!=null">
+        has_all_notice,
+      </if>
+      <if test="list[0].allNotice!=null">
+        all_notice,
+      </if>
+      <if test="list[0].notice!=null">
+        notice,
+      </if>
+      <if test="list[0].updateLog!=null">
+        update_log,
+      </if>
+      <if test="list[0].frontUrl!=null">
+        front_url,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.id!=null">
+          #{item.id,jdbcType=INTEGER},
+        </if>
+        <if test="item.webName!=null">
+          #{item.webName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.keyWord!=null">
+          #{item.keyWord,jdbcType=VARCHAR},
+        </if>
+        <if test="item.description!=null">
+          #{item.description,jdbcType=VARCHAR},
+        </if>
+        <if test="item.sourcePath!=null">
+          #{item.sourcePath,jdbcType=VARCHAR},
+        </if>
+        <if test="item.uploadPath!=null">
+          #{item.uploadPath,jdbcType=VARCHAR},
+        </if>
+        <if test="item.copyright!=null">
+          #{item.copyright,jdbcType=VARCHAR},
+        </if>
+        <if test="item.countCode!=null">
+          #{item.countCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.hasLogNotice!=null">
+          #{item.hasLogNotice,jdbcType=INTEGER},
+        </if>
+        <if test="item.logNotice!=null">
+          #{item.logNotice,jdbcType=VARCHAR},
+        </if>
+        <if test="item.hasAllNotice!=null">
+          #{item.hasAllNotice,jdbcType=INTEGER},
+        </if>
+        <if test="item.allNotice!=null">
+          #{item.allNotice,jdbcType=VARCHAR},
+        </if>
+        <if test="item.notice!=null">
+          #{item.notice,jdbcType=VARCHAR},
+        </if>
+        <if test="item.updateLog!=null">
+          #{item.updateLog,jdbcType=VARCHAR},
+        </if>
+        <if test="item.frontUrl!=null">
+          #{item.frontUrl,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TbBaseExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from tb_base
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

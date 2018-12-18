@@ -16,6 +16,8 @@ public interface TbUserMapper {
 
     int insertSelective(TbUser record);
 
+    TbUser selectOneByExample(TbUserExample example);
+
     List<TbUser> selectByExample(TbUserExample example);
 
     TbUser selectByPrimaryKey(Long id);
@@ -27,4 +29,6 @@ public interface TbUserMapper {
     int updateByPrimaryKeySelective(TbUser record);
 
     int updateByPrimaryKey(TbUser record);
+
+    int insertBatch(List<TbUser> records);
 }

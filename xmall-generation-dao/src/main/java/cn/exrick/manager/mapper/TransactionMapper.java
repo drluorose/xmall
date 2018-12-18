@@ -16,6 +16,8 @@ public interface TransactionMapper {
 
     int insertSelective(Transaction record);
 
+    Transaction selectOneByExample(TransactionExample example);
+
     List<Transaction> selectByExample(TransactionExample example);
 
     Transaction selectByPrimaryKey(Long id);
@@ -27,4 +29,6 @@ public interface TransactionMapper {
     int updateByPrimaryKeySelective(Transaction record);
 
     int updateByPrimaryKey(Transaction record);
+
+    int insertBatch(List<Transaction> records);
 }

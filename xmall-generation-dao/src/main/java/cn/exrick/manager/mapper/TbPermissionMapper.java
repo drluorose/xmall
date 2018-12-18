@@ -16,6 +16,8 @@ public interface TbPermissionMapper {
 
     int insertSelective(TbPermission record);
 
+    TbPermission selectOneByExample(TbPermissionExample example);
+
     List<TbPermission> selectByExample(TbPermissionExample example);
 
     TbPermission selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbPermissionMapper {
     int updateByPrimaryKeySelective(TbPermission record);
 
     int updateByPrimaryKey(TbPermission record);
+
+    int insertBatch(List<TbPermission> records);
 }

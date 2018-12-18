@@ -1,0 +1,25 @@
+dubbo:
+  application:
+    id: xmallConsumer
+    name: xmallConsumer
+  registry:
+    address: zookeeper://192.168.31.234:2181
+    protocol: zookeeper
+  protocol:
+    name: dubbo
+    port: 20880
+  consumer:
+    version: 1.0.1
+    group: xmall
+redis:
+  host: 192.168.31.234
+  port: 6379
+aliyun:
+  oss:
+    accessKeyId: LTAIcklXsm0lpGak
+    accessKeySecret: XsFwUNziSWH1tqnER5j7fAXK3WZbkf
+    imgBuckName: xmall-img
+    imgBuckOrigin: https://xmall-img.oss-cn-beijing.aliyuncs.com/
+    endPoint: oss-cn-beijing.aliyuncs.com
+mall:
+  corsDomainPattern: ^(http|https)://.*$

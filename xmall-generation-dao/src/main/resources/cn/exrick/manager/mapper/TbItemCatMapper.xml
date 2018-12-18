@@ -87,6 +87,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -287,4 +295,91 @@
       updated = #{updated,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <insert id="insertBatch" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_item_cat
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].id!=null">
+        id,
+      </if>
+      <if test="list[0].parentId!=null">
+        parent_id,
+      </if>
+      <if test="list[0].name!=null">
+        name,
+      </if>
+      <if test="list[0].status!=null">
+        status,
+      </if>
+      <if test="list[0].sortOrder!=null">
+        sort_order,
+      </if>
+      <if test="list[0].isParent!=null">
+        is_parent,
+      </if>
+      <if test="list[0].icon!=null">
+        icon,
+      </if>
+      <if test="list[0].remark!=null">
+        remark,
+      </if>
+      <if test="list[0].created!=null">
+        created,
+      </if>
+      <if test="list[0].updated!=null">
+        updated,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.id!=null">
+          #{item.id,jdbcType=BIGINT},
+        </if>
+        <if test="item.parentId!=null">
+          #{item.parentId,jdbcType=BIGINT},
+        </if>
+        <if test="item.name!=null">
+          #{item.name,jdbcType=VARCHAR},
+        </if>
+        <if test="item.status!=null">
+          #{item.status,jdbcType=INTEGER},
+        </if>
+        <if test="item.sortOrder!=null">
+          #{item.sortOrder,jdbcType=INTEGER},
+        </if>
+        <if test="item.isParent!=null">
+          #{item.isParent,jdbcType=BIT},
+        </if>
+        <if test="item.icon!=null">
+          #{item.icon,jdbcType=VARCHAR},
+        </if>
+        <if test="item.remark!=null">
+          #{item.remark,jdbcType=VARCHAR},
+        </if>
+        <if test="item.created!=null">
+          #{item.created,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.updated!=null">
+          #{item.updated,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TbItemCatExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from tb_item_cat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

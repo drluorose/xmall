@@ -1,6 +1,6 @@
 package cn.exrick.content.service;
 
-import cn.exrick.common.pojo.ZTreeNode;
+import cn.exrick.common.enums.IndexTypeEnum;
 import cn.exrick.manager.pojo.TbPanel;
 
 import java.util.List;
@@ -19,11 +19,9 @@ public interface PanelService {
 
     /**
      * 获取板块类目
-     * @param position
-     * @param showAll
      * @return
      */
-    List<ZTreeNode> getPanelList(int position, boolean showAll);
+    List<TbPanel> getPanelList(IndexTypeEnum indexTypeEnum);
 
     /**
      * 添加板块

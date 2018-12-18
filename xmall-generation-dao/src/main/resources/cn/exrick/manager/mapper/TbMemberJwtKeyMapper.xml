@@ -121,6 +121,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -263,4 +271,67 @@
       status = #{status,jdbcType=TINYINT,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <insert id="insertBatch" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_member_jwt_key
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].id!=null">
+        id,
+      </if>
+      <if test="list[0].mid!=null">
+        mid,
+      </if>
+      <if test="list[0].jwtAlgorithmName!=null">
+        jwt_algorithm_name,
+      </if>
+      <if test="list[0].privateKey!=null">
+        private_key,
+      </if>
+      <if test="list[0].publicKey!=null">
+        public_key,
+      </if>
+      <if test="list[0].status!=null">
+        status,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.id!=null">
+          #{item.id,jdbcType=VARCHAR},
+        </if>
+        <if test="item.mid!=null">
+          #{item.mid,jdbcType=VARCHAR},
+        </if>
+        <if test="item.jwtAlgorithmName!=null">
+          #{item.jwtAlgorithmName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.privateKey!=null">
+          #{item.privateKey,jdbcType=VARCHAR},
+        </if>
+        <if test="item.publicKey!=null">
+          #{item.publicKey,jdbcType=VARCHAR},
+        </if>
+        <if test="item.status!=null">
+          #{item.status,jdbcType=TINYINT},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TbMemberJwtKeyExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from tb_member_jwt_key
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

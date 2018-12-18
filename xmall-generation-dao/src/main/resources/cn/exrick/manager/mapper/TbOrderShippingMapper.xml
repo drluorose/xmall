@@ -89,6 +89,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -303,4 +311,97 @@
       updated = #{updated,jdbcType=TIMESTAMP}
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
+  <insert id="insertBatch" keyProperty="orderId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_order_shipping
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].orderId!=null">
+        order_id,
+      </if>
+      <if test="list[0].receiverName!=null">
+        receiver_name,
+      </if>
+      <if test="list[0].receiverPhone!=null">
+        receiver_phone,
+      </if>
+      <if test="list[0].receiverMobile!=null">
+        receiver_mobile,
+      </if>
+      <if test="list[0].receiverState!=null">
+        receiver_state,
+      </if>
+      <if test="list[0].receiverCity!=null">
+        receiver_city,
+      </if>
+      <if test="list[0].receiverDistrict!=null">
+        receiver_district,
+      </if>
+      <if test="list[0].receiverAddress!=null">
+        receiver_address,
+      </if>
+      <if test="list[0].receiverZip!=null">
+        receiver_zip,
+      </if>
+      <if test="list[0].created!=null">
+        created,
+      </if>
+      <if test="list[0].updated!=null">
+        updated,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.orderId!=null">
+          #{item.orderId,jdbcType=VARCHAR},
+        </if>
+        <if test="item.receiverName!=null">
+          #{item.receiverName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.receiverPhone!=null">
+          #{item.receiverPhone,jdbcType=VARCHAR},
+        </if>
+        <if test="item.receiverMobile!=null">
+          #{item.receiverMobile,jdbcType=VARCHAR},
+        </if>
+        <if test="item.receiverState!=null">
+          #{item.receiverState,jdbcType=VARCHAR},
+        </if>
+        <if test="item.receiverCity!=null">
+          #{item.receiverCity,jdbcType=VARCHAR},
+        </if>
+        <if test="item.receiverDistrict!=null">
+          #{item.receiverDistrict,jdbcType=VARCHAR},
+        </if>
+        <if test="item.receiverAddress!=null">
+          #{item.receiverAddress,jdbcType=VARCHAR},
+        </if>
+        <if test="item.receiverZip!=null">
+          #{item.receiverZip,jdbcType=VARCHAR},
+        </if>
+        <if test="item.created!=null">
+          #{item.created,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.updated!=null">
+          #{item.updated,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TbOrderShippingExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from tb_order_shipping
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

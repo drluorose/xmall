@@ -16,6 +16,8 @@ public interface TbBaseMapper {
 
     int insertSelective(TbBase record);
 
+    TbBase selectOneByExample(TbBaseExample example);
+
     List<TbBase> selectByExample(TbBaseExample example);
 
     TbBase selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbBaseMapper {
     int updateByPrimaryKeySelective(TbBase record);
 
     int updateByPrimaryKey(TbBase record);
+
+    int insertBatch(List<TbBase> records);
 }

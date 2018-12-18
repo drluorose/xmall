@@ -22,6 +22,8 @@ public class TbPanel implements Serializable {
 
     private String remark;
 
+    private Integer valid;
+
     private Date created;
 
     private Date updated;

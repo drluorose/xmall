@@ -16,6 +16,8 @@ public interface TransactionPaypalMapper {
 
     int insertSelective(TransactionPaypal record);
 
+    TransactionPaypal selectOneByExample(TransactionPaypalExample example);
+
     List<TransactionPaypal> selectByExample(TransactionPaypalExample example);
 
     TransactionPaypal selectByPrimaryKey(Long id);
@@ -27,4 +29,6 @@ public interface TransactionPaypalMapper {
     int updateByPrimaryKeySelective(TransactionPaypal record);
 
     int updateByPrimaryKey(TransactionPaypal record);
+
+    int insertBatch(List<TransactionPaypal> records);
 }

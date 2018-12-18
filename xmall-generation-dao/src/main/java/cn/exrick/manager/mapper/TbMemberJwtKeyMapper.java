@@ -16,6 +16,8 @@ public interface TbMemberJwtKeyMapper {
 
     int insertSelective(TbMemberJwtKey record);
 
+    TbMemberJwtKey selectOneByExample(TbMemberJwtKeyExample example);
+
     List<TbMemberJwtKey> selectByExample(TbMemberJwtKeyExample example);
 
     TbMemberJwtKey selectByPrimaryKey(String id);
@@ -27,4 +29,6 @@ public interface TbMemberJwtKeyMapper {
     int updateByPrimaryKeySelective(TbMemberJwtKey record);
 
     int updateByPrimaryKey(TbMemberJwtKey record);
+
+    int insertBatch(List<TbMemberJwtKey> records);
 }

@@ -44,7 +44,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-@Service(interfaceClass = ContentService.class)
+@Service
 public class ContentServiceImpl implements ContentService {
 
     @Autowired
@@ -114,7 +114,7 @@ public class ContentServiceImpl implements ContentService {
             result.setData(list);
             return result;
         }
-        List<TbPanelContentDto> contents = Lists.transform(list, TbPanelContentDto::new);
+        List<TbPanelContentDto> contents = Lists.newArrayList(Lists.transform(list, TbPanelContentDto::new));
         for (TbPanelContentDto content : contents) {
             if (content.getProductId() != null) {
                 TbItem tbItem = tbItemMapper.selectByPrimaryKey(content.getProductId());
@@ -124,7 +124,7 @@ public class ContentServiceImpl implements ContentService {
             }
         }
 
-        result.setData(list);
+        result.setData(contents);
         return result;
     }
 

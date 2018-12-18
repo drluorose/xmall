@@ -16,6 +16,8 @@ public interface TbDictMapper {
 
     int insertSelective(TbDict record);
 
+    TbDict selectOneByExample(TbDictExample example);
+
     List<TbDict> selectByExample(TbDictExample example);
 
     TbDict selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbDictMapper {
     int updateByPrimaryKeySelective(TbDict record);
 
     int updateByPrimaryKey(TbDict record);
+
+    int insertBatch(List<TbDict> records);
 }

@@ -88,6 +88,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -302,4 +310,97 @@
       create_date = #{createDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <insert id="insertBatch" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into tb_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].id!=null">
+        id,
+      </if>
+      <if test="list[0].name!=null">
+        name,
+      </if>
+      <if test="list[0].type!=null">
+        type,
+      </if>
+      <if test="list[0].url!=null">
+        url,
+      </if>
+      <if test="list[0].requestType!=null">
+        request_type,
+      </if>
+      <if test="list[0].requestParam!=null">
+        request_param,
+      </if>
+      <if test="list[0].user!=null">
+        user,
+      </if>
+      <if test="list[0].ip!=null">
+        ip,
+      </if>
+      <if test="list[0].ipInfo!=null">
+        ip_info,
+      </if>
+      <if test="list[0].time!=null">
+        time,
+      </if>
+      <if test="list[0].createDate!=null">
+        create_date,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.id!=null">
+          #{item.id,jdbcType=INTEGER},
+        </if>
+        <if test="item.name!=null">
+          #{item.name,jdbcType=VARCHAR},
+        </if>
+        <if test="item.type!=null">
+          #{item.type,jdbcType=INTEGER},
+        </if>
+        <if test="item.url!=null">
+          #{item.url,jdbcType=VARCHAR},
+        </if>
+        <if test="item.requestType!=null">
+          #{item.requestType,jdbcType=VARCHAR},
+        </if>
+        <if test="item.requestParam!=null">
+          #{item.requestParam,jdbcType=VARCHAR},
+        </if>
+        <if test="item.user!=null">
+          #{item.user,jdbcType=VARCHAR},
+        </if>
+        <if test="item.ip!=null">
+          #{item.ip,jdbcType=VARCHAR},
+        </if>
+        <if test="item.ipInfo!=null">
+          #{item.ipInfo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.time!=null">
+          #{item.time,jdbcType=INTEGER},
+        </if>
+        <if test="item.createDate!=null">
+          #{item.createDate,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="cn.exrick.manager.pojo.TbLogExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from tb_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

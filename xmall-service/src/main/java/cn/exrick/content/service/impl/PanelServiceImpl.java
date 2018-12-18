@@ -1,29 +1,31 @@
 package cn.exrick.content.service.impl;
 
+import cn.exrick.common.enums.IndexTypeEnum;
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.jedis.JedisClient;
-import cn.exrick.common.pojo.ZTreeNode;
 import cn.exrick.content.service.PanelService;
-import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.mapper.TbPanelMapper;
 import cn.exrick.manager.pojo.TbPanel;
 import cn.exrick.manager.pojo.TbPanelExample;
+import cn.exrick.manager.pojo.TbPanelExample.Criteria;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Exrickx
  */
 @Slf4j
 @Component
-@Service(interfaceClass = PanelService.class)
+@Service
 public class PanelServiceImpl implements PanelService {
 
     @Autowired
@@ -46,31 +48,21 @@ public class PanelServiceImpl implements PanelService {
     }
 
     @Override
-    public List<ZTreeNode> getPanelList(int position, boolean showAll) {
+    public List<TbPanel> getPanelList(IndexTypeEnum indexTypeEnum) {
 
         TbPanelExample example = new TbPanelExample();
-        TbPanelExample.Criteria criteria = example.createCriteria();
-        if (position == 0 && !showAll) {
-            //除去非轮播
-            criteria.andTypeNotEqualTo(0);
-        } else if (position == -1) {
-            //仅含轮播
-            position = 0;
+        Criteria criteria = example.createCriteria().andStatusEqualTo(1);
+        if (indexTypeEnum == IndexTypeEnum.BANNER) {
             criteria.andTypeEqualTo(0);
+        } else if (indexTypeEnum == IndexTypeEnum.OTHER) {
+            criteria.andTypeNotEqualTo(0);
         }
-        //首页板块
-        criteria.andPositionEqualTo(position);
         example.setOrderByClause("sort_order");
         List<TbPanel> panelList = tbPanelMapper.selectByExample(example);
-
-        List<ZTreeNode> list = new ArrayList<>();
-
-        for (TbPanel tbPanel : panelList) {
-            ZTreeNode zTreeNode = DtoUtil.TbPanel2ZTreeNode(tbPanel);
-            list.add(zTreeNode);
+        if (CollectionUtils.isEmpty(panelList)) {
+            panelList = Lists.newArrayList();
         }
-
-        return list;
+        return panelList;
     }
 
     @Override
@@ -101,9 +93,12 @@ public class PanelServiceImpl implements PanelService {
     public int updatePanel(TbPanel tbPanel) {
 
         TbPanel old = getTbPanelById(tbPanel.getId());
+        if (Objects.isNull(old)) {
+            return 0;
+        }
         tbPanel.setUpdated(new Date());
 
-        if (tbPanelMapper.updateByPrimaryKey(tbPanel) != 1) {
+        if (tbPanelMapper.updateByPrimaryKeySelective(tbPanel) != 1) {
             throw new XmallException("更新板块失败");
         }
         //同步缓存

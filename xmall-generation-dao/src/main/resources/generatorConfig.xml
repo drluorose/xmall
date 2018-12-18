@@ -5,9 +5,22 @@
 
 <generatorConfiguration>
     <context id="testTables" targetRuntime="MyBatis3">
-        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
-        <plugin type="org.mybatis.generator.plugins.LombokPlugin"/>
+
+        <!--serialize plugin-->
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <!--page plugin-->
+        <plugin type="org.mybatis.generator.plugins.MyLimitPlugin"/>
+        <!--lombok plugin-->
+        <plugin type="org.mybatis.generator.plugins.LombokPlugin"/>
+        <!--fix xml overwrite bug plugin-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+
+        <plugin type="org.mybatis.generator.plugins.MyBatchPlugin"/>
+
+        <plugin type="org.mybatis.generator.plugins.JsonIgnorePlugin"/>
+
+        <plugin type="org.mybatis.generator.plugins.SelectOneByExamplePlugin"/>
+
         <commentGenerator>
             <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
             <property name="suppressAllComments" value="true"/>
@@ -91,5 +104,17 @@
         <table schema="" tableName="tb_transaction_paypal_shipping_address"
                domainObjectName="TransactionPaypalShippingAddress">
         </table>
+
+        <table schema="" tableName="tb_menu" domainObjectName="Menu">
+            <columnOverride column="valid" javaType="cn.exrick.common.enums.EnableStatusEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler"/>
+        </table>
+
+        <table schema="" tableName="tb_role_menu" domainObjectName="RoleMenu">
+            <columnOverride column="valid" javaType="cn.exrick.common.enums.EnableStatusEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler"/>
+        </table>
+
+
     </context>
 </generatorConfiguration>

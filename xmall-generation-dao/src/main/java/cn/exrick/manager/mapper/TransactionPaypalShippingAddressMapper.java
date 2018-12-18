@@ -16,6 +16,8 @@ public interface TransactionPaypalShippingAddressMapper {
 
     int insertSelective(TransactionPaypalShippingAddress record);
 
+    TransactionPaypalShippingAddress selectOneByExample(TransactionPaypalShippingAddressExample example);
+
     List<TransactionPaypalShippingAddress> selectByExample(TransactionPaypalShippingAddressExample example);
 
     TransactionPaypalShippingAddress selectByPrimaryKey(Long id);
@@ -27,4 +29,6 @@ public interface TransactionPaypalShippingAddressMapper {
     int updateByPrimaryKeySelective(TransactionPaypalShippingAddress record);
 
     int updateByPrimaryKey(TransactionPaypalShippingAddress record);
+
+    int insertBatch(List<TransactionPaypalShippingAddress> records);
 }

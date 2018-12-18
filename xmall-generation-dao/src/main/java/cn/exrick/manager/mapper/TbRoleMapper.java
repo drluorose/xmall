@@ -16,6 +16,8 @@ public interface TbRoleMapper {
 
     int insertSelective(TbRole record);
 
+    TbRole selectOneByExample(TbRoleExample example);
+
     List<TbRole> selectByExample(TbRoleExample example);
 
     TbRole selectByPrimaryKey(Integer id);
@@ -27,4 +29,6 @@ public interface TbRoleMapper {
     int updateByPrimaryKeySelective(TbRole record);
 
     int updateByPrimaryKey(TbRole record);
+
+    int insertBatch(List<TbRole> records);
 }
