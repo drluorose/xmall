@@ -1,8 +1,11 @@
 package cn.exrick.manager.service.impl;
 
+import cn.exrick.common.enums.EnableStatusEnum;
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.common.pojo.DataTablesResult;
+import cn.exrick.common.pojo.PageResult;
+import cn.exrick.common.query.ItemSearchParam;
 import cn.exrick.common.utils.IDUtil;
 import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.dto.ItemDto;
@@ -13,14 +16,17 @@ import cn.exrick.manager.mapper.TbItemMapper;
 import cn.exrick.manager.mapper.ext.TbItemExtMapper;
 import cn.exrick.manager.pojo.TbItem;
 import cn.exrick.manager.pojo.TbItemCat;
+import cn.exrick.manager.pojo.TbItemCatExample;
 import cn.exrick.manager.pojo.TbItemDesc;
 import cn.exrick.manager.pojo.TbItemExample;
 import cn.exrick.manager.service.ItemService;
+import cn.exrick.manager.service.req.ItemSearchQuery;
 import cn.exrick.search.biz.ElasticSearchBiz;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -77,18 +83,37 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public DataTablesResult getItemList(int draw, int start, int length, int cid, String search,
-                                        String orderCol, String orderDir) {
-        DataTablesResult result = new DataTablesResult();
+    public PageResult<TbItem> getItemList(ItemSearchQuery itemSearchQuery) {
         //分页执行查询返回结果
-        PageHelper.startPage(start / length + 1, length);
-        List<TbItem> list = tbItemExtMapper.selectItemByCondition(cid, "%" + search + "%", orderCol, orderDir);
+        PageHelper.startPage(itemSearchQuery.getPageNo(), itemSearchQuery.getPageSize());
+        ItemSearchParam itemSearchParam = new ItemSearchParam();
+        itemSearchParam.setCid(itemSearchQuery.getCategory());
+        itemSearchParam.setId(itemSearchQuery.getId());
+        itemSearchParam.setName(itemSearchQuery.getName());
+        itemSearchParam.setSku(itemSearchQuery.getSku());
+
+        List<TbItem> list = tbItemExtMapper.selectItemByCondition(itemSearchParam);
         PageInfo<TbItem> pageInfo = new PageInfo<>(list);
-        result.setRecordsFiltered((int) pageInfo.getTotal());
-        result.setRecordsTotal(getAllItemCount().getRecordsTotal());
-        result.setDraw(draw);
+
+        PageResult<TbItem> result = new PageResult<>();
         result.setData(list);
+        result.setPageNo(pageInfo.getPageNum());
+        result.setPageSize(pageInfo.getSize());
+        result.setTotal(pageInfo.getTotal());
         return result;
+    }
+
+    private void getAllTbItemCat(List<TbItemCat> result, long pid) {
+        TbItemCatExample example = new TbItemCatExample();
+        example.createCriteria().andParentIdEqualTo(pid);
+        List<TbItemCat> pResult = tbItemCatMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(pResult)) {
+            return;
+        }
+        result.addAll(pResult);
+        for (TbItemCat tbItemCat : pResult) {
+            getAllTbItemCat(result, tbItemCat.getId());
+        }
     }
 
     @Override
@@ -120,7 +145,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public TbItem alertItemState(Long id, Integer state) {
         TbItem tbMember = getNormalItemById(id);
-        tbMember.setStatus(state);
+        tbMember.setStatus(EnableStatusEnum.numberOf(state));
         tbMember.setUpdated(new Date());
         if (tbItemMapper.updateByPrimaryKey(tbMember) != 1) {
             throw new XmallException("修改商品状态失败");
@@ -145,12 +170,9 @@ public class ItemServiceImpl implements ItemService {
         long id = IDUtil.getRandomId();
         TbItem tbItem = DtoUtil.ItemDto2TbItem(itemDto);
         tbItem.setId(id);
-        tbItem.setStatus(1);
+        tbItem.setStatus(EnableStatusEnum.ENABLED);
         tbItem.setCreated(new Date());
         tbItem.setUpdated(new Date());
-        if (tbItem.getImage().isEmpty()) {
-            tbItem.setImage("http://ow2h3ee9w.bkt.clouddn.com/nopic.jpg");
-        }
         if (tbItemMapper.insert(tbItem) != 1) {
             throw new XmallException("添加商品失败");
         }

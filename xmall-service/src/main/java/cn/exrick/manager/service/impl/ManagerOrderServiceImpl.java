@@ -3,7 +3,8 @@ package cn.exrick.manager.service.impl;
 import cn.exrick.common.enums.OrderStatusEnum;
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.jedis.JedisClient;
-import cn.exrick.common.pojo.DataTablesResult;
+import cn.exrick.common.pojo.PageResult;
+import cn.exrick.common.query.OrderSearchParam;
 import cn.exrick.manager.dto.OrderDetail;
 import cn.exrick.manager.mapper.TbOrderItemMapper;
 import cn.exrick.manager.mapper.TbOrderMapper;
@@ -17,7 +18,7 @@ import cn.exrick.manager.pojo.TbOrderItemExample;
 import cn.exrick.manager.pojo.TbOrderShipping;
 import cn.exrick.manager.pojo.TbThanks;
 import cn.exrick.manager.service.ManagerOrderService;
-import cn.exrick.util.EmailUtil;
+import cn.exrick.manager.service.req.OrderSearchQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -57,23 +58,22 @@ public class ManagerOrderServiceImpl implements ManagerOrderService {
     @Autowired
     private JedisClient jedisClient;
 
-    @Autowired
-    private EmailUtil emailUtil;
-
     @Override
-    public DataTablesResult getOrderList(int draw, int start, int length, String search, String orderCol, String orderDir) {
-
-        DataTablesResult result = new DataTablesResult();
+    public PageResult<TbOrder> getOrderList(OrderSearchQuery orderSearchQuery) {
+        OrderSearchParam orderSearchParam = new OrderSearchParam();
+        orderSearchParam.setMid(orderSearchQuery.getMid());
+        orderSearchParam.setOrderStartTime(orderSearchQuery.getOrderStartTime());
+        orderSearchParam.setOrderEndTime(orderSearchQuery.getOrderEndTime());
+        orderSearchParam.setStatus(orderSearchQuery.getStatus());
         //分页
-        PageHelper.startPage(start / length + 1, length);
-        List<TbOrder> list = tbOrderExtMapper.selectByMulti("%" + search + "%", orderCol, orderDir);
+        PageHelper.startPage(orderSearchQuery.getPageNo(), orderSearchQuery.getPageSize());
+        List<TbOrder> list = tbOrderExtMapper.selectByMulti(orderSearchParam);
         PageInfo<TbOrder> pageInfo = new PageInfo<>(list);
-
-        result.setRecordsFiltered((int) pageInfo.getTotal());
-        result.setRecordsTotal(Math.toIntExact(cancelOrder()));
-
-        result.setDraw(draw);
+        PageResult<TbOrder> result = new PageResult<>();
         result.setData(list);
+        result.setPageNo(pageInfo.getPageNum());
+        result.setPageSize(pageInfo.getSize());
+        result.setTotal(pageInfo.getTotal());
         return result;
     }
 
@@ -247,12 +247,6 @@ public class ManagerOrderServiceImpl implements ManagerOrderService {
                 return 0;
             }
         }
-        //发送通知邮箱
-        if (StringUtils.isNotBlank(tbThanks.getEmail()) && EmailUtil.checkEmail(tbThanks.getEmail())) {
-            String content = "您的订单已支付成功，十分感谢您的捐赠！<br>您可以在捐赠名单中查看到您的数据：" +
-                "<a href='http://xmall.exrick.cn/#/thanks'>http://xmall.exrick.cn/#/thanks</a><br>Powered By XPay. Exrick Present.";
-            emailUtil.sendEmailPayResult(tbThanks.getEmail(), "【XMall商城】支付捐赠成功通知", content);
-        }
         return 1;
     }
 
@@ -286,11 +280,6 @@ public class ManagerOrderServiceImpl implements ManagerOrderService {
                 return 0;
             }
         }
-        //发送通知邮箱
-        if (StringUtils.isNotBlank(tbThanks.getEmail()) && EmailUtil.checkEmail(tbThanks.getEmail())) {
-            String content = "抱歉，由于您支付不起或其他原因，您的订单支付失败，请尝试重新支付！<br>Powered By XPay. Exrick Present.";
-            emailUtil.sendEmailPayResult(tbThanks.getEmail(), "【XMall商城】支付失败通知", content);
-        }
         return 1;
     }
 
@@ -323,12 +312,6 @@ public class ManagerOrderServiceImpl implements ManagerOrderService {
             if (tbOrderMapper.updateByPrimaryKey(tbOrder) != 1) {
                 return 0;
             }
-        }
-        //发送通知邮箱
-        if (StringUtils.isNotBlank(tbThanks.getEmail()) && EmailUtil.checkEmail(tbThanks.getEmail())) {
-            String content = "您的订单已支付成功，十分感谢您的捐赠！<br>但由于您的支付金额过低或其他原因，将不会在捐赠名单中显示，敬请谅解！" +
-                "<br>Powered By XPay. Exrick Present.";
-            emailUtil.sendEmailPayResult(tbThanks.getEmail(), "【XMall商城】支付捐赠成功通知", content);
         }
         return 1;
     }
@@ -412,11 +395,6 @@ public class ManagerOrderServiceImpl implements ManagerOrderService {
             if (tbOrderMapper.updateByPrimaryKey(tbOrder) != 1) {
                 return 0;
             }
-        }
-        //发送通知邮箱
-        if (StringUtils.isNotBlank(tbThanks.getEmail()) && EmailUtil.checkEmail(tbThanks.getEmail())) {
-            String content = "抱歉，由于您支付不起或其他原因，您的订单支付失败，请尝试重新支付！<br>Powered By XPay. Exrick Present.";
-            emailUtil.sendEmailPayResult(tbThanks.getEmail(), "【XMall商城】支付失败通知", content);
         }
         return 1;
     }

@@ -35,7 +35,7 @@ public class PanelDto {
         this.sortOrder = tbPanel.getSortOrder();
         this.position = tbPanel.getPosition();
         this.limitNum = tbPanel.getLimitNum();
-        this.status = tbPanel.getStatus();
+        this.status = tbPanel.getStatus().getNumber();
         this.remark = tbPanel.getRemark();
     }
 

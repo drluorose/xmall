@@ -100,7 +100,7 @@ public class PanelController {
             tbPanel.setLimitNum(updateContentCategoryReq.getLimitNum());
         }
         if (Objects.nonNull(updateContentCategoryReq.getSortOrder())) {
-            tbPanel.setLimitNum(updateContentCategoryReq.getSortOrder());
+            tbPanel.setSortOrder(updateContentCategoryReq.getSortOrder());
         }
         if (Objects.nonNull(updateContentCategoryReq.getName())) {
             tbPanel.setName(updateContentCategoryReq.getName());

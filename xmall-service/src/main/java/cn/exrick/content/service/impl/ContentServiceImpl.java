@@ -1,5 +1,6 @@
 package cn.exrick.content.service.impl;
 
+import cn.exrick.common.enums.EnableStatusEnum;
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.common.pojo.DataTablesResult;
@@ -196,7 +197,7 @@ public class ContentServiceImpl implements ContentService {
         TbPanelExample.Criteria criteria = example.createCriteria();
         //条件查询
         criteria.andPositionEqualTo(0);
-        criteria.andStatusEqualTo(1);
+        criteria.andStatusEqualTo(EnableStatusEnum.ENABLED);
         example.setOrderByClause("sort_order");
         List<TbPanel> tbPanels = tbPanelMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(tbPanels)) {
@@ -300,7 +301,7 @@ public class ContentServiceImpl implements ContentService {
         TbPanelExample.Criteria criteria = example.createCriteria();
         //条件查询
         criteria.andIdEqualTo(panelId);
-        criteria.andStatusEqualTo(1);
+        criteria.andStatusEqualTo(EnableStatusEnum.ENABLED);
         list = tbPanelMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(list)) {
             return Lists.newArrayList();

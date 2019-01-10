@@ -1,6 +1,7 @@
 package cn.exrick.sso.service.impl;
 
 import cn.exrick.common.enums.EnableStatusEnum;
+import cn.exrick.common.enums.MemberStateEnum;
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.common.jwt.JwtAlgorithmEnum;
 import cn.exrick.common.jwt.JwtKeyInfo;
@@ -34,6 +35,7 @@ import java.security.interfaces.ECPublicKey;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -61,20 +63,19 @@ public class LoginServiceImpl implements LoginService {
     private Gson gson = new GsonBuilder().create();
 
     @Override
-    public Member userLogin(String username, String password) throws NoSuchAlgorithmException {
+    public Member userLogin(String email, String password) throws NoSuchAlgorithmException {
 
         TbMemberExample example = new TbMemberExample();
         TbMemberExample.Criteria criteria = example.createCriteria();
-        criteria.andStateEqualTo(1);
-        criteria.andUsernameEqualTo(username);
-        List<TbMember> list = tbMemberMapper.selectByExample(example);
-        if (list == null || list.size() == 0) {
+        criteria.andStateEqualTo(MemberStateEnum.VERIFIED);
+        criteria.andEmailEqualTo(email);
+        TbMember tbMember = tbMemberMapper.selectOneByExample(example);
+        if (Objects.isNull(tbMember)) {
             Member member = new Member();
             member.setState(0);
             member.setMessage("用户名或密码错误");
             return member;
         }
-        TbMember tbMember = list.get(0);
         //md5加密
         if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(tbMember.getPassword())) {
             Member member = new Member();

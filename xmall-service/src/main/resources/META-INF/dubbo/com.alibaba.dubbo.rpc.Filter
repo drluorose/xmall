@@ -1,0 +1,1 @@
+exceptionFilter=com.douyu.adx.exchange.facade.dubbo.filters.RpcExceptionFilter

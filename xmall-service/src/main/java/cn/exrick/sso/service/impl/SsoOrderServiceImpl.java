@@ -23,7 +23,6 @@ import cn.exrick.manager.pojo.TbOrderItemExample;
 import cn.exrick.manager.pojo.TbOrderShipping;
 import cn.exrick.manager.pojo.TbThanks;
 import cn.exrick.sso.service.SsoOrderService;
-import cn.exrick.util.EmailUtil;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -69,14 +68,8 @@ public class SsoOrderServiceImpl implements SsoOrderService {
     @Value("${CART_PRE}")
     private String CART_PRE;
 
-    @Value("${EMAIL_SENDER}")
-    private String EMAIL_SENDER;
-
     @Value("${PAY_EXPIRE}")
     private int PAY_EXPIRE;
-
-    @Autowired
-    private EmailUtil emailUtil;
 
     @Override
     public PageOrder getOrderList(Long userId, int page, int size) {
@@ -345,7 +338,6 @@ public class SsoOrderServiceImpl implements SsoOrderService {
         //设置验证token键值对 tokenName:token
         jedisClient.set(tokenName, token);
         jedisClient.expire(tokenName, PAY_EXPIRE);
-        emailUtil.sendEmailDealThank(EMAIL_SENDER, "【XMall商城】支付待审核处理", tokenName, token, tbThanks);
         return 1;
     }
 

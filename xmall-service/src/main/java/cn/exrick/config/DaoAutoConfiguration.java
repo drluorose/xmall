@@ -2,6 +2,7 @@ package cn.exrick.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -46,7 +47,13 @@ public class DaoAutoConfiguration {
         factoryBean.setDataSource(dspDataSource);
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         factoryBean.setMapperLocations(resolver.getResources("classpath*:/cn/exrick/manager/mapper/**/*.xml"));
-        factoryBean.setPlugins(new Interceptor[]{pageHelper()});
+
+        PageInterceptor pageInterceptor = new PageInterceptor();
+        Properties properties = new Properties();
+        properties.setProperty("helperDialect", "mysql");
+        pageInterceptor.setProperties(properties);
+
+        factoryBean.setPlugins(new Interceptor[]{pageInterceptor});
         return factoryBean.getObject();
     }
 

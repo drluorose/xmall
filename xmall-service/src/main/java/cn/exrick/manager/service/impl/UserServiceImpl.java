@@ -19,7 +19,6 @@ import cn.exrick.manager.mapper.ext.TbUserExtMapper;
 import cn.exrick.manager.pojo.*;
 import cn.exrick.manager.service.UserService;
 import com.alibaba.dubbo.config.annotation.Service;
-import com.alibaba.dubbo.config.support.Parameter;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

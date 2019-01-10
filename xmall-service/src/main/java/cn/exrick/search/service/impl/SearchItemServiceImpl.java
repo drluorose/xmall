@@ -31,8 +31,13 @@ public class SearchItemServiceImpl implements SearchItemService {
 
     @PostConstruct
     private void initIndex() throws IOException {
-        int itemImportSize = importAllItems();
-        log.info("Import {} Items into index", itemImportSize);
+        try {
+            int itemImportSize = importAllItems();
+            log.info("Import {} Items into index", itemImportSize);
+        } catch (Exception e) {
+            log.error("errrpr", e);
+        }
+
     }
 
     @Override

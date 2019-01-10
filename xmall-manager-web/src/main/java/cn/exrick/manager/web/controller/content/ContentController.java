@@ -28,14 +28,6 @@ public class ContentController {
     @Reference
     private ContentService contentService;
 
-    @RequestMapping(value = "/content/list/{panelId}",method = RequestMethod.GET)
-    @ApiOperation(value = "通过panelId获得板块内容列表")
-    public DataTablesResult getContentByCid(@PathVariable int panelId){
-
-        DataTablesResult result=contentService.getPanelContentListByPanelId(panelId);
-        return result;
-    }
-
     @RequestMapping(value = "/content/add",method = RequestMethod.POST)
     @ApiOperation(value = "添加板块内容")
     public Result<Object> addContent(@ModelAttribute TbPanelContent tbPanelContent){

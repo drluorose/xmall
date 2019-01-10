@@ -1,5 +1,6 @@
 package cn.exrick.manager.service.impl;
 
+import cn.exrick.common.enums.MemberStateEnum;
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.manager.dto.DtoUtil;
@@ -173,7 +174,7 @@ public class ManagerMemberServiceImpl implements ManagerMemberService {
         DataTablesResult result = new DataTablesResult();
         TbMemberExample example = new TbMemberExample();
         TbMemberExample.Criteria criteria = example.createCriteria();
-        criteria.andStateNotEqualTo(2);
+        criteria.andStateNotEqualTo(MemberStateEnum.VERIFIED);
         try {
             result.setRecordsTotal((int) tbMemberMapper.countByExample(example));
         } catch (Exception e) {
@@ -189,7 +190,7 @@ public class ManagerMemberServiceImpl implements ManagerMemberService {
         DataTablesResult result = new DataTablesResult();
         TbMemberExample example = new TbMemberExample();
         TbMemberExample.Criteria criteria = example.createCriteria();
-        criteria.andStateEqualTo(2);
+        criteria.andStateEqualTo(MemberStateEnum.VERIFIED);
         try {
             result.setRecordsTotal((int) tbMemberMapper.countByExample(example));
         } catch (Exception e) {
@@ -197,33 +198,6 @@ public class ManagerMemberServiceImpl implements ManagerMemberService {
         }
 
         return result;
-    }
-
-    @Override
-    public TbMember addMember(MemberDto memberDto) {
-
-        TbMember tbMember = DtoUtil.MemberDto2Member(memberDto);
-
-        if (getMemberByUsername(tbMember.getUsername()) != null) {
-            throw new XmallException("用户名已被注册");
-        }
-        if (getMemberByPhone(tbMember.getPhone()) != null) {
-            throw new XmallException("手机号已被注册");
-        }
-        if (getMemberByEmail(tbMember.getEmail()) != null) {
-            throw new XmallException("邮箱已被注册");
-        }
-
-        tbMember.setState(1);
-        tbMember.setCreated(new Date());
-        tbMember.setUpdated(new Date());
-        String md5Pass = DigestUtils.md5DigestAsHex(tbMember.getPassword().getBytes());
-        tbMember.setPassword(md5Pass);
-
-        if (tbMemberMapper.insert(tbMember) != 1) {
-            throw new XmallException("添加用户失败");
-        }
-        return getMemberByPhone(tbMember.getPhone());
     }
 
     @Override
@@ -267,7 +241,7 @@ public class ManagerMemberServiceImpl implements ManagerMemberService {
     public TbMember alertMemberState(Long id, Integer state) {
 
         TbMember tbMember = tbMemberMapper.selectByPrimaryKey(id);
-        tbMember.setState(state);
+        tbMember.setState(MemberStateEnum.numberOf(state));
         tbMember.setUpdated(new Date());
 
         if (tbMemberMapper.updateByPrimaryKey(tbMember) != 1) {

@@ -1,4 +1,4 @@
-package cn.exrick.manager.web.controller;
+package cn.exrick.manager.web.controller.goods;
 
 import cn.exrick.common.pojo.DataTablesResult;
 import cn.exrick.common.pojo.Result;

@@ -1,6 +1,7 @@
 package cn.exrick.content.service.impl;
 
 import cn.exrick.common.enums.IndexTypeEnum;
+import cn.exrick.common.enums.ValidStatusEnum;
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.content.service.PanelService;
@@ -51,7 +52,7 @@ public class PanelServiceImpl implements PanelService {
     public List<TbPanel> getPanelList(IndexTypeEnum indexTypeEnum) {
 
         TbPanelExample example = new TbPanelExample();
-        Criteria criteria = example.createCriteria().andStatusEqualTo(1);
+        Criteria criteria = example.createCriteria().andValidEqualTo(ValidStatusEnum.VALID);
         if (indexTypeEnum == IndexTypeEnum.BANNER) {
             criteria.andTypeEqualTo(0);
         } else if (indexTypeEnum == IndexTypeEnum.OTHER) {
@@ -108,8 +109,13 @@ public class PanelServiceImpl implements PanelService {
 
     @Override
     public int deletePanel(int id) {
+        TbPanel tbPanel = new TbPanel();
+        tbPanel.setId(id);
+        tbPanel.setValid(ValidStatusEnum.INVALID);
+        tbPanel.setUpdated(new Date());
 
-        if (tbPanelMapper.deleteByPrimaryKey(id) != 1) {
+        int result = tbPanelMapper.updateByPrimaryKeySelective(tbPanel);
+        if (result != 1) {
             throw new XmallException("删除内容分类失败");
         }
         //同步缓存

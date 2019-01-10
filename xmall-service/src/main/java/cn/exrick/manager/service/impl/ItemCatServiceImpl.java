@@ -1,20 +1,22 @@
 package cn.exrick.manager.service.impl;
 
+import cn.exrick.common.enums.EnableStatusEnum;
 import cn.exrick.common.exception.XmallException;
-import cn.exrick.common.pojo.ZTreeNode;
-import cn.exrick.manager.dto.DtoUtil;
 import cn.exrick.manager.mapper.TbItemCatMapper;
 import cn.exrick.manager.pojo.TbItemCat;
 import cn.exrick.manager.pojo.TbItemCatExample;
 import cn.exrick.manager.service.ItemCatService;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Exrick
@@ -39,27 +41,22 @@ public class ItemCatServiceImpl implements ItemCatService {
     }
 
     @Override
-    public List<ZTreeNode> getItemCatList(int parentId) {
+    public ArrayList<TbItemCat> getItemCatList(long parentId, EnableStatusEnum enableStatusEnum) {
 
         TbItemCatExample example = new TbItemCatExample();
         TbItemCatExample.Criteria criteria = example.createCriteria();
+        if (Objects.nonNull(enableStatusEnum)) {
+            criteria.andStatusEqualTo(enableStatusEnum);
+        }
         //排序
         example.setOrderByClause("sort_order");
         //条件查询
         criteria.andParentIdEqualTo(new Long(parentId));
         List<TbItemCat> list = tbItemCatMapper.selectByExample(example);
-
-        //转换成ZtreeNode
-        List<ZTreeNode> resultList = new ArrayList<>();
-
-        for (TbItemCat tbItemCat : list) {
-
-            ZTreeNode node = DtoUtil.TbItemCat2ZTreeNode(tbItemCat);
-
-            resultList.add(node);
+        if (CollectionUtils.isEmpty(list)) {
+            return Lists.newArrayList();
         }
-
-        return resultList;
+        return Lists.newArrayList(list);
     }
 
     @Override
@@ -68,11 +65,11 @@ public class ItemCatServiceImpl implements ItemCatService {
         if (tbItemCat.getParentId() == 0) {
             //根节点
             tbItemCat.setSortOrder(0);
-            tbItemCat.setStatus(1);
+            tbItemCat.setStatus(EnableStatusEnum.ENABLED);
         } else {
             TbItemCat parent = tbItemCatMapper.selectByPrimaryKey(tbItemCat.getParentId());
             tbItemCat.setSortOrder(0);
-            tbItemCat.setStatus(1);
+            tbItemCat.setStatus(EnableStatusEnum.ENABLED);
             tbItemCat.setCreated(new Date());
             tbItemCat.setUpdated(new Date());
         }
@@ -105,18 +102,18 @@ public class ItemCatServiceImpl implements ItemCatService {
     @Override
     public void deleteZTree(Long id) {
 
-        //查询该节点所有子节点
-        List<ZTreeNode> node = getItemCatList(Math.toIntExact(id));
-        if (node.size() > 0) {
-            //如果有子节点，遍历子节点
-            for (int i = 0; i < node.size(); i++) {
-                deleteItemCat((long) node.get(i).getId());
-            }
-        }
-        //没有子节点直接删除
-        if (tbItemCatMapper.deleteByPrimaryKey(id) != 1) {
-            throw new XmallException("删除商品分类失败");
-        }
+//        //查询该节点所有子节点
+//        List<ZTreeNode> node = getItemCatList(Math.toIntExact(id));
+//        if (node.size() > 0) {
+//            //如果有子节点，遍历子节点
+//            for (int i = 0; i < node.size(); i++) {
+//                deleteItemCat((long) node.get(i).getId());
+//            }
+//        }
+//        //没有子节点直接删除
+//        if (tbItemCatMapper.deleteByPrimaryKey(id) != 1) {
+//            throw new XmallException("删除商品分类失败");
+//        }
     }
 
 }

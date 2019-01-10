@@ -59,10 +59,19 @@ RECOMEED_PANEL: RECOMEED_PANEL
 THANK_PANEL_ID: 4
 THANK_PANEL: THANK_PANEL
 
-
-EMAIL_HOST: smtp.qq.com
-EMAIL_USERNAME: dongjiejie@qq.com
-EMAIL_PASSWORD: dongjiejie
-EMAIL_SENDER: dongjiejie
-
 BASE_ID: 1
+aliyun:
+  region:
+    name: cn-hangzhou
+    endpointName:
+    product:
+    domain:
+  accessId: LTAIcklXsm0lpGak
+  accessKey: XsFwUNziSWH1tqnER5j7fAXK3WZbkf
+register:
+  callbackUrl: http://localhost:8080/reigster/verify/callback
+
+elaticjob:
+  zookeeper:
+    server-lists: 192.168.31.234:2181
+    namespace: mall
