@@ -91,15 +91,6 @@ public interface ManagerMemberService {
     TbMember getMemberByUsername(String username);
 
     /**
-     * 添加会员
-     *
-     * @param memberDto
-     *
-     * @return
-     */
-    TbMember addMember(MemberDto memberDto);
-
-    /**
      * 更新会员信息
      *
      * @param id

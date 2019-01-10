@@ -3,21 +3,23 @@ package cn.exrick.front.controller;
 import cn.exrick.common.jedis.JedisClient;
 import cn.exrick.common.pojo.GeetInit;
 import cn.exrick.common.pojo.Result;
+import cn.exrick.common.res.ResultCodeEnum;
 import cn.exrick.common.utils.GeetestLib;
 import cn.exrick.common.utils.IPInfoUtil;
+import cn.exrick.common.utils.ResultResUtil;
 import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.manager.dto.front.CommonDto;
 import cn.exrick.manager.dto.front.Member;
 import cn.exrick.manager.dto.front.MemberLoginRegist;
 import cn.exrick.sso.service.LoginService;
-import cn.exrick.sso.service.SsoMemberService;
 import cn.exrick.sso.service.RegisterService;
+import cn.exrick.sso.service.SsoMemberService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,16 +31,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
  * @author Exrickx
  */
+@Slf4j
 @RestController
 @Api(description = "会员注册登录")
 public class MemberController {
-
-    private final static Logger log = LoggerFactory.getLogger(MemberController.class);
 
     @Reference
     private LoginService loginService;
@@ -82,52 +84,22 @@ public class MemberController {
 
     @RequestMapping(value = "/member/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录")
-    public Result<Member> login(@RequestBody MemberLoginRegist memberLoginRegist,
-                                HttpServletRequest request) {
+    public Result<Member> login(@RequestBody MemberLoginRegist memberLoginRegist) {
 
-        //极验验证
-        GeetestLib gtSdk = new GeetestLib(GeetestLib.id, GeetestLib.key, GeetestLib.newfailback);
-
-        String challenge = memberLoginRegist.getChallenge();
-        String validate = memberLoginRegist.getValidate();
-        String seccode = memberLoginRegist.getSeccode();
-
-        //从redis中获取gt-server状态
-        //int gt_server_status_code = (Integer) request.getSession().getAttribute(gtSdk.gtServerStatusSessionKey);
-        int gt_server_status_code = Integer.parseInt(jedisClient.get(memberLoginRegist.getStatusKey()));
-
-        //自定义参数,可选择添加
-        HashMap<String, String> param = new HashMap<String, String>();
-
-        int gtResult = 0;
-
-        if (gt_server_status_code == 1) {
-            //gt-server正常，向gt-server进行二次验证
-            gtResult = gtSdk.enhencedValidateRequest(challenge, validate, seccode, param);
-            System.out.println(gtResult);
-        } else {
-            // gt-server非正常情况下，进行failback模式验证
-            System.out.println("failback:use your own server captcha validate");
-            gtResult = gtSdk.failbackValidateRequest(challenge, validate, seccode);
-            System.out.println(gtResult);
-        }
-
-        Member member = new Member();
-        if (gtResult == 1) {
+        boolean gtResult = this.gtVerify(memberLoginRegist);
+        if (gtResult) {
             // 验证成功
             try {
-                member = loginService.userLogin(memberLoginRegist.getUserName(), memberLoginRegist.getUserPwd());
+                Member member = loginService.userLogin(memberLoginRegist.getUserEmail(), memberLoginRegist.getUserPwd());
+                return ResultResUtil.successWithData(member);
             } catch (NoSuchAlgorithmException e) {
                 log.error("e", e);
-                member.setState(0);
-                member.setMessage("签名错误");
+                return ResultResUtil.errorWithoutData(ResultCodeEnum.CODE_LOGIN_FAIL);
             }
         } else {
             // 验证失败
-            member.setState(0);
-            member.setMessage("验证失败");
+            return ResultResUtil.errorWithoutData(ResultCodeEnum.CODE_LOGIN_FAIL);
         }
-        return new ResultUtil<Member>().setData(member);
     }
 
     @RequestMapping(value = "/member/checkLogin", method = RequestMethod.GET)
@@ -148,8 +120,42 @@ public class MemberController {
 
     @RequestMapping(value = "/member/register", method = RequestMethod.POST)
     @ApiOperation(value = "用户注册")
-    public Result<Object> register(@RequestBody MemberLoginRegist memberLoginRegist,
-                                   HttpServletRequest request) {
+    public Result<String> register(@RequestBody MemberLoginRegist memberLoginRegist) {
+        if (Objects.isNull(memberLoginRegist) || StringUtils.isBlank(memberLoginRegist.getUserEmail()) || StringUtils.isBlank(memberLoginRegist.getUserPwd())) {
+            return ResultResUtil.withResultCodeEnum(ResultCodeEnum.CODE_NORMAL_FAIL_PARAM_ERROR);
+        }
+        boolean gtResult = this.gtVerify(memberLoginRegist);
+        if (gtResult) {
+            // 验证成功
+            try {
+                registerService.register(memberLoginRegist.getUserEmail(), memberLoginRegist.getUserPwd());
+                return ResultResUtil.withResultCodeEnum(ResultCodeEnum.CODE_NORMAL_SUCCESS);
+            } catch (Exception e) {
+                log.error("用户注册|exception", e);
+                return ResultResUtil.withResultCodeEnum(ResultCodeEnum.CODE_NORMAL_FAIL_SERVER_ERROR);
+            }
+        } else {
+            // 验证失败
+            return ResultResUtil.withResultCodeEnum(ResultCodeEnum.CODE_NORMAL_FAIL_HUMAN_VERIFY_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/member/imgaeUpload", method = RequestMethod.POST)
+    @ApiOperation(value = "用户头像上传")
+    public Result<Object> imgaeUpload(@RequestBody CommonDto common) {
+
+        String imgPath = memberService.imageUpload(common.getUserId(), common.getToken(), common.getImgData());
+        return new ResultUtil<Object>().setData(imgPath);
+    }
+
+    /**
+     * gt 验证
+     *
+     * @param memberLoginRegist
+     *
+     * @return
+     */
+    private boolean gtVerify(MemberLoginRegist memberLoginRegist) {
 
         //极验验证
         GeetestLib gtSdk = new GeetestLib(GeetestLib.id, GeetestLib.key, GeetestLib.newfailback);
@@ -157,9 +163,6 @@ public class MemberController {
         String challenge = memberLoginRegist.getChallenge();
         String validate = memberLoginRegist.getValidate();
         String seccode = memberLoginRegist.getSeccode();
-
-        //从redis中获取gt-server状态
-        //int gt_server_status_code = (Integer) request.getSession().getAttribute(gtSdk.gtServerStatusSessionKey);
         int gt_server_status_code = Integer.parseInt(jedisClient.get(memberLoginRegist.getStatusKey()));
 
         //自定义参数,可选择添加
@@ -170,34 +173,15 @@ public class MemberController {
         if (gt_server_status_code == 1) {
             //gt-server正常，向gt-server进行二次验证
             gtResult = gtSdk.enhencedValidateRequest(challenge, validate, seccode, param);
-            System.out.println(gtResult);
+            log.info("极验证|enhencedValidateRequest|gtResult:{}", gtResult);
         } else {
             // gt-server非正常情况下，进行failback模式验证
-            System.out.println("failback:use your own server captcha validate");
             gtResult = gtSdk.failbackValidateRequest(challenge, validate, seccode);
-            System.out.println(gtResult);
+            log.info("极验证|failbackValidateRequest|gtResult:{}", gtResult);
         }
-
         if (gtResult == 1) {
-            // 验证成功
-            int result = registerService.register(memberLoginRegist.getUserName(), memberLoginRegist.getUserPwd());
-            if (result == 0) {
-                return new ResultUtil<Object>().setErrorMsg("该用户名已被注册");
-            } else if (result == -1) {
-                return new ResultUtil<Object>().setErrorMsg("用户名密码不能为空");
-            }
-            return new ResultUtil<Object>().setData(result);
-        } else {
-            // 验证失败
-            return new ResultUtil<Object>().setErrorMsg("验证失败");
+            return true;
         }
-    }
-
-    @RequestMapping(value = "/member/imgaeUpload", method = RequestMethod.POST)
-    @ApiOperation(value = "用户头像上传")
-    public Result<Object> imgaeUpload(@RequestBody CommonDto common) {
-
-        String imgPath = memberService.imageUpload(common.getUserId(), common.getToken(), common.getImgData());
-        return new ResultUtil<Object>().setData(imgPath);
+        return false;
     }
 }

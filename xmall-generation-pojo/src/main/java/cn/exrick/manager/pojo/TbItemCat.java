@@ -1,5 +1,6 @@
 package cn.exrick.manager.pojo;
 
+import cn.exrick.common.enums.EnableStatusEnum;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
@@ -12,7 +13,7 @@ public class TbItemCat implements Serializable {
 
     private String name;
 
-    private Integer status;
+    private EnableStatusEnum status;
 
     private Integer sortOrder;
 

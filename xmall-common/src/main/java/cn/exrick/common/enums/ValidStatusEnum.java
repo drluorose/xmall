@@ -5,12 +5,16 @@ import lombok.Getter;
 
 import java.util.Arrays;
 
+/**
+ * @author dongjiejie
+ */
+
 @AllArgsConstructor
 @Getter
 public enum ValidStatusEnum implements StdEnum {
 
-    DISABLED(0, "disabled", "已废弃"),
-    ENABLED(1, "enable", "已启用");
+    INVALID(0, "invalid", "无效"),
+    VALID(1, "valid", "有效");
 
     private final Integer number;
 

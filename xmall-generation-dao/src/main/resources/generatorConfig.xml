@@ -58,10 +58,24 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
         <!-- 指定数据库表 -->
-        <table schema="" tableName="tb_panel"></table>
-        <table schema="" tableName="tb_panel_content"></table>
-        <table schema="" tableName="tb_item"></table>
-        <table schema="" tableName="tb_item_cat"></table>
+        <table schema="" tableName="tb_panel">
+            <columnOverride column="status" javaType="cn.exrick.common.enums.EnableStatusEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler"/>
+            <columnOverride column="valid" javaType="cn.exrick.common.enums.ValidStatusEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler"/>
+        </table>
+        <table schema="" tableName="tb_panel_content">
+            <columnOverride column="valid" javaType="cn.exrick.common.enums.ValidStatusEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler"/>
+        </table>
+        <table schema="" tableName="tb_item">
+            <columnOverride column="status" javaType="cn.exrick.common.enums.EnableStatusEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler"/>
+        </table>
+        <table schema="" tableName="tb_item_cat">
+            <columnOverride column="status" javaType="cn.exrick.common.enums.EnableStatusEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler"/>
+        </table>
         <table schema="" tableName="tb_item_desc"></table>
         <table schema="" tableName="tb_item_param"></table>
         <table schema="" tableName="tb_item_param_item"></table>
@@ -69,10 +83,18 @@
             <columnOverride column="status" javaType="cn.exrick.common.enums.OrderStatusEnum"
                             typeHandler="cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler"></columnOverride>
         </table>
-        <table schema="" tableName="tb_order_item"></table>
+        <table schema="" tableName="tb_order_item">
+        </table>
         <table schema="" tableName="tb_order_shipping"></table>
         <table schema="" tableName="tb_user"></table>
-        <table schema="" tableName="tb_member"></table>
+        <table schema="" tableName="tb_member">
+            <columnOverride column="state" javaType="cn.exrick.common.enums.MemberStateEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.MemberStateEnumHandler"/>
+        </table>
+        <table schema="" tableName="tb_member_verify" domainObjectName="MemberVerify">
+            <columnOverride column="status" javaType="cn.exrick.common.enums.DoStatusEnum"
+                            typeHandler="cn.exrick.manager.mapper.handlers.DoStatusEnumHandler"/>
+        </table>
         <table schema="" tableName="tb_address"></table>
         <table schema="" tableName="tb_role"></table>
         <table schema="" tableName="tb_permission"></table>

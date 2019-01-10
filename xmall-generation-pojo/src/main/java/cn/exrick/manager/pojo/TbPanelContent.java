@@ -1,5 +1,6 @@
 package cn.exrick.manager.pojo;
 
+import cn.exrick.common.enums.ValidStatusEnum;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
@@ -23,6 +24,8 @@ public class TbPanelContent implements Serializable {
     private String picUrl2;
 
     private String picUrl3;
+
+    private ValidStatusEnum valid;
 
     private Date created;
 

@@ -6,7 +6,7 @@
         <result column="payment" jdbcType="DECIMAL" property="payment"/>
         <result column="payment_type" jdbcType="INTEGER" property="paymentType"/>
         <result column="post_fee" jdbcType="DECIMAL" property="postFee"/>
-        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="status" jdbcType="INTEGER" property="status" typeHandler="cn.exrick.manager.mapper.handlers.OrderStatusEnumHandler"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime"/>
@@ -21,39 +21,40 @@
         <result column="buyer_comment" jdbcType="BIT" property="buyerComment"/>
     </resultMap>
     <sql id="Base_Column_List_Ext">
-        order_id, payment, payment_type, post_fee, status, create_time, update_time, payment_time,
-        consign_time, end_time, close_time, shipping_name, shipping_code, user_id, buyer_message,
-        buyer_nick, buyer_comment
+        order_id,
+        payment,
+        payment_type,
+        post_fee,
+        status,
+        create_time,
+        update_time,
+        payment_time,
+        consign_time,
+        end_time,
+        close_time,
+        shipping_name,
+        shipping_code,
+        user_id,
+        buyer_message,
+        buyer_nick,
+        buyer_comment
     </sql>
     <select id="selectByMulti" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List_Ext"/>
         FROM tb_order
-        WHERE
-        order_id LIKE #{search}
-        OR
-        payment LIKE #{search}
-        OR
-        shipping_code LIKE #{search}
-        OR
-        user_id LIKE #{search}
-        OR
-        buyer_nick LIKE #{search}
-        OR
-        create_time LIKE #{search}
-        OR
-        update_time LIKE #{search}
-        OR
-        payment_time LIKE #{search}
-        OR
-        close_time LIKE #{search}
-        OR
-        end_time LIKE #{search}
-        OR
-        status LIKE #{search}
-        ORDER BY
-        ${orderCol}
-        ${orderDir}
+        <where>
+            <if test="orderId != null and orderId != ''">
+                orderId = #{orderId}
+            </if>
+            <if test="mid != null and mid !=''">
+                and mid like concat('%',#{mid},'%')
+            </if>
+            <if test="orderStartTime != null and orderEndTime != null">
+                <![CDATA[and create_time >= #{orderStartTime} and create_time <= #{orderEndTime} ]]>
+            </if>
+        </where>
+        ORDER BY order_id desc
     </select>
     <select id="selectOrderChart" resultType="cn.exrick.manager.dto.OrderChartData">
         select sum(payment) AS money, DATE(create_time) AS time

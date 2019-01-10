@@ -1,4 +1,4 @@
-package cn.exrick.manager.web.controller.res;
+package cn.exrick.manager.web.controller.panel.res;
 
 import cn.exrick.manager.pojo.TbPanelContent;
 import lombok.Data;

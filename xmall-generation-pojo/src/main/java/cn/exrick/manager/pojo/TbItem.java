@@ -1,5 +1,6 @@
 package cn.exrick.manager.pojo;
 
+import cn.exrick.common.enums.EnableStatusEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -25,7 +26,7 @@ public class TbItem implements Serializable {
 
     private Long cid;
 
-    private Integer status;
+    private EnableStatusEnum status;
 
     private Date created;
 

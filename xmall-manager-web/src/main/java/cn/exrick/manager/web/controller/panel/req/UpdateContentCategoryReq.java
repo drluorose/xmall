@@ -1,5 +1,6 @@
-package cn.exrick.manager.web.controller.req;
+package cn.exrick.manager.web.controller.panel.req;
 
+import cn.exrick.common.enums.EnableStatusEnum;
 import lombok.Data;
 
 /**
@@ -15,4 +16,6 @@ public class UpdateContentCategoryReq {
     private Integer limitNum;
 
     private Integer sortOrder;
+
+    private EnableStatusEnum status;
 }

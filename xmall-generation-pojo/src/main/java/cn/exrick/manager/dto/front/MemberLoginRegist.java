@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Data
 public class MemberLoginRegist implements Serializable {
 
-    private String userName;
+    private String userEmail;
 
     private String userPwd;
 

@@ -1,7 +1,7 @@
 package cn.exrick.common.utils;
 
 import com.google.common.collect.Lists;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;

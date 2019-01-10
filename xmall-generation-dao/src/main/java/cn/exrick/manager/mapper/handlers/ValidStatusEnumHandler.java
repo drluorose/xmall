@@ -1,6 +1,6 @@
 package cn.exrick.manager.mapper.handlers;
 
-import cn.exrick.common.enums.EnableStatusEnum;
+import cn.exrick.common.enums.ValidStatusEnum;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -12,27 +12,27 @@ import java.sql.SQLException;
 /**
  * @author dongjiejie
  */
-public class ValidStatusEnumHandler extends BaseTypeHandler<EnableStatusEnum> {
+public class ValidStatusEnumHandler extends BaseTypeHandler<ValidStatusEnum> {
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, EnableStatusEnum parameter, JdbcType jdbcType) throws SQLException {
+    public void setNonNullParameter(PreparedStatement ps, int i, ValidStatusEnum parameter, JdbcType jdbcType) throws SQLException {
         ps.setByte(i, parameter.getNumber().byteValue());
     }
 
     @Override
-    public EnableStatusEnum getNullableResult(ResultSet rs, String columnName) throws SQLException {
+    public ValidStatusEnum getNullableResult(ResultSet rs, String columnName) throws SQLException {
         Byte code = rs.getByte(columnName);
-        return EnableStatusEnum.numberOf(code);
+        return ValidStatusEnum.numberOf(code);
     }
 
     @Override
-    public EnableStatusEnum getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+    public ValidStatusEnum getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
         Byte code = rs.getByte(columnIndex);
-        return EnableStatusEnum.numberOf(code);
+        return ValidStatusEnum.numberOf(code);
     }
 
     @Override
-    public EnableStatusEnum getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+    public ValidStatusEnum getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
         Byte code = cs.getByte(columnIndex);
-        return EnableStatusEnum.numberOf(code);
+        return ValidStatusEnum.numberOf(code);
     }
 }

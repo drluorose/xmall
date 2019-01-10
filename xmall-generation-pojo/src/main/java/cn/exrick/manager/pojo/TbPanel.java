@@ -1,5 +1,7 @@
 package cn.exrick.manager.pojo;
 
+import cn.exrick.common.enums.EnableStatusEnum;
+import cn.exrick.common.enums.ValidStatusEnum;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
@@ -18,11 +20,11 @@ public class TbPanel implements Serializable {
 
     private Integer limitNum;
 
-    private Integer status;
+    private EnableStatusEnum status;
 
     private String remark;
 
-    private Integer valid;
+    private ValidStatusEnum valid;
 
     private Date created;
 

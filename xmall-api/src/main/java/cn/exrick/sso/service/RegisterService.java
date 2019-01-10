@@ -1,6 +1,5 @@
 package cn.exrick.sso.service;
 
-
 /**
  * @author Exrickx
  */
@@ -8,17 +7,21 @@ public interface RegisterService {
 
     /**
      * 勾选
-     * @param param
-     * @param type
+     *
+     * @param id
+     * @param content
+     *
      * @return
      */
-    boolean checkData(String param, int type);
+    boolean verifyCallback(String id, String content);
 
     /**
      * 注册
-     * @param userName
+     *
+     * @param email
      * @param userPwd
+     *
      * @return
      */
-    int register(String userName, String userPwd);
+    void register(String email, String userPwd);
 }

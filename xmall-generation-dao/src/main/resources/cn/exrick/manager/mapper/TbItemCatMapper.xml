@@ -5,7 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="status" jdbcType="INTEGER" property="status" typeHandler="cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler" />
     <result column="sort_order" jdbcType="INTEGER" property="sortOrder" />
     <result column="is_parent" jdbcType="BIT" property="isParent" />
     <result column="icon" jdbcType="VARCHAR" property="icon" />
@@ -37,6 +37,25 @@
                 </when>
               </choose>
             </foreach>
+            <foreach collection="criteria.statusCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler} and #{criterion.secondValue,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
           </trim>
         </if>
       </foreach>
@@ -62,6 +81,25 @@
                   and ${criterion.condition}
                   <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.statusCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler} and #{criterion.secondValue,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
                   </foreach>
                 </when>
               </choose>
@@ -114,13 +152,15 @@
   </delete>
   <insert id="insert" parameterType="cn.exrick.manager.pojo.TbItemCat">
     insert into tb_item_cat (id, parent_id, name, 
-      status, sort_order, is_parent, 
-      icon, remark, created, 
-      updated)
+      status, 
+      sort_order, is_parent, icon, 
+      remark, created, updated
+      )
     values (#{id,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{sortOrder,jdbcType=INTEGER}, #{isParent,jdbcType=BIT}, 
-      #{icon,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, 
-      #{updated,jdbcType=TIMESTAMP})
+      #{status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}, 
+      #{sortOrder,jdbcType=INTEGER}, #{isParent,jdbcType=BIT}, #{icon,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.exrick.manager.pojo.TbItemCat">
     insert into tb_item_cat
@@ -167,7 +207,7 @@
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        #{status,jdbcType=INTEGER},
+        #{status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       </if>
       <if test="sortOrder != null">
         #{sortOrder,jdbcType=INTEGER},
@@ -208,7 +248,7 @@
         name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
+        status = #{record.status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       </if>
       <if test="record.sortOrder != null">
         sort_order = #{record.sortOrder,jdbcType=INTEGER},
@@ -238,7 +278,7 @@
     set id = #{record.id,jdbcType=BIGINT},
       parent_id = #{record.parentId,jdbcType=BIGINT},
       name = #{record.name,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       sort_order = #{record.sortOrder,jdbcType=INTEGER},
       is_parent = #{record.isParent,jdbcType=BIT},
       icon = #{record.icon,jdbcType=VARCHAR},
@@ -259,7 +299,7 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
+        status = #{status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       </if>
       <if test="sortOrder != null">
         sort_order = #{sortOrder,jdbcType=INTEGER},
@@ -286,7 +326,7 @@
     update tb_item_cat
     set parent_id = #{parentId,jdbcType=BIGINT},
       name = #{name,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       sort_order = #{sortOrder,jdbcType=INTEGER},
       is_parent = #{isParent,jdbcType=BIT},
       icon = #{icon,jdbcType=VARCHAR},

@@ -1,9 +1,12 @@
 package cn.exrick.common.query;
 
+import lombok.Data;
+
 /**
  * @author dongjiejie dongjiejie@qq.com
  */
-public class ItemSearchQuery {
+@Data
+public class ItemSearchParam {
 
     private Integer cid;
 
@@ -11,5 +14,5 @@ public class ItemSearchQuery {
 
     private String sku;
 
-    private String 
+    private String name;
 }

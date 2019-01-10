@@ -1,8 +1,10 @@
 package cn.exrick.manager.service;
 
-import cn.exrick.common.pojo.DataTablesResult;
+import cn.exrick.common.pojo.PageResult;
 import cn.exrick.manager.dto.OrderDetail;
+import cn.exrick.manager.pojo.TbOrder;
 import cn.exrick.manager.pojo.TbThanks;
+import cn.exrick.manager.service.req.OrderSearchQuery;
 
 import java.math.BigDecimal;
 
@@ -14,16 +16,11 @@ public interface ManagerOrderService {
     /**
      * 获得订单列表
      *
-     * @param draw
-     * @param start
-     * @param length
-     * @param search
-     * @param orderCol
-     * @param orderDir
+     * @param orderSearchQuery 查询条件
      *
      * @return
      */
-    DataTablesResult getOrderList(int draw, int start, int length, String search, String orderCol, String orderDir);
+    PageResult<TbOrder> getOrderList(OrderSearchQuery orderSearchQuery);
 
     /**
      * 统计订单数

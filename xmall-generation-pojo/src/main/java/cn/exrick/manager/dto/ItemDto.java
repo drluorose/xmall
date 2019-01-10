@@ -32,8 +32,6 @@ public class ItemDto implements Serializable {
 
     private String cname;
 
-    private Byte status;
-
     private Date created;
 
     private Date updated;

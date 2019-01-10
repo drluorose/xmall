@@ -20,8 +20,6 @@ public interface TbItemDescMapper {
 
     List<TbItemDesc> selectByExampleWithBLOBs(TbItemDescExample example);
 
-    TbItemDesc selectOneByExample(TbItemDescExample example);
-
     List<TbItemDesc> selectByExample(TbItemDescExample example);
 
     TbItemDesc selectByPrimaryKey(Long itemId);

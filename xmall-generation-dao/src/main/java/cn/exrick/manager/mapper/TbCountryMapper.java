@@ -20,8 +20,6 @@ public interface TbCountryMapper {
 
     List<TbCountry> selectByExampleWithBLOBs(TbCountryExample example);
 
-    TbCountry selectOneByExample(TbCountryExample example);
-
     List<TbCountry> selectByExample(TbCountryExample example);
 
     TbCountry selectByPrimaryKey(Integer id);

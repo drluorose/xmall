@@ -8,9 +8,9 @@
     <result column="sort_order" jdbcType="INTEGER" property="sortOrder" />
     <result column="position" jdbcType="INTEGER" property="position" />
     <result column="limit_num" jdbcType="INTEGER" property="limitNum" />
-    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="status" jdbcType="INTEGER" property="status" typeHandler="cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="valid" jdbcType="INTEGER" property="valid" />
+    <result column="valid" jdbcType="INTEGER" property="valid" typeHandler="cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler" />
     <result column="created" jdbcType="TIMESTAMP" property="created" />
     <result column="updated" jdbcType="TIMESTAMP" property="updated" />
   </resultMap>
@@ -34,6 +34,44 @@
                   and ${criterion.condition}
                   <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.statusCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler} and #{criterion.secondValue,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.validCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler} and #{criterion.secondValue,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
                   </foreach>
                 </when>
               </choose>
@@ -63,6 +101,44 @@
                   and ${criterion.condition}
                   <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.statusCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler} and #{criterion.secondValue,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.validCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler} and #{criterion.secondValue,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
                   </foreach>
                 </when>
               </choose>
@@ -117,11 +193,13 @@
   <insert id="insert" parameterType="cn.exrick.manager.pojo.TbPanel">
     insert into tb_panel (id, name, type, 
       sort_order, position, limit_num, 
-      status, remark, valid, 
+      status, 
+      remark, valid, 
       created, updated)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
       #{sortOrder,jdbcType=INTEGER}, #{position,jdbcType=INTEGER}, #{limitNum,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{valid,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler}, 
+      #{remark,jdbcType=VARCHAR}, #{valid,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}, 
       #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="cn.exrick.manager.pojo.TbPanel">
@@ -181,13 +259,13 @@
         #{limitNum,jdbcType=INTEGER},
       </if>
       <if test="status != null">
-        #{status,jdbcType=INTEGER},
+        #{status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
       <if test="valid != null">
-        #{valid,jdbcType=INTEGER},
+        #{valid,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler},
       </if>
       <if test="created != null">
         #{created,jdbcType=TIMESTAMP},
@@ -225,13 +303,13 @@
         limit_num = #{record.limitNum,jdbcType=INTEGER},
       </if>
       <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
+        status = #{record.status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
       <if test="record.valid != null">
-        valid = #{record.valid,jdbcType=INTEGER},
+        valid = #{record.valid,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler},
       </if>
       <if test="record.created != null">
         created = #{record.created,jdbcType=TIMESTAMP},
@@ -252,9 +330,9 @@
       sort_order = #{record.sortOrder,jdbcType=INTEGER},
       position = #{record.position,jdbcType=INTEGER},
       limit_num = #{record.limitNum,jdbcType=INTEGER},
-      status = #{record.status,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       remark = #{record.remark,jdbcType=VARCHAR},
-      valid = #{record.valid,jdbcType=INTEGER},
+      valid = #{record.valid,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler},
       created = #{record.created,jdbcType=TIMESTAMP},
       updated = #{record.updated,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -280,13 +358,13 @@
         limit_num = #{limitNum,jdbcType=INTEGER},
       </if>
       <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
+        status = #{status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="valid != null">
-        valid = #{valid,jdbcType=INTEGER},
+        valid = #{valid,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler},
       </if>
       <if test="created != null">
         created = #{created,jdbcType=TIMESTAMP},
@@ -304,9 +382,9 @@
       sort_order = #{sortOrder,jdbcType=INTEGER},
       position = #{position,jdbcType=INTEGER},
       limit_num = #{limitNum,jdbcType=INTEGER},
-      status = #{status,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.EnableStatusEnumHandler},
       remark = #{remark,jdbcType=VARCHAR},
-      valid = #{valid,jdbcType=INTEGER},
+      valid = #{valid,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler},
       created = #{created,jdbcType=TIMESTAMP},
       updated = #{updated,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

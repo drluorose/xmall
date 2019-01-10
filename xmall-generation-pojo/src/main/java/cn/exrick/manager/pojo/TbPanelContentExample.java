@@ -1,5 +1,6 @@
 package cn.exrick.manager.pojo;
 
+import cn.exrick.common.enums.ValidStatusEnum;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -85,19 +86,50 @@ public class TbPanelContentExample {
     }
 
     protected abstract static class GeneratedCriteria {
+        protected List<Criterion> validCriteria;
+
+        protected List<Criterion> allCriteria;
+
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
             super();
             criteria = new ArrayList<Criterion>();
+            validCriteria = new ArrayList<Criterion>();
+        }
+
+        public List<Criterion> getValidCriteria() {
+            return validCriteria;
+        }
+
+        protected void addValidCriterion(String condition, Object value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            validCriteria.add(new Criterion(condition, value, "cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler"));
+            allCriteria = null;
+        }
+
+        protected void addValidCriterion(String condition, ValidStatusEnum value1, ValidStatusEnum value2, String property) {
+            if (value1 == null || value2 == null) {
+                throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            validCriteria.add(new Criterion(condition, value1, value2, "cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler"));
+            allCriteria = null;
         }
 
         public boolean isValid() {
-            return criteria.size() > 0;
+            return criteria.size() > 0
+                || validCriteria.size() > 0;
         }
 
         public List<Criterion> getAllCriteria() {
-            return criteria;
+            if (allCriteria == null) {
+                allCriteria = new ArrayList<Criterion>();
+                allCriteria.addAll(criteria);
+                allCriteria.addAll(validCriteria);
+            }
+            return allCriteria;
         }
 
         public List<Criterion> getCriteria() {
@@ -109,6 +141,7 @@ public class TbPanelContentExample {
                 throw new RuntimeException("Value for condition cannot be null");
             }
             criteria.add(new Criterion(condition));
+            allCriteria = null;
         }
 
         protected void addCriterion(String condition, Object value, String property) {
@@ -116,6 +149,7 @@ public class TbPanelContentExample {
                 throw new RuntimeException("Value for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value));
+            allCriteria = null;
         }
 
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
@@ -123,6 +157,7 @@ public class TbPanelContentExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
+            allCriteria = null;
         }
 
         public Criteria andIdIsNull() {
@@ -702,6 +737,66 @@ public class TbPanelContentExample {
 
         public Criteria andPicUrl3NotBetween(String value1, String value2) {
             addCriterion("pic_url3 not between", value1, value2, "picUrl3");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidIsNull() {
+            addCriterion("valid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidIsNotNull() {
+            addCriterion("valid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidEqualTo(ValidStatusEnum value) {
+            addValidCriterion("valid =", value, "valid");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidNotEqualTo(ValidStatusEnum value) {
+            addValidCriterion("valid <>", value, "valid");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidGreaterThan(ValidStatusEnum value) {
+            addValidCriterion("valid >", value, "valid");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidGreaterThanOrEqualTo(ValidStatusEnum value) {
+            addValidCriterion("valid >=", value, "valid");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidLessThan(ValidStatusEnum value) {
+            addValidCriterion("valid <", value, "valid");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidLessThanOrEqualTo(ValidStatusEnum value) {
+            addValidCriterion("valid <=", value, "valid");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidIn(List<ValidStatusEnum> values) {
+            addValidCriterion("valid in", values, "valid");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidNotIn(List<ValidStatusEnum> values) {
+            addValidCriterion("valid not in", values, "valid");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidBetween(ValidStatusEnum value1, ValidStatusEnum value2) {
+            addValidCriterion("valid between", value1, value2, "valid");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidNotBetween(ValidStatusEnum value1, ValidStatusEnum value2) {
+            addValidCriterion("valid not between", value1, value2, "valid");
             return (Criteria) this;
         }
 

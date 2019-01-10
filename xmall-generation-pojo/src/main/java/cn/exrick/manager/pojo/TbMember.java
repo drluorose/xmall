@@ -1,5 +1,6 @@
 package cn.exrick.manager.pojo;
 
+import cn.exrick.common.enums.MemberStateEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class TbMember implements Serializable {
 
     private String address;
 
-    private Integer state;
+    private MemberStateEnum state;
 
     private String file;
 
@@ -36,6 +37,8 @@ public class TbMember implements Serializable {
     private Integer points;
 
     private BigDecimal balance;
+
+    private Integer valid;
 
     private static final long serialVersionUID = 1L;
 }

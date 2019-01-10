@@ -4,7 +4,6 @@ package cn.exrick.common.utils;
  * @author dongjiejie dongjiejie@qq.com
  */
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

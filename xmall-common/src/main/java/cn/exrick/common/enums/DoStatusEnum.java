@@ -9,8 +9,8 @@ import java.util.Arrays;
 @Getter
 public enum DoStatusEnum implements StdEnum {
 
-    DISABLED(0, "disabled", "已废弃"),
-    ENABLED(1, "enable", "已启用");
+    UNDO(0, "undo", "已废弃"),
+    DO(1, "do", "已启用");
 
     private final Integer number;
 

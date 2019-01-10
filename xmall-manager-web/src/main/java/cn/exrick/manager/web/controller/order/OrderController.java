@@ -1,14 +1,18 @@
-package cn.exrick.manager.web.controller;
+package cn.exrick.manager.web.controller.order;
 
-import cn.exrick.common.pojo.DataTablesResult;
+import cn.exrick.common.pojo.PageResult;
 import cn.exrick.common.pojo.Result;
 import cn.exrick.common.utils.ResultUtil;
 import cn.exrick.manager.dto.OrderDetail;
+import cn.exrick.manager.pojo.TbOrder;
 import cn.exrick.manager.service.ManagerOrderService;
+import cn.exrick.manager.service.req.OrderSearchQuery;
+import cn.exrick.manager.web.controller.order.req.OrderSearchReq;
 import com.alibaba.dubbo.config.annotation.Reference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,24 +30,21 @@ public class OrderController {
     @Reference
     private ManagerOrderService orderService;
 
-    @RequestMapping(value = "/order/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/order/list", method = RequestMethod.POST)
     @ApiOperation(value = "获取订单列表")
-    public DataTablesResult getOrderList(int draw, int start, int length, @RequestParam("search[value]") String search,
-                                         @RequestParam("order[0][column]") int orderCol, @RequestParam("order[0][dir]") String orderDir) {
+    public Result<PageResult> getOrderList(@RequestBody OrderSearchReq orderSearchReq) {
 
         //获取客户端需要排序的列
-        String[] cols = {"checkbox", "order_id", "payment", "shipping_code", "user_id", "buyer_nick", "create_time", "update_time", "payment_time", "close_time", "end_time", "status"};
-        String orderColumn = cols[orderCol];
-        //默认排序列
-        if (orderColumn == null) {
-            orderColumn = "create_time";
-        }
-        //获取排序方式 默认为desc(asc)
-        if (orderDir == null) {
-            orderDir = "desc";
-        }
-        DataTablesResult result = orderService.getOrderList(draw, start, length, search, orderColumn, orderDir);
-        return result;
+        OrderSearchQuery orderSearchQuery = new OrderSearchQuery();
+        orderSearchQuery.setMid(orderSearchReq.getMid());
+        orderSearchQuery.setOrderEndTime(orderSearchReq.getOrderEndTime());
+        orderSearchQuery.setOrderStartTime(orderSearchReq.getOrderStartTime());
+        orderSearchQuery.setPageNo(orderSearchReq.getPageNo());
+        orderSearchQuery.setPageSize(orderSearchReq.getPageSize());
+        orderSearchQuery.setStatus(orderSearchReq.getStatus());
+
+        PageResult<TbOrder> result = orderService.getOrderList(orderSearchQuery);
+        return new ResultUtil<PageResult>().setData(result);
     }
 
     @RequestMapping(value = "/order/count", method = RequestMethod.GET)

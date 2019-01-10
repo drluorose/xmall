@@ -13,12 +13,12 @@ public interface LoginService {
     /**
      * 登录
      *
-     * @param username
+     * @param email
      * @param password
      *
      * @return
      */
-    Member userLogin(String username, String password) throws NoSuchAlgorithmException;
+    Member userLogin(String email, String password) throws NoSuchAlgorithmException;
 
     /**
      * 通过token获取

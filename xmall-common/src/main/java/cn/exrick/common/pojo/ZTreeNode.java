@@ -1,5 +1,6 @@
 package cn.exrick.common.pojo;
 
+import cn.exrick.common.enums.EnableStatusEnum;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -23,7 +24,7 @@ public class ZTreeNode implements Serializable {
 
     private String icon;
 
-    private int status;
+    private EnableStatusEnum status;
 
     private int sortOrder;
 

@@ -10,6 +10,9 @@ import java.util.GregorianCalendar;
  */
 public class TimeUtil {
 
+    String check = "^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+
+
     /**
      * 获取本周的开始时间
      * @return

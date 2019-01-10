@@ -5,12 +5,16 @@ import lombok.Getter;
 
 import java.util.Arrays;
 
+/**
+ * @author dongjiejie
+ */
+
 @AllArgsConstructor
 @Getter
 public enum MemberStateEnum implements StdEnum {
 
-    DISABLED(0, "disabled", "已废弃"),
-    ENABLED(1, "enable", "已启用");
+    NEW(0, "新建", "已废弃"),
+    VERIFIED(1, "已经验证邮箱", "已启用");
 
     private final Integer number;
 
