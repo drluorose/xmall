@@ -2,17 +2,22 @@ package cn.exrick.sso.service.impl;
 
 import cn.exrick.common.exception.XmallException;
 import cn.exrick.common.jedis.JedisClient;
+import cn.exrick.manager.dto.MemberDto;
 import cn.exrick.manager.dto.front.Member;
 import cn.exrick.manager.mapper.TbMemberMapper;
 import cn.exrick.manager.pojo.TbMember;
+import cn.exrick.manager.pojo.TbMemberExample;
 import cn.exrick.sso.service.LoginService;
 import cn.exrick.sso.service.SsoMemberService;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 /**
  * @author Exrickx
@@ -37,7 +42,6 @@ public class SsoMemberServiceImpl implements SsoMemberService {
     @Override
     public String imageUpload(Long userId, String token, String imgData) {
 
-
         TbMember tbMember = tbMemberMapper.selectByPrimaryKey(userId);
         if (tbMember == null) {
             throw new XmallException("通过id获取用户失败");
@@ -52,5 +56,19 @@ public class SsoMemberServiceImpl implements SsoMemberService {
         member.setFile("");
         jedisClient.set("SESSION:" + token, new Gson().toJson(member));
         return "";
+    }
+
+    @Override
+    public MemberDto getByMid(String mid) {
+        if (StringUtils.isBlank(mid)) {
+            throw new IllegalArgumentException("get by mid");
+        }
+        TbMemberExample example = new TbMemberExample();
+        example.createCriteria().andMidEqualTo(mid);
+        TbMember tbMember = tbMemberMapper.selectOneByExample(example);
+        if (Objects.isNull(tbMember)) {
+            throw new IllegalArgumentException("mid is error :" + mid);
+        }
+        return new MemberDto(tbMember);
     }
 }

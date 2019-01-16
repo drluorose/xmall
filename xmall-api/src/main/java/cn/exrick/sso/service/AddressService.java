@@ -2,8 +2,7 @@ package cn.exrick.sso.service;
 
 import cn.exrick.manager.dto.front.AddressDto;
 import cn.exrick.manager.pojo.TbAddress;
-import cn.exrick.manager.pojo.TbCity;
-import cn.exrick.manager.pojo.TbCountry;
+import cn.exrick.manager.pojo.TbAddressItem;
 
 import java.util.List;
 
@@ -11,22 +10,6 @@ import java.util.List;
  * @author Exrickx
  */
 public interface AddressService {
-
-    /**
-     * 获取国家列表
-     *
-     * @return
-     */
-    List<TbCountry> getCountryList();
-
-    /**
-     * 通过国家id号获取国家城市
-     *
-     * @param countryId
-     *
-     * @return
-     */
-    List<TbCity> getCountryCites(Integer countryId);
 
     /**
      * 获取地址
@@ -53,16 +36,17 @@ public interface AddressService {
      *
      * @return
      */
-    int addAddress(TbAddress tbAddress);
+    void addAddress(TbAddress tbAddress, List<TbAddressItem> items);
 
     /**
-     * 更新
+     * 更新地址信息
      *
      * @param tbAddress
+     * @param items
      *
      * @return
      */
-    int updateAddress(TbAddress tbAddress);
+    void updateAddress(TbAddress tbAddress, List<TbAddressItem> items);
 
     /**
      * 删除

@@ -10,7 +10,7 @@ public interface TbAddressMapper {
 
     int deleteByExample(TbAddressExample example);
 
-    int deleteByPrimaryKey(Long addressId);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbAddress record);
 
@@ -20,7 +20,7 @@ public interface TbAddressMapper {
 
     List<TbAddress> selectByExample(TbAddressExample example);
 
-    TbAddress selectByPrimaryKey(Long addressId);
+    TbAddress selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbAddress record, @Param("example") TbAddressExample example);
 

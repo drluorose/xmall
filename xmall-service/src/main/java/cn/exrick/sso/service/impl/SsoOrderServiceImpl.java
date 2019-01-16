@@ -105,7 +105,7 @@ public class SsoOrderServiceImpl implements SsoOrderService {
             TbOrderShipping tbOrderShipping = tbOrderShippingMapper.selectByPrimaryKey(tbOrder.getOrderId());
             TbAddress address = new TbAddress();
             address.setUserName(tbOrderShipping.getReceiverName());
-            address.setStreetName(tbOrderShipping.getReceiverAddress());
+//            address.setStreetName(tbOrderShipping.getReceiverAddress());
             address.setTel(tbOrderShipping.getReceiverPhone());
             order.setAddressInfo(address);
             //orderTotal
@@ -177,7 +177,7 @@ public class SsoOrderServiceImpl implements SsoOrderService {
         TbOrderShipping tbOrderShipping = tbOrderShippingMapper.selectByPrimaryKey(tbOrder.getOrderId());
         TbAddress address = new TbAddress();
         address.setUserName(tbOrderShipping.getReceiverName());
-        address.setStreetName(tbOrderShipping.getReceiverAddress());
+//        address.setStreetName(tbOrderShipping.getReceiverAddress());
         address.setTel(tbOrderShipping.getReceiverPhone());
         order.setAddressInfo(address);
         //orderTotal

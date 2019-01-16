@@ -1,26 +1,24 @@
 package cn.exrick.sso.service.impl;
 
-import cn.exrick.common.enums.EnableStatusEnum;
+import cn.exrick.common.enums.ValidStatusEnum;
 import cn.exrick.common.exception.XmallException;
+import cn.exrick.common.utils.ObjectId;
 import cn.exrick.manager.dto.front.AddressDto;
+import cn.exrick.manager.mapper.TbAddressItemMapper;
 import cn.exrick.manager.mapper.TbAddressMapper;
-import cn.exrick.manager.mapper.TbCityMapper;
-import cn.exrick.manager.mapper.TbCountryMapper;
 import cn.exrick.manager.pojo.TbAddress;
 import cn.exrick.manager.pojo.TbAddressExample;
-import cn.exrick.manager.pojo.TbCity;
-import cn.exrick.manager.pojo.TbCityExample;
-import cn.exrick.manager.pojo.TbCountry;
-import cn.exrick.manager.pojo.TbCountryExample;
+import cn.exrick.manager.pojo.TbAddressItem;
+import cn.exrick.manager.pojo.TbAddressItemExample;
 import cn.exrick.sso.service.AddressService;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,114 +36,108 @@ public class AddressServiceImpl implements AddressService {
     private TbAddressMapper tbAddressMapper;
 
     @Autowired
-    private TbCountryMapper tbCountryMapper;
-
-    @Autowired
-    private TbCityMapper tbCityMapper;
-
-    @Override
-    public List<TbCountry> getCountryList() {
-        TbCountryExample tbCountryExample = new TbCountryExample();
-        tbCountryExample.createCriteria().andStatusEqualTo(EnableStatusEnum.ENABLED);
-        List<TbCountry> tbCountryList = this.tbCountryMapper.selectByExample(tbCountryExample);
-        if (CollectionUtils.isEmpty(tbCountryList)) {
-            tbCountryList = Lists.newArrayList();
-        }
-        return tbCountryList;
-    }
-
-    @Override
-    public List<TbCity> getCountryCites(Integer countryId) {
-        if (Objects.isNull(countryId)) {
-            throw new IllegalArgumentException("Country Id is null");
-        }
-        TbCityExample tbCityExample = new TbCityExample();
-        tbCityExample.createCriteria().andCountryIdEqualTo(countryId);
-        List<TbCity> cities = tbCityMapper.selectByExample(tbCityExample);
-        if (CollectionUtils.isEmpty(cities)) {
-            cities = Lists.newArrayList();
-        }
-        return cities;
-    }
+    private TbAddressItemMapper tbAddressItemMapper;
 
     @Override
     public List<AddressDto> getAddressList(String mid) {
 
-        List<TbAddress> list = null;
         TbAddressExample example = new TbAddressExample();
-        TbAddressExample.Criteria criteria = example.createCriteria();
-        criteria.andMidEqualTo(mid);
-        list = tbAddressMapper.selectByExample(example);
-        if (Objects.isNull(list)) {
-            list = Lists.newArrayList();
-        }
-        List<AddressDto> addressDtos = Lists.newArrayListWithCapacity(list.size());
-        list.forEach(tbAddress -> {
-            AddressDto addressDto = new AddressDto();
-            addressDto.setAddressId(tbAddress.getAddressId());
-            addressDto.setIsDefault(tbAddress.getIsDefault());
-            addressDto.setMid(tbAddress.getMid());
-            addressDto.setStreetName(tbAddress.getStreetName());
-            TbCity tbCity = tbCityMapper.selectByPrimaryKey(tbAddress.getCityId());
-            TbCountry tbCountry = null;
-            if (Objects.nonNull(tbCity)) {
-                tbCountry = tbCountryMapper.selectByPrimaryKey(tbCity.getCountryId());
-            }
-            addressDto.setTbCity(tbCity);
-            addressDto.setTbCountry(tbCountry);
-            addressDto.setTel(tbAddress.getTel());
-            addressDto.setUserId(tbAddress.getUserId());
-            addressDto.setUserName(tbAddress.getUserName());
-            addressDtos.add(addressDto);
-        });
-        for (int i = 0; i < addressDtos.size(); i++) {
-            if (list.get(i).getIsDefault()) {
-                Collections.swap(addressDtos, 0, i);
-                break;
-            }
-        }
+        example.createCriteria().andMidEqualTo(mid);
 
+        List<TbAddress> addresses = this.tbAddressMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(addresses)) {
+            return Lists.newArrayList();
+        }
+        List<AddressDto> addressDtos = Lists.newArrayListWithCapacity(addresses.size());
+        for (TbAddress tbAddress : addresses) {
+            TbAddressItemExample itemExample = new TbAddressItemExample();
+            itemExample.createCriteria().andAddressIdEqualTo(tbAddress.getId());
+            itemExample.setOrderByClause("level ASC");
+            List<TbAddressItem> tbAddressItems = tbAddressItemMapper.selectByExample(itemExample);
+            addressDtos.add(new AddressDto(tbAddress, tbAddressItems));
+        }
         return addressDtos;
     }
 
     @Override
     public TbAddress getAddress(Long addressId) {
 
-        TbAddress tbAddress = tbAddressMapper.selectByPrimaryKey(addressId);
-        if (tbAddress == null) {
-            throw new XmallException("通过id获取地址失败");
-        }
-        return tbAddress;
+        return null;
     }
 
     @Override
-    public int addAddress(TbAddress tbAddress) {
-
-        //设置唯一默认
-        setOneDefault(tbAddress);
-        if (tbAddressMapper.insert(tbAddress) != 1) {
-            throw new XmallException("添加地址失败");
+    @Transactional(rollbackFor = Exception.class)
+    public void addAddress(TbAddress tbAddress, List<TbAddressItem> items) {
+        if (Objects.isNull(tbAddress) || CollectionUtils.isEmpty(items)) {
+            throw new IllegalArgumentException("参数错误");
         }
-        return 1;
+        TbAddressExample example = new TbAddressExample();
+        example.createCriteria().andMidEqualTo(tbAddress.getMid())
+            .andValidEqualTo(ValidStatusEnum.VALID);
+        List<TbAddress> tbAddressValidList = this.tbAddressMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(tbAddressValidList) && tbAddressValidList.size() > 5) {
+            throw new XmallException("当前已经达到最大邮件地址数");
+        }
+        if (tbAddress.getIsDefault()) {
+            TbAddress tbAddressUpdateRecord = new TbAddress();
+            tbAddress.setIsDefault(false);
+            tbAddressMapper.updateByExample(tbAddressUpdateRecord, example);
+        }
+        tbAddressMapper.insert(tbAddress);
+        for (TbAddressItem tbAddressItem : items) {
+            tbAddressItemMapper.insertSelective(tbAddressItem);
+        }
     }
 
     @Override
-    public int updateAddress(TbAddress tbAddress) {
-
-        //设置唯一默认
-        setOneDefault(tbAddress);
-        if (tbAddressMapper.updateByPrimaryKey(tbAddress) != 1) {
-            throw new XmallException("更新地址失败");
+    @Transactional(rollbackFor = Exception.class)
+    public void updateAddress(TbAddress tbAddress, List<TbAddressItem> items) {
+        if (Objects.isNull(tbAddress) || CollectionUtils.isEmpty(items) || items.size() != 3) {
+            throw new IllegalArgumentException("参数错误");
         }
-        return 1;
+        TbAddressExample example = new TbAddressExample();
+        example.createCriteria().andIdEqualTo(tbAddress.getId())
+            .andMidEqualTo(tbAddress.getMid()).andValidEqualTo(ValidStatusEnum.VALID);
+        TbAddress tbAddressInDb = this.tbAddressMapper.selectOneByExample(example);
+        if (Objects.isNull(tbAddressInDb)) {
+            throw new IllegalArgumentException("提交的参数不匹配");
+        }
+        if (tbAddress.getIsDefault()) {
+            example = new TbAddressExample();
+            example.createCriteria().andMidEqualTo(tbAddress.getMid());
+            TbAddress tbAddressUpdateRecord = new TbAddress();
+            tbAddressUpdateRecord.setIsDefault(false);
+            tbAddressMapper.updateByExampleSelective(tbAddressUpdateRecord, example);
+        }
+
+        tbAddressMapper.updateByPrimaryKey(tbAddress);
+        TbAddressItemExample itemExample = new TbAddressItemExample();
+        itemExample.createCriteria().andAddressIdEqualTo(tbAddress.getId());
+        List<TbAddressItem> tbAddressItems = tbAddressItemMapper.selectByExample(itemExample);
+        for (int i = 0; i < items.size(); i++) {
+            TbAddressItem req = items.get(i);
+            TbAddressItem db = null;
+            if (Objects.nonNull(tbAddressItems) && tbAddressItems.size() > i) {
+                db = tbAddressItems.get(i);
+            }
+            fill(req, db);
+        }
+    }
+
+    private void fill(TbAddressItem req, TbAddressItem db) {
+        if (Objects.isNull(db)) {
+            req.setId(ObjectId.getId());
+            tbAddressItemMapper.insertSelective(req);
+            return;
+        }
+        req.setId(db.getId());
+        tbAddressItemMapper.updateByPrimaryKeySelective(req);
+        return;
     }
 
     @Override
     public int delAddress(TbAddress tbAddress) {
 
-        if (tbAddressMapper.deleteByPrimaryKey(tbAddress.getAddressId()) != 1) {
-            throw new XmallException("删除地址失败");
-        }
         return 1;
     }
 
@@ -154,7 +146,6 @@ public class AddressServiceImpl implements AddressService {
         if (tbAddress.getIsDefault()) {
             TbAddressExample example = new TbAddressExample();
             TbAddressExample.Criteria criteria = example.createCriteria();
-            criteria.andUserIdEqualTo(tbAddress.getUserId());
             List<TbAddress> list = tbAddressMapper.selectByExample(example);
             for (TbAddress tbAddress1 : list) {
                 tbAddress1.setIsDefault(false);

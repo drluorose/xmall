@@ -2,14 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.exrick.manager.mapper.TbAddressMapper">
   <resultMap id="BaseResultMap" type="cn.exrick.manager.pojo.TbAddress">
-    <id column="address_id" jdbcType="BIGINT" property="addressId" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="mid" jdbcType="VARCHAR" property="mid" />
-    <result column="city_id" jdbcType="INTEGER" property="cityId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="tel" jdbcType="VARCHAR" property="tel" />
-    <result column="street_name" jdbcType="VARCHAR" property="streetName" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="is_default" jdbcType="BIT" property="isDefault" />
+    <result column="valid" jdbcType="INTEGER" property="valid" typeHandler="cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -31,6 +30,25 @@
                   and ${criterion.condition}
                   <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.validCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler} and #{criterion.secondValue,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
                   </foreach>
                 </when>
               </choose>
@@ -64,13 +82,32 @@
                 </when>
               </choose>
             </foreach>
+            <foreach collection="criteria.validCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler} and #{criterion.secondValue,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
           </trim>
         </if>
       </foreach>
     </where>
   </sql>
   <sql id="Base_Column_List">
-    address_id, user_id, mid, city_id, user_name, tel, street_name, is_default
+    id, mid, user_name, tel, address, is_default, valid
   </sql>
   <select id="selectByExample" parameterType="cn.exrick.manager.pojo.TbAddressExample" resultMap="BaseResultMap">
     select
@@ -94,15 +131,15 @@
       </if>
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from tb_address
-    where address_id = #{addressId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_address
-    where address_id = #{addressId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="cn.exrick.manager.pojo.TbAddressExample">
     delete from tb_address
@@ -111,27 +148,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.exrick.manager.pojo.TbAddress">
-    insert into tb_address (address_id, user_id, mid, 
-      city_id, user_name, tel, 
-      street_name, is_default)
-    values (#{addressId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{mid,jdbcType=VARCHAR}, 
-      #{cityId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
-      #{streetName,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT})
+    insert into tb_address (id, mid, user_name, 
+      tel, address, is_default, 
+      valid
+      )
+    values (#{id,jdbcType=VARCHAR}, #{mid,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT}, 
+      #{valid,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.exrick.manager.pojo.TbAddress">
     insert into tb_address
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="addressId != null">
-        address_id,
-      </if>
-      <if test="userId != null">
-        user_id,
+      <if test="id != null">
+        id,
       </if>
       <if test="mid != null">
         mid,
-      </if>
-      <if test="cityId != null">
-        city_id,
       </if>
       <if test="userName != null">
         user_name,
@@ -139,25 +172,22 @@
       <if test="tel != null">
         tel,
       </if>
-      <if test="streetName != null">
-        street_name,
+      <if test="address != null">
+        address,
       </if>
       <if test="isDefault != null">
         is_default,
       </if>
+      <if test="valid != null">
+        valid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="addressId != null">
-        #{addressId,jdbcType=BIGINT},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
       </if>
       <if test="mid != null">
         #{mid,jdbcType=VARCHAR},
-      </if>
-      <if test="cityId != null">
-        #{cityId,jdbcType=INTEGER},
       </if>
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
@@ -165,11 +195,14 @@
       <if test="tel != null">
         #{tel,jdbcType=VARCHAR},
       </if>
-      <if test="streetName != null">
-        #{streetName,jdbcType=VARCHAR},
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
       </if>
       <if test="isDefault != null">
         #{isDefault,jdbcType=BIT},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler},
       </if>
     </trim>
   </insert>
@@ -182,17 +215,11 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_address
     <set>
-      <if test="record.addressId != null">
-        address_id = #{record.addressId,jdbcType=BIGINT},
-      </if>
-      <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=BIGINT},
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.mid != null">
         mid = #{record.mid,jdbcType=VARCHAR},
-      </if>
-      <if test="record.cityId != null">
-        city_id = #{record.cityId,jdbcType=INTEGER},
       </if>
       <if test="record.userName != null">
         user_name = #{record.userName,jdbcType=VARCHAR},
@@ -200,11 +227,14 @@
       <if test="record.tel != null">
         tel = #{record.tel,jdbcType=VARCHAR},
       </if>
-      <if test="record.streetName != null">
-        street_name = #{record.streetName,jdbcType=VARCHAR},
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
       </if>
       <if test="record.isDefault != null">
         is_default = #{record.isDefault,jdbcType=BIT},
+      </if>
+      <if test="record.valid != null">
+        valid = #{record.valid,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler},
       </if>
     </set>
     <if test="_parameter != null">
@@ -213,14 +243,13 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_address
-    set address_id = #{record.addressId,jdbcType=BIGINT},
-      user_id = #{record.userId,jdbcType=BIGINT},
+    set id = #{record.id,jdbcType=VARCHAR},
       mid = #{record.mid,jdbcType=VARCHAR},
-      city_id = #{record.cityId,jdbcType=INTEGER},
       user_name = #{record.userName,jdbcType=VARCHAR},
       tel = #{record.tel,jdbcType=VARCHAR},
-      street_name = #{record.streetName,jdbcType=VARCHAR},
-      is_default = #{record.isDefault,jdbcType=BIT}
+      address = #{record.address,jdbcType=VARCHAR},
+      is_default = #{record.isDefault,jdbcType=BIT},
+      valid = #{record.valid,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -228,14 +257,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="cn.exrick.manager.pojo.TbAddress">
     update tb_address
     <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
       <if test="mid != null">
         mid = #{mid,jdbcType=VARCHAR},
-      </if>
-      <if test="cityId != null">
-        city_id = #{cityId,jdbcType=INTEGER},
       </if>
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
@@ -243,40 +266,36 @@
       <if test="tel != null">
         tel = #{tel,jdbcType=VARCHAR},
       </if>
-      <if test="streetName != null">
-        street_name = #{streetName,jdbcType=VARCHAR},
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
       </if>
       <if test="isDefault != null">
         is_default = #{isDefault,jdbcType=BIT},
       </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler},
+      </if>
     </set>
-    where address_id = #{addressId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.exrick.manager.pojo.TbAddress">
     update tb_address
-    set user_id = #{userId,jdbcType=BIGINT},
-      mid = #{mid,jdbcType=VARCHAR},
-      city_id = #{cityId,jdbcType=INTEGER},
+    set mid = #{mid,jdbcType=VARCHAR},
       user_name = #{userName,jdbcType=VARCHAR},
       tel = #{tel,jdbcType=VARCHAR},
-      street_name = #{streetName,jdbcType=VARCHAR},
-      is_default = #{isDefault,jdbcType=BIT}
-    where address_id = #{addressId,jdbcType=BIGINT}
+      address = #{address,jdbcType=VARCHAR},
+      is_default = #{isDefault,jdbcType=BIT},
+      valid = #{valid,jdbcType=INTEGER,typeHandler=cn.exrick.manager.mapper.handlers.ValidStatusEnumHandler}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
-  <insert id="insertBatch" keyProperty="addressId" parameterType="java.util.List" useGeneratedKeys="true">
+  <insert id="insertBatch" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
     insert into tb_address
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="list[0].addressId!=null">
-        address_id,
-      </if>
-      <if test="list[0].userId!=null">
-        user_id,
+      <if test="list[0].id!=null">
+        id,
       </if>
       <if test="list[0].mid!=null">
         mid,
-      </if>
-      <if test="list[0].cityId!=null">
-        city_id,
       </if>
       <if test="list[0].userName!=null">
         user_name,
@@ -284,27 +303,24 @@
       <if test="list[0].tel!=null">
         tel,
       </if>
-      <if test="list[0].streetName!=null">
-        street_name,
+      <if test="list[0].address!=null">
+        address,
       </if>
       <if test="list[0].isDefault!=null">
         is_default,
+      </if>
+      <if test="list[0].valid!=null">
+        valid,
       </if>
     </trim>
      values 
     <foreach collection="list" index="index" item="item" separator=",">
       <trim prefix=" (" suffix=")" suffixOverrides=",">
-        <if test="item.addressId!=null">
-          #{item.addressId,jdbcType=BIGINT},
-        </if>
-        <if test="item.userId!=null">
-          #{item.userId,jdbcType=BIGINT},
+        <if test="item.id!=null">
+          #{item.id,jdbcType=VARCHAR},
         </if>
         <if test="item.mid!=null">
           #{item.mid,jdbcType=VARCHAR},
-        </if>
-        <if test="item.cityId!=null">
-          #{item.cityId,jdbcType=INTEGER},
         </if>
         <if test="item.userName!=null">
           #{item.userName,jdbcType=VARCHAR},
@@ -312,11 +328,14 @@
         <if test="item.tel!=null">
           #{item.tel,jdbcType=VARCHAR},
         </if>
-        <if test="item.streetName!=null">
-          #{item.streetName,jdbcType=VARCHAR},
+        <if test="item.address!=null">
+          #{item.address,jdbcType=VARCHAR},
         </if>
         <if test="item.isDefault!=null">
           #{item.isDefault,jdbcType=BIT},
+        </if>
+        <if test="item.valid!=null">
+          #{item.valid,jdbcType=INTEGER},
         </if>
       </trim>
     </foreach>

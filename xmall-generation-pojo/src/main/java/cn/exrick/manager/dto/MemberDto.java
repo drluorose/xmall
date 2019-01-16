@@ -1,9 +1,9 @@
 package cn.exrick.manager.dto;
 
+import cn.exrick.manager.pojo.TbMember;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author Exrick
@@ -11,6 +11,7 @@ import java.util.Date;
  */
 @Data
 public class MemberDto implements Serializable {
+
 
     private String username;
 
@@ -33,5 +34,16 @@ public class MemberDto implements Serializable {
     private String memberfile;
 
     private String description;
+
+    public MemberDto() {
+    }
+
+    public MemberDto(TbMember tbMember) {
+        this();
+        this.username = tbMember.getUsername();
+        this.email = tbMember.getEmail();
+        this.state = tbMember.getState().getNumber();
+        this.memberfile = tbMember.getFile();
+    }
 
 }

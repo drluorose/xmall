@@ -29,10 +29,15 @@ public class ResultResUtil {
      * @return
      */
     public static final <T> Result<T> successWithData(T data) {
+        Result<T> result = success();
+        result.setResult(data);
+        return result;
+    }
+
+    public static final <T> Result<T> success() {
         Result<T> result = new Result<>();
         result.setCode(ResultCodeEnum.CODE_NORMAL_SUCCESS.getNumber());
         result.setMessage(ResultCodeEnum.CODE_NORMAL_SUCCESS.getCode());
-        result.setResult(data);
         return result;
     }
 

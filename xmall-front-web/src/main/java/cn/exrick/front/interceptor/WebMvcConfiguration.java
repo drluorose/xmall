@@ -1,8 +1,10 @@
 package cn.exrick.front.interceptor;
 
+import cn.exrick.front.argument.resolver.MemberHandlerMethodArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -10,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -26,6 +29,11 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Autowired
     private SessionAuthInterceptor sessionAuthInterceptor;
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(new MemberHandlerMethodArgumentResolver());
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

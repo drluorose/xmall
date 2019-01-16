@@ -2,8 +2,9 @@ package cn.exrick.manager.mapper;
 
 import cn.exrick.manager.pojo.TbItemDesc;
 import cn.exrick.manager.pojo.TbItemDescExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TbItemDescMapper {
     long countByExample(TbItemDescExample example);
